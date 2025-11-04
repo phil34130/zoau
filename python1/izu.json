@@ -1,0 +1,6 @@
+{
+	"display_cmd" : "D j,IZUANG1",
+	"down_msg"    : "IZUANG1 NOT FOUND",
+        "up_msg"    : "IZUANG1  IZUANG1  STEP1",
+        "start_cmd" : "S IZUANG"
+}

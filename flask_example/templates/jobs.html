@@ -1,0 +1,44 @@
+# flask_example/templates/jobs.html
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<h2>z/OS Jobs</h2>
+
+<table>
+  <!-- Job Heading -->
+  <tr>
+    <th>Job Name</th>
+    <th>Job ID</th>
+    <th>Status</th>
+    <th>Return Code</th>
+    <th>Action</th>
+  </tr>
+  <!-- List Jobs -->
+  {% for job in jobs %}
+  <tr>
+    <td>{{job.name}}</td>
+    <td>{{job.job_id}}</td>
+    <td>{{job.status}}</td>
+    <td>{{job.return_code}}</td>
+    <td><a href="/cancel/{{job.job_id}}">Cancel</a> <a href="/purge/{{job.job_id}}">Purge</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+</body>

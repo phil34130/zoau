@@ -1,0 +1,13 @@
+SMPECSI:
+  dataset: SMPE.FEU.CSI
+TEMP_DATASET:
+  primary_space: 5M
+  secondary_space: 5M
+  volume: B3USR1
+OUTPUT_DATASET:
+  primary_space: 5M
+  secondary_space: 5M
+  volume: B3USR1
+SMPECNTL:
+  filename: /tmp/smpcntl.input
+
