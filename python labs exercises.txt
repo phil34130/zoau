@@ -1,0 +1,4641 @@
+============================================================================================================================================
+The python package manager and install tool pip is also included, which allows us to install supporting packages to expand our range a little. Here’s a quick run through some bits that might be useful:
+ 
+pip – What’s Already Installed?
+
+Z04683@S0W1:~/flask_dataset $ pip3 list
+Package                Version
+---------------------- -----------
+beautifulsoup4         4.10.0
+boto3                  1.35.43
+botocore               1.35.43
+bottle                 0.12.21
+certifi                2021.10.8
+cffi                   1.14.0
+charset-normalizer     2.0.7
+click                  8.1.3
+cryptography           3.3.2
+ebcdic                 1.1.1
+filelock               3.3.0
+Flask                  2.1.2
+ibm-db                 3.1.4
+idna                   3.3
+importlib-metadata     4.12.0
+itsdangerous           2.1.2
+Jinja2                 3.1.2
+jmespath               1.0.1
+MarkupSafe             2.1.1
+mysql-connector-python 8.0.32
+numpy                  1.18.2
+paho-mqtt              2.1.0
+pdfkit                 0.6.1
+pip                    23.0.1
+protobuf               3.20.3
+pycparser              2.20
+python-dateutil        2.9.0.post0
+pyzfile                1.0.0.post2
+requests               2.26.0
+requests-file          1.5.1
+s3_client              0.1.3
+s3transfer             0.10.3
+setuptools             67.4.0
+six                    1.16.0
+soupsieve              2.2.1
+tabulate               0.9.0
+tldextract             3.1.2
+tqdm                   4.66.5
+urllib3                1.26.20
+Werkzeug               2.1.2
+wheel                  0.38.4
+zipp                   3.8.0
+zos_util               1.0.0
+
+ 
+pip – How Do We Install Another Package?
+Our z/OS service isn’t connected to the internet, so we did it like this:
+1. On a laptop with Python and pip installed:
+a. mkdir requests
+b. cd requests
+c. pip download requests
+i. This pulled the “requests” package and four dependencies:
+1. certifi
+2. chardet
+3. idna
+4. urllib
+d. Binary FTP all five to a USS directory (/u/myid/pipdl)
+2. On z/OS, in USS in the directory we uploaded to, install all of the packages using:
+pip3 install requests --find-links ./
+Note lots of error messages as pip tries to access the internet version, but then success at the end.
+=============================================================================
+ python3 dslist.py
+pyhton3 members.py
+python3 python_scr1.py
+zoaversion
+
+
+# confirm python is functioning correctly
+$ python3 -–version
+Python 3.12.3
+
+# confirm zoau is accessible
+$ zoaversion 
+2025/10/10 19:33:08 CUT v1.3.6.2 c3c85436 8578 PH68399 1582 5691f54b
+
+# confirm that zoau is importable to python
+$ python3 -c "import zoautil_py;print(zoautil_py.__name__)"
+zoautil_py
+
+
+sysinfo.py:
+import platform                               
+import sys                                    
+sys.path.append('./')                         
+print("machine",platform.machine())           
+print("platform",platform.platform())         
+print("arch ",platform.architecture())        
+print("process ",platform.processor())        
+print("compiler",platform.python_compiler())  
+
+python3 sysinfo.py
+
+machine 8562
+platform OS-390-29.00-8562-64bit
+arch  ('64bit', '')
+process
+compiler Clang 14.0.0 (build 1ef0cff)
+system  OS/390
+
+pip --version
+pip 24.0 from /usr/lpp/IBM/cyp/v3r12/pyz/lib/python3.12/site-packages/pip (python 3.12)
+
+   /u/prichar/python1/	
+
+---------------------------------------------
+
+see zoau python script zos.docx for the exercices below
+
+Getting started with Flask is very easy, we just create an app.py with the following contents:
+from flask import Flask
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    return "Hello World!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+After we run this with python3 app.py, we’ll be able to navigate to our z/OS server at port 5000. Keep in mind, your z/OS machine may be behind a firewall or completely locked down- you’ll need to chat with your administrator.
+If you’re locked down and still want to play around, you can install Rocket cURL and curl 127.0.0.1:5000 (just change your host in the above app).
+                               
+pip install flask
+
+ WARNING: The script flask is installed in '/u/prichar/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+Successfully installed blinker-1.9.0 click-8.3.0 flask-3.1.2 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.3 werkzeug-3.1.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 25.3
+[notice] To update, run: pip install --upgrade pip
+PRICHAR:/u/prichar: >
+PRICHAR:/u/prichar: >python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.66:5000
+Press CTRL+C to quit
+
+http://192.168.0.66:5000
+Hello World!
+
+python3 
+>>> from zoautil_py import Datasets
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ImportError: cannot import name 'Datasets' from 'zoautil_py' (/usr/lpp/IBM/cyp/v3r12/pyz/lib/python3.12/site-packages/zoautil_py/__init__.py)
+>>> from zoautil_py import datasets
+>>> datasets.create("PRICHAR.FLASK", type="SEQ")
+PRICHAR.FLASK
+>>> datasets.write("PRICHAR.FLASK", "Hello World")
+0
+>>> exit()
+
+PRICHAR:/u/prichar: >python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.66:5000
+Press CTRL+C to quit
+PRICHAR:/u/prichar: >nano app.py
+PRICHAR:/u/prichar: >python3 app.py
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.66:5000
+Press CTRL+C to quit
+192.168.0.69 - - [31/Oct/2025 16:41:09] "GET / HTTP/1.1" 200 -
+
+http://192.168.0.66:5000/
+Hello World
+
+
+app.py
+from flask import Flask
+from flask import request
+from zoautil_py import datasets
+app = Flask(__name__)
+
+
+@app.route('/')
+def get_dataset():
+    dataset = request.args.get('dataset')
+    if dataset:
+        return Datasets.read(dataset)
+    else:
+        return Datasets.read("PRICHAR.FLASK")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+python3 app.py
+http://192.168.0.66:5000/
+Hello World
+http://192.168.0.66:5000/?dataset=prichar.test
+['SYS1.LINKLIB' 'SYS1.MIGLIB' 'SYS1.CSSLIB' 'SYS1.SIEALNKE' 'SYS1.SIEAMIGE' 'SYS1.SHASLNKE' 'SYS1.SERBLNKE' 'SYS1.SGRBLINK' 'SYS1.SHASMIG' 'SYS1.SCBDHENU' 'SYS1.DGTLLIB' 'SYS1.CMDLIB' 'SYS1.SICELINK' 'SYS1.SORTLIB' 'GIM.SGIMLMD0' 'CEE.SCEERUN' 'ISF.SISFLOAD' 'CSF.SCSFMOD0' 'CSF.SCSFSTUB' 'CEE.SCEERUN2' 'CBC.SCLBDLL' 'CBC.SCLBDLL2' 'ISP.SISPLOAD' 'FFST.SEPWMOD2' 'FFST.SEPWMOD4' 'TCPIP.SEZALOAD' 'HLA.SASMMOD1' 'GDDM.SADMMOD' 'USER.Z31B.LINKLIB' 'FEU.Z31B.LINKLIB' 'ADCD.Z31B.LINKLIB' 'CBC.SCCNCMP' 'CSQ920.SCSQLINK' 'CSQ920.SCSQAUTH' 'CSQ920.SCSQMVR1' 'CSQ920.SCSQANLE' 'CSQ920.SCSQSNLE' 'IGY640.SIGYCOMP' 'ISM403.SEQABMOD' 'ISM403.SEQAMOD' 'FAN140.SEAGALT' 'FAN140.SEAGLMD' 'FAN140.SFANLMD' 'DIT130.SDITMOD1' 'BLZ703.SBLZLOAD' 'BLZ703.SBLZAUTH' 'AZF230.SAZFLOAD' 'ISM403.SFEKAUTH' 'ISM403.SFEKLPA' 'ISM403.SFELLMOD' 'ISM403.SFELLOAD' 'ISM403.SFELLPA' 'DFH610.CICS.SDFHLINK' 'DFH610.CPSM.SEYULINK' 'DSND10.SDSNLINK']
+
+==== lab here =================================
+https://medium.com/@kalebporter/flask-on-z-os-with-dataset-example-3f3ed26c455b
+
+Flask on z/OS (with data set example)
+
+
+This summer I started playing with the Rocket’s Python for z/OS, mostly due to our newly released Python library for Z Open Automation Utilities (ZOAU). After our sprint locked down, I was curious what all Rocket Python shipped with, so I started digging around the packages.
+I was surprised when I saw Flask, and knew I had to do something fun with it.
+What is Flask?
+If you’re not familiar, Flask is a micro web framework for building Python web applications. It’s great for building light-weight REST APIs, which I’ll be doing in this example.
+The Project
+For this article, we’re going to be writing a simple REST API using Flask and ZOAU. Our REST API will read a data set and display its contents on the web page.
+Getting Started
+Getting started with Flask is very easy, we just create an app.py with the following contents:
+from flask import Flask
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    return "Hello World!"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+After we run this with python3 app.py, we’ll be able to navigate to our z/OS server at port 5000. Keep in mind, your z/OS machine may be behind a firewall or completely locked down- you’ll need to chat with your administrator.
+If you’re locked down and still want to play around, you can install Rocket cURL and curl 127.0.0.1:5000 (just change your host in the above app).
+Reading our Dataset
+For our example, we want to read out a data set contents and write them to our webpage, so we’ll import ZOAU and use the Datasets.read() method.
+
+from flask import Flask
+from zoautil_py import Datasets
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    return Datasets.read("PRICHAR.FLASK")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+
+http://9.212.128.238:5000/
+BGYSC1304E Unable to open dataset PRICHAR.FLASK for read.                       
+Ý2020-07-31 13:00:18,875¨ ERROR in app: Exception on / ÝGET¨                    
+Traceback (most recent call last):                                              
+  File "/usr/local/rocket/py36/python-2017-04-12-py36/python36/lib/python3.6/sit
+e-packages/flask/app.py", line 1982, in wsgi_app                                
+    response = self.full_dispatch_request()                                     
+  File "/usr/local/rocket/py36/python-2017-04-12-py36/python36/lib/python3.6/sit
+e-packages/flask/app.py", line 1615, in full_dispatch_request                   
+    return self.finalize_request(rv)                                            
+  File "/usr/local/rocket/py36/python-2017-04-12-py36/python36/lib/python3.6/sit
+e-packages/flask/app.py", line 1630, in finalize_request                        
+    response = self.make_response(rv)                                           
+  File "/usr/local/rocket/py36/python-2017-04-12-py36/python36/lib/python3.6/sit
+e-packages/flask/app.py", line 1725, in make_response                           
+    raise ValueError('View function did not return a response')                 
+ValueError: View function did not return a response                             
+9.145.155.194 - - Ý31/Jul/2020 13:00:18¨ "GET / HTTP/1.1" 500 -                 
+
+Hm, but when we go to our webpage again we’ll get ValueError: View function did not return a response . Whoops, forgot to create my dataset!
+Let’s just do that with Python really quick.
+
+
+PRICHAR@X9:/u/prichar #                                                         
+PRICHAR@X9:/u/prichar #python3                                                  
+Python 3.6.1 (default, Apr  7 2017, 13:59:34) ÝC¨ on zos                        
+Type "help", "copyright", "credits" or "license" for more information.          
+>>>                                                                             
+   >>> from zoautil_py import Datasets                                          
+BGYSC1902E Too many parameters were specified for hlq. No parameters are require
+d.                                                                              
+>>>                                                                             
+   >>> Datasets.create("PRICHAR.FLASK", type="SEQ")                             
+0                                                                               
+>>>                                                                             
+   >>> Datasets.write("KPORTER.FLASK", "HELLO WORLD")                           
+BGYSC1103E No datasets match pattern: KPORTER.FLASK.                            
+1                                                                               
+>>>                                                                             
+   >>> Datasets.write("PRICHAR.FLASK", "HELLO WORLD")                           
+0                                                                               
+>>>                                                                             
+   >>>    
+exit()
+
+VIEW       PRICHAR.FLASK       
+Command ===>                   
+****** ************************
+000001 HELLO WORLD             
+****** ************************
+
+                                                                      
+Great, now let’s try that again.    
+http://9.212.128.238:5000/
+HELLO WORLD
+
+
+Going Further
+Reading a static data set isn’t really all that interesting, so let’s make it so that we can pass whatever data set we want.
+
+from flask import Flask
+from flask import request
+from zoautil_py import Datasets
+app = Flask(__name__)
+
+
+@app.route('/')
+def get_dataset():
+    dataset = request.args.get('dataset')
+    if dataset:
+        return Datasets.read(dataset)
+    else:
+        return Datasets.read("PRICHAR.FLASK")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+
+With the above code, we’re parsing the GET parameters of the URL for a data set, if they’re provided. Otherwise, we just return our default data set that we want to see.
+With that, we can start our application and navigate with the url http://<server ip>:5000?dataset=<data set name>` where server IP is our mainframe IP, and data set name is the data set we want to read.
+The Result
+Now when we navigate to our site with a data set name as a GET parameter, we’ll get the contents of it!                                          
+                
+http://9.212.128.238:5000/?dataset=PRICHAR.SAMPLE.CUSTFILE
+00001AIBM 000445599000254205 S MIAMI BLVD--|RALEIGH------|NCUSA-------|100000001200000002300000003400000004500000005600000006700000007800000008900000009100000010110000011120000012OCCUPATION NOTES----1---------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------|DATA1DATA2----1---------2---------3---------| 00002AWIDGET MAKERS 000002599000064206 S MIAMI BLVD--|RALEIGH------|NCUSA-------|100000001200000002300000003400000004500000005600000006700000007800000008900000009100000010110000011120000012WIDGET DESIGNER WIDGET NOTES-------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------|DATA1DATA2----1---------2---------3---------| 00003ACAFE RTP 000003399000064208 S MIAMI BLVD--|RALEIGH------|NCUSA-------|100000001200000002300000003400000004500000005600000006700000007800000008900000009100000010110000011120000012DONUT BAKER CAFE NOTES -------2---------3---------4---------5---------6---------7---------8---------9---------0---------1---------|DATA1DATA2----1---------2---------3---------| 99999CCONTACT NAME----|CNCT DESC|CONTACT INFO-------|DATA3DATA4DATA56
+
+
+http://9.212.128.238:5000/?dataset=PRICHAR.SAMPLE.tranfile
+UPDATE 00001A REPLACE NAME 01 IBM-RTP CRUNCH 00001A 000000012 DELETE 00003A ADD 00004A UPDATE 99999C REPLACE NAME 01 CONTACT2
+
+PRICHAR.SAMPLE.CUSTFILE                     
+  
+PRICHAR.SAMPLE.CUSTOUT                      
+PRICHAR.SAMPLE.CUSTRPT                      
+                 
+PRICHAR.SAMPLE.TRANFILE   
+
+ BROWSE    PRICHAR.SAMPLE.TRANFILE  
+
+====================================
+operating a local file server with python
+python3 -m http.server
+192.168.0.66:8000
+Directory listing for /
+.bash_history
+.bashrc
+.cache/
+.cpan/
+.gitconfig
+.gnupg/
+.local/
+.nanorc
+.node_repl_history
+.npm/
+.npmrc
+.profile
+.python_history
+.sh_history
+.ssh/
+.zsh_history
+adcdcassl.crt
+Amazon-Root-CA-1.crt
+api/
+app.py
+azfprov1.sh
+azfprov2.sh
+BaseCA.crt
+buildpds.rex
+Common FTP Group that all Rules attls for ftp.txt
+conf/
+configuration_log.csv
+configuration_log1.csv
+configuration_log2.csv
+configuration_log3.csv
+configuration_log4.csv
+configuration_log6.csv
+c...
+...                L
+
+===== NO NO does not work virtual envt ===
+python virtual environment:
+python -m venv api
+
+PRICHAR:/u/prichar: >python3 -m venv api
+
+PRICHAR:/u/prichar: >PRICHAR:/u/prichar: >source api/bin/activate
+source: FSUM7351 not found
+PRICHAR:/u/prichar: >pip --version
+pip 24.0 from /usr/lpp/IBM/cyp/v3r12/pyz/lib/python3.12/site-packages/pip (python 3.12)
+PRICHAR:/u/prichar: >source
+source: FSUM7351 not found
+PRICHAR:/u/prichar: >python -m venv api
+PRICHAR:/u/prichar: >source
+source: FSUM7351 not found
+
+PRICHAR:/u/prichar: >bash
+
+PRICHAR:/u/prichar: >source
+bash: source: filename argument required
+source: usage: source filename [arguments]
+PRICHAR:/u/prichar: >source api/bin/activate
+(api) PRICHAR:/u/prichar: >pip --version
+
+pip 24.0 from /u/prichar/api/lib/python3.12/site-packages/pip (python 3.12)
+(api) PRICHAR:/u/prichar: >
+
+pip install --upgrade pip
+===== end ==========
+PRICHAR:/u/prichar: >bash
+
+pip install fastapi uvicorn
+
+(pip freeze)
+
+
+
+----------------------------------------------
+
+
+remove tags: chtag -r
+ ls -TaEls run*
+  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP      425 Dec 31 03:45 run_command_and_wait.sh
+  16 m IBM-1047    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP     3089 Dec 31 04:32 runjcl.py
+Z04683@S0W1:~/python $ chtag -r runjcl.py
+Z04683@S0W1:~/python $ ls -TaEls run*
+  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP      425 Dec 31 03:45 run_command_and_wait.sh
+  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP     3089 Dec 31 04:32 runjcl.py
+
+
+>mkdir python1
+PRICHAR:/u/prichar: >cd python1
+PRICHAR:/u/prichar/python1: >
+
+nano main.py
+iconv -f IBM-1047 -t ISO8859-1 main.py
+$ chtag -tc ISO8859-1 main.py
+ls -lT main.py
+
+
+PRICHAR:/u/prichar/python1: >nano izu.json
+
+cat izu*
+{
+        "display_cmd" : "D j,IZUANG1",
+        "down_msg"    : "IZUANG1 NOT FOUND",
+        "up_msg"    : "IZUANG1  IZUANG1  STEP1",
+        "start_cmd" : "S IZUANG"
+}
+
+PRICHAR:/u/prichar/python1: >
+cat main*
+from zoautil_py import opercmd, zsystem
+import json
+import time
+
+# Points to wherever your .json is stored
+JSON_PATH = 'izu.json'
+
+RETRY_INTERVAL = 2
+MAX_RETRIES = 6  # 6 x 2 = 12 seconds
+
+with open(JSON_PATH, 'r') as json_file:
+
+    data = json.load(json_file)
+
+    # assign the contents of the json to variables
+    start_cmd = data['start_cmd']
+    display_cmd = data['display_cmd']
+    up_msg = data['up_msg']
+    down_msg = data['down_msg']
+
+# execute the display  command
+zos_response = opercmd.execute(display_cmd)
+#print(zsystem.read_console())
+print(zos_response.stdout_response)
+for _ in range(MAX_RETRIES):
+
+    if down_msg in zos_response.stdout_response:
+        print("STC IZUANG1 is not started, will start it now !")
+# execute the start  command
+
+        zos_response = opercmd.execute(start_cmd)
+#print(zsystem.read_console())
+        print(zos_response.stdout_response)
+
+        break
+
+    time.sleep(RETRY_INTERVAL)
+else:
+     if up_msg in zos_response.stdout_response:
+        print("STC IZUANG1 is already started !")
+
+     else:
+        print("status of STC IZUANG1 is unknown....")
+
+
+PRICHAR:/u/prichar/python1: >
+
+nano dsinf.py
+
+from zoautil_py import datasets, jobs, zsystem
+import sys
+dsname = input("Enter the Sequential Data Set name: ")
+if (datasets.exists(dsname) == True):
+    print("Data set found! We will use it")
+else:
+    sys.exit("Without a data set name, we cannot continue. Quitting!")
+
+members = datasets.list_members(dsname)
+
+print(f"the dataset members are: {members}\n")
+
+
+PRICHAR:/u/prichar/my-example-project: >python3 ds*
+Enter the Sequential Data Set name: prichar.python.jcl
+Data set found! We will use it
+	the dataset members are: ['DATA', 'HELOWRLD', 'J', 'TESTJOB', 'TESTJOB1']
+echo $name | tr '[:lower:]' '[:upper:]'
+
+python/rexx:
+ python3 iplinfo.py
+Sysname  OS/390
+Version  05
+Release  29.00
+Node     S0W1
+Hardware 8561
+USER=Z04683  NAME=UNKNOWN  OWNER=SYS1      CREATED=21.253
+ DEFAULT-GROUP=STUDENTU PASSDATE=25.297 PASS-INTERVAL= 60 PHRASEDATE=N/A
+ ATTRIBUTES=NONE
+ REVOKE DATE=NONE   RESUME DATE=NONE
+ LAST-ACCESS=25.309/07:06:59
+ CLASS AUTHORIZATIONS=NONE
+ INSTALLATION-DATA=PHIL34130@GMAIL.COM
+ NO-MODEL-NAME
+ LOGON ALLOWED   (DAYS)          (TIME)
+ ---------------------------------------------
+ ANYDAY                          ANYTIME
+  GROUP=TECHTEAM  AUTH=USE      CONNECT-OWNER=TECH      CONNECT-DATE=22.348
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=STUDENTU  AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=23.187
+    CONNECTS=   661  UACC=NONE     LAST-CONNECT=25.309/07:06:59
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=CSQ9USR   AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=23.187
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=@Z04683   AUTH=USE      CONNECT-OWNER=A99993    CONNECT-DATE=24.096
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=OMPCOBOL  AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=24.172
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=CICS4ZXP  AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=24.354
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=ZXPIZUWF  AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=25.073
+    CONNECTS=    01  UACC=NONE     LAST-CONNECT=25.121/06:27:38
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+  GROUP=IZUUSRU   AUTH=USE      CONNECT-OWNER=IBM0001   CONNECT-DATE=25.122
+    CONNECTS=    00  UACC=NONE     LAST-CONNECT=UNKNOWN
+    CONNECT ATTRIBUTES=NONE
+    REVOKE DATE=NONE   RESUME DATE=NONE
+SECURITY-LEVEL=NONE SPECIFIED
+CATEGORY-AUTHORIZATION
+ NONE SPECIFIED
+SECURITY-LABEL=NONE SPECIFIED
+
+    /z/z04683/iplinfo.py                            Columns 00001
+ ===>                                                  Scroll ===
+***************************** Top of Data ***********************
+import subprocess                                                
+import sys                                                       
+                                                                 
+if __name__ == '__main__':                                       
+    output = subprocess.check_output(['./rexx/sysinfo.rexx'])    
+    output=(str(output,'utf-8'))                                 
+    print(output)                                                
+
+
+ BROWSE    /z/z04683/rexx/sysinfo.rexx        
+ Command ===>                                 
+********************************* Top of Data 
+/* REXX *** */                                
+/* return OMVS information */                 
+address syscall                               
+'uname sys.'                                  
+say 'Sysname  'sys.U_SYSNAME                  
+say 'Version  'sys.U_VERSION                  
+say 'Release  'sys.U_RELEASE                  
+say 'Node     'sys.U_NODENAME                 
+say 'Hardware 'sys.U_MACHINE                  
+address TSO                                   
+lu userid()                                   
+exit 0                                        
+
+ZOAU load modules:
+
+cat hc_detail.py
+
+from zoautil_py import datasets, mvscmd
+from zoautil_py.ztypes import DDStatement, DatasetDefinition
+tmp_name = datasets.tmp_name(high_level_qualifier="Z04683")
+tmp_ds = datasets.create(tmp_name, "SEQ", primary_space = "1K",
+                         record_format="FB", record_length=256)
+print(tmp_ds)
+dd_statements = [
+    DDStatement(name="SYSOUT", definition=DatasetDefinition(tmp_name))
+]
+
+
+result = mvscmd.execute_authorized("HZSPRNT",
+         pgm_args="CHECK(IBMUSS,USS_PARMLIB)",
+         dds=dd_statements,
+         verbose=True)
+if result.rc == 0:
+    output = datasets.read(tmp_name)
+    [print(line.strip()) for line in output.split('\n')]
+
+
+>python3 hc_detail.py
+{'name': 'PRICHAR.P0065656.T0345206.C0000000', 'organization': 'PS', 'record_format': 'FB', 'volume': 'B3USR1', 'type': 'BASIC', 'block_size': 27904, 'record_length': 256, 'total_space': 56664, 'used_space': 0, 'last_referenced': None}
+[<zoautil_py.ztypes.DDStatement object at 0x5008BE48F0>]
+PRICHAR:/u/prichar/python1: >nano hc*
+PRICHAR:/u/prichar/python1: >python3 hc_detail.py
+{'name': 'PRICHAR.P0065658.T0478317.C0000000', 'organization': 'PS', 'record_format': 'FB', 'volume': 'B3USR1', 'type': 'BASIC', 'block_size': 27904, 'record_length': 256, 'total_space': 56664, 'used_space': 0, 'last_referenced': None}
+
+1************************************************************************
+*                                                                      *
+* HZSPRINT (HBB77E0-22269)  2025/11/05 17:31                           *
+*                                                                      *
+* HZSU001I Check messages                                              *
+* Sysplex: ADCDPL    System: S0W1                                      *
+*                                                                      *
+* Filter: CHECK(IBMUSS,USS_PARMLIB)                                    *
+*                                                                      *
+************************************************************************
+
+
+
+************************************************************************
+*                                                                      *
+* Start: CHECK(IBMUSS,USS_PARMLIB)                                     *
+*                                                                      *
+************************************************************************
+
+CHECK(IBMUSS,USS_PARMLIB)
+SYSPLEX:    ADCDPL    SYSTEM: S0W1
+START TIME: 11/05/2025 17:13:06.119922
+CHECK DATE: 20060112  CHECK SEVERITY: LOW
+
+BPXH003I z/OS UNIX System Services was initialized using
+OMVS=(00,01,BP,IZ,CI,DB,IM,W9,RZ,RT,BB,ZW,DG,PY,JV,), where each
+2-character item is a BPXPRMxx suffix.
+
+BPXH041I The following differences were found between the system
+settings and the BPXPRMxx parmlib members:
+
+
+Changed File Systems
+-----------------------------------------------------------
+File System: IZU.SIZUUSRD
+BPXPRMIZ Value:
+Path: /global/zosmf
+Automove: NOAUTOMOVE
+Access: RDWR
+Parm: NONE
+
+System Value:
+This file system is currently not mounted.
+
+File System: DSND10.SJVAZFS
+BPXPRMDB Value:
+Path: /u/dbdg
+Automove: NOAUTOMOVE
+Access: RDWR
+Parm: NONE
+
+System Value:
+This file system is currently not mounted.
+
+File System: ZFS.BGY130.ZOAU13
+BPXPRMRZ Value:
+Path: zoautil
+Automove: AUTOMOVE
+Access: READ
+Parm: NONE
+
+System Value:
+Path: zoautil
+Automove: AUTOMOVE
+Access: RDWR
+Parm: NONE
+
+File System: ISM403.CYP312.ZFS
+BPXPRMPY Value:
+Path: v3r12
+Automove: AUTOMOVE
+Access: READ
+Parm: NONE
+
+System Value:
+Path: v3r12
+Automove: AUTOMOVE
+Access: RDWR
+Parm: NONE
+
+
+* Low Severity Exception *
+
+BPXH040E One or more differences were found between the system settings
+and the settings in the current BPXPRMxx parmlib members.
+
+Explanation:  Check USS_PARMLIB detected changes made to either the
+system settings or to the BPXPRMxx parmlib members.
+
+System Action:  The system continues processing.
+
+Operator Response:  Report this problem to the system programmer.
+
+System Programmer Response:  View the message buffer for information
+on what values have changed. Use the DISPLAY OMVS,OPTIONS command to
+view what the current system settings are. The system values can be
+changed dynamically by using the SETOMVS command. If the current
+system values are desired, then a permanent definition should be
+created so the values will be available the next time z/OS UNIX
+System Services is initialized. A permanent definition can be
+created by editing the BPXPRMxx parmlib members to include the
+desired values.
+
+
+END TIME: 11/05/2025 17:13:10.176362  STATUS: EXCEPTION-LOW
+
+************************************************************************
+*                                                                      *
+* End:   CHECK(IBMUSS,USS_PARMLIB)                                     *
+*                                                                      *
+*******************************
+
+
+python3 main.py
+
+>python3 main.py
+S0W1       2025306  13:28:02.00             ISF031I CONSOLE PRIC0000 ACTIVATED
+S0W1       2025306  13:28:02.00            -D J,IZUANG1
+S0W1       2025306  13:28:02.00             CNZ4106I 13.28.03 DISPLAY ACTIVITY 672
+                                            JOBS     M/S    TS USERS    SYSAS    INITS   ACTIVE/MAX VTAM     OAS
+                                           00014    00025    00001      00034    00031    00001/00040       00038
+                                            IZUANG1  IZUANG1  STEP1    NSW  SO  A=005D   PER=NO   SMC=000
+                                                                                PGN=N/A  DMN=N/A  AFF=NONE
+                                                                                CT=000.507S  ET=813.971S
+                                                                                WUID=STC04658 USERID=IZUSVR
+                                                                                WKL=STARTED  SCL=STCHIM   P=1
+                                                                                RGP=N/A      SRVR=NO  QSC=NO
+                                                                                ADDR SPACE ASTE=7EEB8740
+
+STC IZUANG1 is already started !
+
+PRICHAR:/u/prichar/python1: >opercmd "d a,l"
+S0W1       2025305  20:21:45.00             ISF031I CONSOLE PRIC0000 ACTIVATED
+S0W1       2025305  20:21:45.00            -D A,L
+S0W1       2025305  20:21:45.00             CNZ4105I 20.21.46 DISPLAY ACTIVITY 505
+                                            JOBS     M/S    TS USERS    SYSAS    INITS   ACTIVE/MAX VTAM     OAS
+                                           00014    00025    00001      00034    00033    00001/00040       00040
+                                            LLA      LLA      LLA      NSW  S  CNMPSSI  CNMPSSI  NETVIEW  NSW  S
+                                            CNMPROC  CNMPROC
+
+nano console.sh
+
+./console.sh 
+
+PRICHAR:/u/prichar/python1: >apfadm -j -l
+
+[{"format": "DYNAMIC"}, {"header": ["S0W1       2025305  20:36:52.00             ISF031I CONSOLE PRIC0000 ACTIVATED", "S0W1       2025305  20:36:52.00            -D PROG,APF", "S0W1       2025305  20:36:52.00             CSV450I 20.36.53 PROG,APF DISPLAY 550", "FORMAT=DYNAMIC", "ENTRY VOLUME DSNAME"]}, {"vol":"B3RES1", "ds": "SYS1.LINKLIB"}, {"vol":"B3RES1", "ds": "SYS1.SVCLIB"}, {"vol":"B3RES1", "ds": "SYS1.SHASLNKE"}, {"vol":"B3RES1", "ds": "SYS1.SIEAMIGE"}, {"vol":"B3RES1", "ds": "SYS1.MIGLIB"}, {"vol":"B3RES1", "ds": "SYS1.SERBLNKE"}, {"vol":"B3RES1", "ds": "SYS1.SGRBLINK"}, {"vol":"B3RES1", "ds": "SYS1.SIEALNKE"}, {"vol":"B3RES1", "ds": "SYS1.CSSLIB"}, {"vol":"B3RES1", "ds": "GIM.SGIMLMD0"}, {"vol":"B3RES1", "ds": "SYS1.SHASMIG"}, {"vol":"B3RES2", "ds": "CSF.SCSFMOD0"}, {"vol":"B3RES1", "ds": "CSF.SCSFSTUB"}, {"vol":"B3RES2", "ds": "ISF.SISFLOAD"}, {"vol":"B3CFG1", "ds": "USER.Z31B.LINKLIB"}, {"vol":"B3CFG1", "ds": "FEU.Z31B.LINKLIB"}, {"vol":"B3SYS1", "ds": "ADCD.Z31B.LINKLIB"}, {"vol":"B3CFG1", "ds": "USER.Z31B.VTAMLIB"}, {"vol":"B3CFG1", "ds": "FEU.Z31B.VTAMLIB"}, {"vol":"B3SYS1", "ds": "ADCD.Z31B.VTAMLIB"}, {"vol":"B3RES1", "ds": "FFST.SEPWMOD2"}, {"vol":"B3RES1", "ds": "FFST.SEPWMOD4"}, {"vol":"B3RES2", "ds": "NFS.NFSLIBE"}, {"vol":"B3RES1", "ds": "TCPIP.SEZATCP"}, {"vol":"B3RES1", "ds": "TCPIP.SEZALNK2"}, {"vol":"B3RES2", "ds": "TCPIP.SEZADSIL"}, {"vol":"B3RES1", "ds": "TCPIP.SEZALPA"}, {"vol":"B3RES1", "ds": "TCPIP.SEZALOAD"}, {"vol":"B3RES1", "ds": "ISP.SISPLOAD"}, {"vol":"B3RES1", "ds": "SYS1.VTAMLIB"}, {"vol":"B3RES1", "ds": "SYS1.SISTCLIB"}, {"vol":"B3RES2", "ds": "CEE.SCEERUN"}, {"vol":"B3RES2", "ds": "CEE.SCEERUN2"}, {"vol":"B3RES1", "ds": "CBC.SCLBDLL"}, {"vol":"B3RES1", "ds": "CBC.SCLBDLL2"}, {"vol":"B3PRD2", "ds": "IGY640.SIGYCOMP"}, {"vol":"B3PRD1", "ds": "ISM403.SEQABMOD"}, {"vol":"B3PRD1", "ds": "ISM403.SEQAAUTH"}, {"vol":"B3PRD1", "ds": "FAN140.SEAGLPA"}, {"vol":"B3PRD1", "ds": "DIT130.SDITMOD1"}, {"vol":"B3PRD1", "ds": "ISM403.SEQAMOD"}, {"vol":"*SMS*", "ds": "ISM403.DB2SP.SCEERUN"}, {"vol":"*SMS*", "ds": "FEU.SFEUAUTH"}, {"vol":"*SMS*", "ds": "FEU1.SFEUAUTH"}, {"vol":"B3BLZ1", "ds": "BLZ703.SBLZAUTH"}, {"vol":"B3BLZ1", "ds": "BLZ703.SBLZLOAD"}, {"vol":"B3PRD4", "ds": "AZF230.SAZFLOAD"}, {"vol":"ZSC205", "ds": "SYS2.ZSC25.SCKRLOAD"}, {"vol":"ZSC205", "ds": "SYS2.ZSC25.SB8RLN"}, {"vol":"B3PRD1", "ds": "ISM403.SFEKAUTH"}, {"vol":"B3PRD1", "ds": "ISM403.SFELLPA"}, {"vol":"B3PRD1", "ds": "FEUE21.SFEUAUTH"}, {"vol":"B3C610", "ds": "DFH610.CICS.SDFHEXCI"}, {"vol":"B3C610", "ds": "DFH610.CICS.SDFHAUTH"}, {"vol":"B3C610", "ds": "DFH610.CPSM.SEYUAUTH"}, {"vol":"B3C610", "ds": "DFH610.CICS.SDFHLPA"}, {"vol":"B3C610", "ds": "DFH610.CPSM.SEYULPA"}, {"vol":"B3C610", "ds": "DFH610.CICS.SDFHLINK"}, {"vol":"B3C610", "ds": "DFH610.CPSM.SEYULINK"}, {"vol":"B3C610", "ds": "DFH610.SDFHLIC"}, {"vol":"B3DBD1", "ds": "DSND10.SDSNLINK"}, {"vol":"B3DBD1", "ds": "DSND10.DBDG.SDSNEXIT"}, {"vol":"B3DBD1", "ds": "DSND10.SDSNLOAD"}, {"vol":"B3DBD1", "ds": "DSND10.SDSNLOD2"}, {"vol":"B3DBD1", "ds": "DSND10.SDXRRESL"}, {"vol":"B3DBD1", "ds": "ADBD10.SADBLINK"}, {"vol":"B3IMF1", "ds": "DFSF10.SDXRRESL"}, {"vol":"B3IMF1", "ds": "DFSF10.SDFSRESL"}, {"vol":"B3IMF1", "ds": "DFSF10.MODBLKS"}, {"vol":"B3IMF1", "ds": "DFSF10.MODBLKSA"}, {"vol":"B3IMF1", "ds": "DFSF10.MODBLKSB"}, {"vol":"B3IMF1", "ds": "DFSF10.VTAMLIB"}, {"vol":"B3IMF1", "ds": "DFSF10.USER.SDFSRESL"}, {"vol":"B3PRD4", "ds": "CSQ920.SCSQLINK"}, {"vol":"B3PRD4", "ds": "CSQ920.SCSQAUTH"}, {"vol":"B3PRD4", "ds": "CSQ920.CSQ9.SCSQAUTH"}, {"vol":"B3PRD4", "ds": "CSQ920.SCSQSNLE"}, {"vol":"B3PRD4", "ds": "CSQ920.SCSQANLE"}, {"vol":"B3PRD4", "ds": "CSQ920.SCSQMVR1"}, {"vol":"B3ZWE1", "ds": "ZWE200.SZWEAUTH"}, {"vol":"B3PRD3", "ds": "NET640.CNMLINK"}, {"vol":"B3PRD3", "ds": "NET640.SCNMLNKN"}, {"vol":"B3PRD3", "ds": "NET640.SCNMLNK1"}, {"vol":"B3PRD3", "ds": "NET640.SCNMLPA1"}
+
+opercmd -t "d a,l"
+
+pparm
+
+dslist.py
+PRICHAR:/u/prichar: >python3 dslist.py
+1: AWSCERTA
+2: COMPROBJ
+3: CREBUCKT
+4: CREDLIST
+5: CSFKEYS
+6: DELMULTI
+7: DOWNLOAD
+8: DOWNMULT
+9: DOWNPAST
+10: DOWNUNIX
+11: FULLREST
+12: FULLVOL
+13: GDKUTIL1
+14: IKJ
+15: J
+16: LISTCRED
+17: LISTFIL
+18: LISTPROV
+19: RETRVFIL
+20: SENDGDG
+21: TERSE
+22: UPLDUMP
+23: UPLODMUL
+24: UPLODUMP
+25: UPLSEQDS
+
+python3 members.py
+Enter the Sequential Data Set name: prichar.python.out
+'PRICHAR.PYTHON.OUT'
+Data set not found. Should we create it? (y/n) : y
+['SYS1.LINKLIB'
+ 'SYS1.MIGLIB'
+ 'SYS1.CSSLIB'
+ 'SYS1.SIEALNKE'
+ 'SYS1.SIEAMIGE'
+ 'SYS1.SHASLNKE'
+ 'SYS1.SERBLNKE'
+ 'SYS1.SGRBLINK'
+ 'SYS1.SHASMIG'
+ 'SYS1.SCBDHENU'
+ 'SYS1.DGTLLIB'
+ 'SYS1.CMDLIB'
+ 'SYS1.SICELINK'
+ 'SYS1.SORTLIB'
+ 'GIM.SGIMLMD0'
+ 'CEE.SCEERUN'
+ 'ISF.SISFLOAD'
+ 'CSF.SCSFMOD0'
+ 'CSF.SCSFSTUB'
+ 'CEE.SCEERUN2'
+ 'CBC.SCLBDLL'
+ 'CBC.SCLBDLL2'
+ 'ISP.SISPLOAD'
+ 'FFST.SEPWMOD2'
+ 'FFST.SEPWMOD4'
+ 'TCPIP.SEZALOAD'
+ 'HLA.SASMMOD1'
+ 'GDDM.SADMMOD'
+ 'USER.Z31B.LINKLIB'
+ 'FEU.Z31B.LINKLIB'
+ 'ADCD.Z31B.LINKLIB'
+ 'CBC.SCCNCMP'
+ 'CSQ920.SCSQLINK'
+ 'CSQ920.SCSQAUTH'
+ 'CSQ920.SCSQMVR1'
+ 'CSQ920.SCSQANLE'
+ 'CSQ920.SCSQSNLE'
+ 'IGY640.SIGYCOMP'
+ 'ISM403.SEQABMOD'
+ 'ISM403.SEQAMOD'
+ 'FAN140.SEAGALT'
+ 'FAN140.SEAGLMD'
+ 'FAN140.SFANLMD'
+ 'DIT130.SDITMOD1'
+ 'BLZ703.SBLZLOAD'
+ 'BLZ703.SBLZAUTH'
+ 'AZF230.SAZFLOAD'
+ 'ISM403.SFEKAUTH'
+ 'ISM403.SFEKLPA'
+ 'ISM403.SFELLMOD'
+ 'ISM403.SFELLOAD'
+ 'ISM403.SFELLPA'
+ 'DFH610.CICS.SDFHLINK'
+ 'DFH610.CPSM.SEYULINK'
+ 'DSND10.SDSNLINK']
+
+ZOA commands:
+see https://www.ibm.com/docs/en/zoau/1.3.x?topic=code-examples
+
+pparm
+USER.Z31B.PARMLIB
+FEU.Z31B.PARMLIB
+ADCD.Z31B.PARMLIB
+SYS1.PARMLIB
+
+Search parmlib for a member
+With ZOAU, you can search for the dataset that a member, for example ZSCHED00, comes from in the parmlib concatenation in the following ways:
+
+Issuing a shell command:
+parmwhence BPXPRM01
+parmwhence BPXPRM01
+FEU.Z31B.PARMLIB
+
+
+Search parmlib for a string
+With ZOAU, you can search for a string, for example NODSI, across the parmlib concatenation in the following ways:
+
+Issuing a shell command:
+parmgrep "MOUNT"
+parmgrep "MOUNT"
+FEU.Z31B.PARMLIB BPXPRMAU   MOUNT    FILESYSTEM('ZFS.&SYSNAME..SYSTEM')
+FEU.Z31B.PARMLIB BPXPRMAU            MODE(RDWR) UNMOUNT
+FEU.Z31B.PARMLIB BPXPRMAU            MOUNTPOINT('/&SYSNAME.')
+FEU.Z31B.PARMLIB BPXPRMAU   MOUNT    FILESYSTEM('ZFS.&SYSVER..VERSION')
+FEU.Z31B.PARMLIB BPXPRMAU            MOUNTPOINT('/$VERSION')
+
+...
+...
+FEU.Z31B.PARMLIB BPXPRMDG MOUNT    FILESYSTEM('ISM403.EQA.ZFS')
+FEU.Z31B.PARMLIB BPXPRMDG MOUNTPOINT('/usr/lpp/IBM/debug')
+FEU.Z31B.PARMLIB BPXPRMGO MOUNT    FILESYSTEM('CVG122.ZFS')
+FEU.Z31B.PARMLIB BPXPRMGO MOUNTPOINT('/usr/lpp/IBM/cvg')
+FEU.Z31B.PARMLIB BPXPRMJV MOUNT    FILESYSTEM('ZFS.JAVASC')
+FEU.Z31B.PARMLIB BPXPRMJV MOUNTPOINT('/javasc')
+FEU.Z31B.PARMLIB BPXPRMPY MOUNT    FILESYSTEM('ISM403.CYP312.ZFS')
+FEU.Z31B.PARMLIB BPXPRMPY          MOUNTPOINT('/usr/lpp/IBM/cyp/v3r12')
+FEU.Z31B.PARMLIB BPXPRM01 MOUNT    FILESYSTEM('ZFS.&SYSNAME..SYSTEM')
+FEU.Z31B.PARMLIB BPXPRM01          MODE(RDWR) UNMOUNT
+FEU.Z31B.PARMLIB BPXPRM01          MOUNTPOINT('/&SYSNAME.')
+FEU.Z31B.PARMLIB BPXPRM01 MOUNT    FILESYSTEM('ZFS.&SYSVER..VERSION')
+FEU.Z31B.PARMLIB BPXPRM01          MOUNTPOINT('/$VERSION')
+...
+...
+ADCD.Z31B.PARMLIB BPXPRMBP MOUNT    FILESYSTEM('BUZ732.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMBP          MOUNTPOINT('/usr/lpp/IBM/ucd/v7.3.2')
+ADCD.Z31B.PARMLIB BPXPRMBP MOUNT    FILESYSTEM('BUZ732.CONFIG.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMBP          MOUNTPOINT('/apps/ucd/v7.3.2')
+ADCD.Z31B.PARMLIB BPXPRMBP MOUNT FILESYSTEM('BAQ30E.BASE.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMBP       MOUNTPOINT('/usr/lpp/IBM/zosconnect')
+ADCD.Z31B.PARMLIB BPXPRMBP MOUNT FILESYSTEM('BAQ30E.REL.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMBP         MOUNTPOINT('/usr/lpp/IBM/zosconnect/v3r0')
+ADCD.Z31B.PARMLIB BPXPRMBP MOUNT FILESYSTEM('ZFS.&SYSNAME..ZOS.CONNECT')
+ADCD.Z31B.PARMLIB BPXPRMBP         MOUNTPOINT('/var/zosconnect')
+ADCD.Z31B.PARMLIB BPXPRMCI MOUNT    FILESYSTEM('DFH610.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMCI          MOUNTPOINT('/usr/lpp/cicsts/cicsts61')
+ADCD.Z31B.PARMLIB BPXPRMCI MOUNT    FILESYSTEM('DFH610.JVMPROFS.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMCI          MOUNTPOINT('/usr/lpp/cicsts/cicsts61/JVMProfiles')
+ADCD.Z31B.PARMLIB BPXPRMCI MOUNT    FILESYSTEM('DFH610.SAMPLES.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMCI          MOUNTPOINT('/usr/lpp/cicsts/cicsts61/samples')
+ADCD.Z31B.PARMLIB BPXPRMCI MOUNT    FILESYSTEM('DFH610.USCONFIG.ZFS')
+ADCD.Z31B.PARMLIB BPXPRMCI          MOUNTPOINT('/usr/lpp/cicsts/cicsts61/dfhconfig')
+ADCD.Z31B.PARMLIB BPXPRMDB MOUNT    FILESYSTEM('DSND10.SDSNAZFS')
+ADCD.Z31B.PARMLIB BPXPRMDB          MOUNTPOINT('/usr/lpp/db2d10/base')
+ADCD.Z31B.PARMLIB BPXPRMDB MOUNT    FILESYSTEM('DSND10.SDSNJCC')
+ADCD.Z31B.PARMLIB BPXPRMDB          MOUNTPOINT('/usr/lpp/db2d10/jdbc')
+ADCD.Z31B.PARMLIB BPXPRMDB MOUNT    FILESYSTEM('DSND10.SDSNMQLS')
+ADCD.Z31B.PARMLIB BPXPRMDB          MOUNTPOINT('/usr/lpp/db2d10/mql')
+ADCD.Z31B.PARMLIB BPXPRMDB MOUNT    FILESYSTEM('DSND10.SDSNWORF')
+
+Print the current HLQ
+Last Updated
+: 2025-10-17
+With ZOAU, you can print the high-level qualifier (HLQ) of the active TSO environment in the following ways:
+
+Issuing a shell command:
+
+Option 1:
+hlq
+Option 2:
+echo "  PROFILE" | mvscmdauth --pgm=IKJEFT01 --sysprint=* --systsprt=* --systsin=stdin | awk '/PREFIX/ { print $11; }'
+ echo "  PROFILE" | mvscmdauth --pgm=IKJEFT01 --sysprint=* --systsprt=* --systsin=stdin | awk '/PREFIX/ { print $11; }'
+PREFIX(PRICHAR)
+
+List all non-VSAM datasets under your default high-level-qualifier:
+
+dls -l "`hlq`.*"
+Get a JSON object with detailed information for datasets under your high-level-qualifier:
+ dls -l "`hlq`.*.JCL"
+PRICHAR.CDA.JCL                              PO  FB      80 B3USR1
+PRICHAR.DSFS.JCL                             PO  FB      80 B3USR1
+PRICHAR.ES28.JCL                             PO  FB      80 B3USR1
+PRICHAR.ES66.JCL                             PO  FB      80 B3USR1
+PRICHAR.HERCULES.ZOS31.JCL                   PO  FB      80 B3USR1
+PRICHAR.HTTPD.JCL                            PO  FB      80 B3USR1
+PRICHAR.LDAP.LDBM13.JCL                      PO  FB      80 B3USR1
+PRICHAR.LIBERTY.JCL                          PO  FB      80 B3USR1
+PRICHAR.MFA.JCL                              PO  FB      80 B3USR1
+PRICHAR.PASSTIKT.ENHC.JCL                    PO  FB      80 B3USR1
+PRICHAR.PASSTIKT.JCL                         PO  FB      80 B3USR1
+PRICHAR.PYTHON.JCL                           PO  FB      80 B3USR1
+PRICHAR.RACFAUTH.JCL                         PO  FB      80 B3USR1
+PRICHAR.X9.JCL                               PO  FB      80 B3USR1
+PRICHAR.ZOSMF.JCL                            PO  FB      80 B3USR1
+
+dls -j -bsu "$(hlq).*.JCL"
+dls -j -bsu "$(hlq).*.JCL"
+{"data":{"datasets":[{"name":"PRICHAR.CDA.JCL","alloc":"849960","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"419700","volume":"B3USR1"},{"name":"PRICHAR.DSFS.JCL","alloc":"339984","blksize":" 3200","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"22202","volume":"B3USR1"},{"name":"PRICHAR.ES28.JCL","alloc":"509976","blksize":"27920","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"491120","volume":"B3USR1"},{"name":"PRICHAR.ES66.JCL","alloc":"1926576","blksize":"27920","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/14","used":"1846874","volume":"B3USR1"},{"name":"PRICHAR.HERCULES.ZOS31.JCL","alloc":"566640","blksize":" 3120","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"285972","volume":"B3USR1"},{"name":"PRICHAR.HTTPD.JCL","alloc":"849960","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"302972","volume":"B3USR1"},{"name":"PRICHAR.LDAP.LDBM13.JCL","alloc":"339984","blksize":" 3200","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"334218","volume":"B3USR1"},{"name":"PRICHAR.LIBERTY.JCL","alloc":"849960","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"772740","volume":"B3USR1"},{"name":"PRICHAR.MFA.JCL","alloc":"7649640","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"902490","volume":"B3USR1"},{"name":"PRICHAR.PASSTIKT.ENHC.JCL","alloc":"509976","blksize":" 3200","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"483368","volume":"B3USR1"},{"name":"PRICHAR.PASSTIKT.JCL","alloc":"849960","blksize":"27920","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"560636","volume":"B3USR1"},{"name":"PRICHAR.PYTHON.JCL","alloc":"849960","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/07","used":"313784","volume":"B3USR1"},{"name":"PRICHAR.RACFAUTH.JCL","alloc":"793296","blksize":"27920","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"760976","volume":"B3USR1"},{"name":"PRICHAR.X9.JCL","alloc":"7649640","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/07","used":"7068292","volume":"B3USR1"},{"name":"PRICHAR.ZOSMF.JCL","alloc":"2549880","blksize":"24000","dsorg":"PO","lrecl":"80","recfm":"FB","ref":"2025/11/05","used":"2142910","volume":"B3USR1"}]}}
+
+
+
+List all non-VSAM datasets that have an HLQ of TEST, followed by TSTR, and then exactly three characters, with a low-level qualifier of JCL:
+
+dls -l 'test.tstr???.*.jcl'
+
+
+Test whether a dataset exists:
+
+dls -q $(hlq).x9.jcl
+if [ $? -eq 0 ]; then
+  echo "Dataset exists."
+fi
+Dataset exists.
+
+
+List all the non-VSAM datasets that match the pattern TEST.**.X*: and volume VOLSER:
+
+dls -l -V VOLSER TEST.**.X*
+
+
+EXIT VALUES
+0
+  At least one dataset was found matching a <dataset-pattern>
+
+1
+  No datasets were found.
+
+other
+  Error in dataset listing. See error messages for details.
+
+jobs:
+EXAMPLES
+Cancels JOB0001 with jobname IBMUSERX:
+
+jcan C IBMUSERX JOB0001
+
+
+Cancels and purges all jobs with jobname IBMUSERX:
+
+jcan P IBMUSERX //
+
+huawei zexplore:
+Z04683-[/z/z04683/python] $>ls
+compress.sh         fia.py              local_time          readds.py
+cpy_file_to_ds.py   fib.py              mps.sh              readfi.py
+dcat.sh             fib.sh              program1.py         submit_and_wait.sh
+ebcdic_test.txt     iehlist.sh          query_sys.py        testa.txt
+ebcdic_testa.txt    listcat.sh          racf_digtring.sh    textb.txt
+
+Z04683-[/z/z04683] $>ls *.py
+code1.py        dslist.py       marbles.py      python_scr1.py
+code2.py        dslist2.py      members.py
+
+
+PRICHAR:/u/prichar/python1: >python3 python_jcl.py
+JobId : JOB04677
+Job Name : PRICHARZ
+Job Owner : PRICHAR
+Job Status : CC
+Job RC : 0000
+
+cat python_jcl*
+from zoautil_py import jobs, datasets
+
+jcl_template = """
+//PRICHARZ JOB (ACCT#1),'JCL FROM PYTHON',
+//     CLASS=A,
+//     MSGCLASS=X,NOTIFY=&SYSUID
+//*
+//STEP1     EXEC PGM=SORT
+//SYSPRINT  DD  SYSOUT=*
+//SYSOUT    DD  SYSOUT=*
+//SORTIN    DD DSN=PRICHAR.PYTHON.JCL(DATA),DISP=SHR
+//* PATH='/u/prichar/python1/data'
+//SORTOUT   DD DSN=PRICHAR.SORTOUT1,
+//          DISP=(NEW,CATLG),
+//          SPACE=(TRK,(5,5)),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=800),
+//          UNIT=3390
+//*
+//SYSIN     DD *
+ SORT FIELDS=COPY
+ OUTREC FIELDS=(1:6,25,26:46,5,50X)
+/*
+//*
+"""
+
+mypds = datasets.hlq() + ".PYTHON.JCL"
+this_job = mypds + "(TESTJOB)"
+datasets.write(dataset=this_job, content=jcl_template)
+job_info = jobs.submit(this_job)
+
+print(f"JobId : {job_info.id}")
+print(f"Job Name : {job_info.name}")
+print(f"Job Owner : {job_info.owner}")
+
+job_info.wait()
+job_info.refresh()
+print(f"Job Status : {job_info.status}")
+print(f"Job RC : {job_info.rc}")
+PRICHAR:/u/prichar/python1: >
+
+ BROWSE    PRICHAR.PYTHON.SORTOUT1    
+********************************* Top 
+JOHN                     08000        
+AKSHAY                   10000        
+SMITH                    25000        
+JOHN                     28000        
+
+dcat.sh prichar.python.jcl(data)
+bash: syntax error near unexpected token `('
+PRICHAR:/u/prichar/python1: >dcat.sh "prichar.python.jcl(data)"
+88888JOHN                     PURCHASING     08000                      00010001
+11111AKSHAY                   HR             10000                      00020001
+55555SMITH                    R&D            25000                      00030001
+99999JOHN                     ADMIN          28000                      00040001
+PRICHAR:/u/prichar/python1: >dcat.sh "prichar.python.jcl(tes*)"
+
+//PRICHARZ JOB (ACCT#1),'JCL FROM PYTHON',
+//     CLASS=A,
+//     MSGCLASS=X,NOTIFY=&SYSUID
+//*
+//STEP1     EXEC PGM=SORT
+//SYSPRINT  DD  SYSOUT=*
+//SYSOUT    DD  SYSOUT=*
+//SORTIN    DD DSN=PRICHAR.PYTHON.JCL(DATA),DISP=SHR
+//* PATH='/u/prichar/python1/data'
+//SORTOUT   DD DSN=PRICHAR.PYTHON.SORTOUT1,
+//          DISP=(NEW,CATLG),
+//          SPACE=(TRK,(5,5)),
+//          DCB=(RECFM=FB,LRECL=80,BLKSIZE=800),
+//          UNIT=3390
+//*
+//SYSIN     DD *
+ SORT FIELDS=COPY
+ OUTREC FIELDS=(1:6,25,26:46,5,50X)
+/*
+//*
+
+
+
+python3 jobs.py
+Details - sample job
+id: JOB04692
+name: UPTIME
+owner: PRICHAR
+status: AC
+rc: ?
+Waiting for job completion, then refresh and print status, rc...
+status:  CC
+rc:  0000
+The contents of the STDOUT DD:
+02:42PM  up 3 day(s), 06:32,  1 users,  load average: 0.00, 0.00, 0.00
+
+
+./listd* prichar.python.jcl
+1 arguments
+1                              SYSTEMS SUPPORT UTILITIES---IEHLIST                               PAGE    1
+-DATE: 2025.306  TIME: 17.33.36                                                 
+  DIRECTORY INFO FOR SPECIFIED PDS ON VOL B3USR1                                
+ IEH102I  THIS VOLUME DOES NOT CONTAIN DATA SET ---prichar.python.jcl           
+PRICHAR:/u/prichar/python1: >./listd* PRICHAR.PYTHON.JCL
+1 arguments
+1                              SYSTEMS SUPPORT UTILITIES---IEHLIST                               PAGE    1
+-DATE: 2025.306  TIME: 17.34.55                                                 
+  DIRECTORY INFO FOR SPECIFIED PDS ON VOL B3USR1                                
+ PRICHAR.PYTHON.JCL                                                             
+0                                                OTHER INFORMATION INDEX        
+0    SCATTER FORMAT   SCTR=SCATTER/TRANSLATION TABLE TTR IN HEX,LEN OF SCTR LIST IN DEC,LEN OF TRANS TABLE IN DEC,
+                           ESDID OF FIRST TEXT RCD IN DEC,ESDID OF CSECT CONTAINING ENTRY POINT IN DEC
+0    OVERLAY FORMAT   OVLY=NOTE LIST RCD TTR IN HEX,NUMBER OF ENTRIES IN NOTE LIST RCD IN DEC
+0    ALIAS NAMES      ALIAS MEMBER NAMES WILL BE FOLLOWED BY AN ASTERISK IN THE PDS FORMAT LISTING
+-                                                   ATTRIBUTE INDEX             
+-       BIT  ON     OFF          BIT  ON      OFF           BIT    ON        OFF          BIT    ON        OFF
+0        0  RENT  NOT RENT        4  OL     NOT OL            8  NOT DC    DC              12  NOT EDIT  EDIT
+         1  REUS  NOT REUS        5  SCTR   BLOCK             9  ZERO ORG  NOT ZERO        13  SYMS      NO SYMS
+         2  OVLY  NOT OVLY        6  EXEC   NOT EXEC         10  EP ZERO   NOT ZERO        14  F LEVEL   E LEVEL
+         3  TEST  NOT TEST        7  1 TXT  MULTI RCD        11  NO RLD    RLD             15  REFR      NOT REFR
+-  MEMBER       ENTRY    ATTR    REL ADDR-HEX     CONTIG    LEN 1ST   ORG 1ST     SSI       VS    AUTH       OTHER
+    NAME        PT-HEX   HEX    BEGIN  1ST TXT   STOR-DEC   TXT-DEC   TXT-HEX     INFO     ATTR   REQ     INFORMATION
+                                                                                
+  DATA          040007   0125   000505  010100   03174164    16384    0004D7    C9C3C8C1
+  J             060006   0125   000416  010000   03174163    22784    0000D7    C9C3C8C1
+0IEH112I MEMBERS OF SPECIFIED PDS NOT CREATED BY LINKAGE EDITOR - DUMP OPTION OUTPUT GENERATED.
+           TESTJOB   00050B00                                                   
+                                                                                
+ OF THE 00200 DIRECTORY BLOCKS ALLOCATED TO THIS PDS, 00199 ARE(IS) COMPLETELY UNUSED
+
+
+
+
+nano mps.sh
+PRICHAR:/u/prichar/python1: >chmod 755 mps*
+PRICHAR:/u/prichar/python1: >./mps.sh
+*MASTER* *MASTER* ~~~~~~~  NSW  *   A=0001   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=541.868S  ET=79.31.43 WUID=STC04504 USERID=+MASTER+ WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+PCAUTH   PCAUTH   ~~~~~~~  NSW  *   A=0002   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=000.074S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+RASP     RASP     ~~~~~~~  NSW  *   A=0003   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=000.075S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+TRACE    TRACE    ~~~~~~~  NSW  *   A=0004   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=000.175S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+DUMPSRV  DUMPSRV  DUMPSRV  NSW  *   A=0005   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=002.496S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+XCFAS    XCFAS    IEFPROC  NSW  *   A=0006   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=00.24.48  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+GRS      GRS      ~~~~~~~  NSW  *   A=0007   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=013.494S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+SMSPDSE  SMSPDSE  ~~~~~~~  NSW  *   A=0008   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=128.051S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+CONSOLE  CONSOLE  ~~~~~~~  NSW  *   A=0009   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=12.09.56  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+WLM      WLM      IEFPROC  NSW  *   A=000A   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=08.01.38  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+ANTMAIN  ANTMAIN  IEFPROC  NSW  *   A=000B   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=049.070S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+ANTAS000 ANTAS000 IEFPROC  NSW  *   A=000C   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=006.583S  ET=79.31.15 WKL=STARTED  SCL=STCLOM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+DEVMAN   DEVMAN   IEFPROC  NSW  *   A=000D   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=003.693S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+GTZ      GTZ      GTZ      NSW  *   A=000E   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=001.730S  ET=79.31.15 WKL=STARTED  SCL=STCHIM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+OMVS     OMVS     OMVS     NSW  *   A=000F   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=495.227S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+CATALOG  CATALOG  IEFPROC  NSW  *   A=0010   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=165.191S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+JESXCF   JESXCF   IEFPROC  NSW  *   A=0011   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=072.750S  ET=79.31.38 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+ALLOCAS  ALLOCAS  ~~~~~~~  NSW  *   A=0012   PER=NO   SMC=000 PGN=N/A  DMN=N/A  AFF=NONE CT=000.236S  ET=79.31.43 WKL=SYSTEM   SCL=SYSTEM   P=1 RGP=N/A      SRVR=NO  QSC=NO
+IOSAS    IOSAS    IEFPROC  NSW  *   A=0014   PER=NO   SMC=000 PGN=N/A 
+
+opercmd 'd a,all'
+
+Print all files...
+Print all files on all online volumes:
+
+Write out the online volumes to stdout, then strip off the 5 header lines and the one trailer line, using awk to print just the volume serial name and store it into the variable volumes.
+For each volume in volumes, print out the volume table of contents if there is no error getting the VTOC for the volume. This will list cataloged and uncataloged data sets.
+Note: You could add a grep or awk filter on the end to restrict the output to files of a particular pattern.
+volumes=`opercmd 'd u,dasd,online,,65536' | tail +5 | sed \\$d | awk '{ print $4; }'` 
+for volume in $volumes; do
+  out=`vtocls $volume 2>/dev/null` 
+  if [ $? -eq 0 ]; then 
+    echo "$out" 
+  fi
+done
+
+
+opercmd 'devserv qdasd,type=all'
+S0W1       2025306  17:39:42.00             ISF031I CONSOLE PRIC0000 ACTIVATED
+S0W1       2025306  17:39:42.00            -DEVSERV QDASD,TYPE=ALL
+S0W1       2025306  17:39:42.00             IEE459I 17.39.43 DEVSERV QDASD 979
+                                            UNIT VOLSER SCUTYPE DEVTYPE       CYL  SSID SCU-SERIAL DEV-SERIAL EFC
+                                           00A80 B3RES1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-96438 *OK
+                                           00A81 SARES1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-18602 *OK
+                                           00A82 B3C610 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-99792 *OK
+                                           00A83 B3CFG1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-07175 *OK
+                                           00A84 B3ZWE1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-54287 *OK
+                                           00A85 B3BLZ1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-53163 *OK
+                                           00A86 B3DBAR 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-25479 *OK
+                                           00A87 B3DBD1 339000C 339000C     18000  0A80 XXZZ-00003 XXZZ-97615 *OK
+                                           00A88 B3DBD2 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-37454 *OK
+                                           00A89 B3DIS1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-40187 *OK
+                                           00A8A B3DIS2 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-34086 *OK
+                                           00A8B B3DIS3 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-36467 *OK
+                                           00A8C B3IMF1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-67700 *OK
+                                           00A8D B3INM1 339000C 339000C     20000  0A80 XXZZ-00003 XXZZ-03463 *OK
+                                           00A8E B3KAN1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-56522 *OK
+                                           00A8F B3PAGA 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-28019 *OK
+                                           00A90 B3PAGB 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-53459 *OK
+                                           00A91 B3PAGC 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-43832 *OK
+                                           00A92 B3PRD1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-17229 *OK
+                                           00A93 B3PRD2 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-44857 *OK
+                                           00A94 B3PRD3 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-00373 *OK
+                                           00A95 B3PRD4 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-87082 *OK
+                                           00A96 B3PRD5 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-36545 *OK
+                                           00A97 ZSC205 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-14218 *OK
+                                           00A98 B3RES2 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-72609 *OK
+                                           00A99 B3SYS1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-05737 *OK
+                                           00A9A B3USR1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-30794 *OK
+                                           00A9B B3USS1 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-09520 *OK
+                                           00A9C B3USS2 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-94137 *OK
+                                           00A9D B3USS3 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-74539 *OK
+                                           00A9E B3W901 339000C 339000C     12014  0A80 XXZZ-00003 XXZZ-91864 *OK
+                                           00A9F B3W902 339000C 339000C     10017  0A80 XXZZ-00003 XXZZ-54124 *OK
+                                           ****     32 DEVICE(S) MET THE SELECTION CRITERIA
+                                           ****      0 DEVICE(S) FAILED EXTENDED FUNCTION CHECKING
+
+Display nucleus information
+Dump out the load module information for SYS1.NUCLEUS to stdout:
+
+echo " LISTLOAD OUTPUT=MAP" | mvscmd --pgm=AMBLIST --syslib=SYS1.NUCLEUS --sysin=stdin --sysprint=stdout
+
+Display MVS local time
+Get the current MVS local time (as opposed to the Unix System Services local time):
+
+>opercmd 'd t' | awk ' { if ($4 == "IEE136I") { print substr($7,8,2) substr($7,11) " " substr($6,6) }}'
+25306 18.00.37
+
+python3 runjcl.py "PRICHAR.LDAP.LDBM13.JCL(PASSLIST)"
+Job PRICHARE submitted
+{'NAME': 'PRICHARE', 'OWNER': 'PRICHAR', 'STATUS': 'AC', 'RC': '?'}
+{'NAME': 'PRICHARE', 'OWNER': 'PRICHAR', 'STATUS': 'AC', 'RC': '?'}
+{'NAME': 'PRICHARE', 'OWNER': 'PRICHAR', 'STATUS': 'AC', 'RC': '?'}
+{'NAME': 'PRICHARE', 'OWNER': 'PRICHAR', 'STATUS': 'CC', 'RC': '0000'}
+
+
+
+python3 runrexx.py PRICHAR.PYTHON.JCL
+HELOWRLD
+
+
+ BROWSE    /S0W1/tmp/dddata.txt           
+ Command ===>                             
+********************************* Top of D
+First Line of data written a DD           
+Second Line of data written to a DD       
+
+_ File   rw-r--r--  2025-11-02 16:36  OMVSKERN          181  systsprt.176210139
+_ File   rw-r--r--  2025-11-02 16:36  OMVSKERN            0  sysprt.1762101392.
+
+
+ BROWSE    /u/prichar/systsprt.1762101392.265481    Line 0000000
+ Command ===>                                                  S
+********************************* Top of Data ******************
+1Argument passed in is:  These are the parameters               
+ Simple hello World app running for  PRICHAR                    
+ Now printing data passed in via STDIN:                         
+ Line 1 of input                                                
+ Line 2 of input                                                
+ READY                                                          
+ END                                                            
+
+
+
+nano submit_and_wait.sh
+PRICHAR:/u/prichar/python1: >chmod 755 sub*
+PRICHAR:/u/prichar/python1: > submit_and_wait.sh "//PRICHAR.LDAP.LDBM13.JCL(PASSLIST)"
+FSUMB408 submit: data set PRICHAR.LDAP.LDBM13.JCL(PASSLIST) Not accepted by JES.
+PRICHAR:/u/prichar/python1: > submit_and_wait.sh "//PRICHAR.LDAP.LDBM13.JCL(PASSLIST)"
+Job JOB04717 has a JCL error
+PRICHAR:/u/prichar/python1: > submit_and_wait.sh "//PRICHAR.LDAP.LDBM13.JCL(PASSLIST)"
+Job JOB04718 ABENDED
+PRICHAR:/u/prichar/python1: > submit_and_wait.sh "//PRICHAR.PYTHON.JCL(TESTJOB1)"
+Job JOB04739 failed with rc: 0016
+
+  
+
+nano smpgzone.sh
+PRICHAR:/u/prichar/python1: >chmod 755 smp*
+PRICHAR:/u/prichar/python1: >smpgz* -h
+psmpgzone: print SMP global zones for the specified CSI
+Syntax: psmpgzone [<CSI-name>]
+  If no CSI is specified, the environment variable SMP_CSI is used
+  If the environment variable is not specified, an error is issued
+PRICHAR:/u/prichar/python1: >smpgz* ?
+BGYSC0205E Name ? contains invalid characters.
+PRICHAR:/u/prichar/python1: >smpgz* -?
+psmpgzone: print SMP global zones for the specified CSI
+Syntax: psmpgzone [<CSI-name>]
+  If no CSI is specified, the environment variable SMP_CSI is used
+  If the environment variable is not specified, an error is issued
+PRICHAR:/u/prichar/python1: >smpgz* SMPE.FEU.CS
+BGYSC0233E Error allocating DDName SMPCSI to (probably) non-existent dataset SMPE.FEU.CS.
+PRICHAR:/u/prichar/python1: >smpgz* SMPE.FEU.CSI
+PRICHAR:/u/prichar/python1: >
+PRICHAR:/u/prichar/python1: >smpgz* SMPE.FEU.CSI
+1PAGE 0001  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 09:28:08  SMP/E 37.23   SMPLIST  OUTPUT
+
+  LIST GZONE.
+1PAGE 0002  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 09:28:09  SMP/E 37.23   SMPLIST  OUTPUT
+
+ GLOBAL  ZONE ENTRIES
+
+
+   NAME
+
+ GLOBAL    UPGLEVEL        = SMP/E 37.23
+           OPTIONS         = ZDTGOPT
+           ZONEINDEX       = DLB      DLIB     SMPE.FEU.CSI
+                             TGT      TARGET   SMPE.FEU.CSI
+           SREL            = Z038
+           FMID            = HALMF01
+1PAGE 0003  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 09:28:09  SMP/E 37.23   SMPLIST  OUTPUT
+
+ LIST     SUMMARY REPORT FOR GLOBAL
+
+ ENTRY-TYPE   ENTRY-NAME         STATUS
+
+ ZONE                            STARTS ON PAGE 0002
+
+
+
+https://www.ibm.com/docs/en/zoau/1.4.x?topic=zoau-functionality-overview#data-set-manipulation-utilities
+
+https://www.ibm.com/docs/en/zoau/1.4.x?topic=examples-submit-job
+https://www.ibm.com/docs/en/zoau/1.4.x?topic=examples-create-dataset
+
+The Journey from JCL to Python: so easy even an old mainframer can do it.
+https://medium.com/theropod/the-journey-from-jcl-to-python-so-easy-even-an-old-mainframer-can-do-it-f088cc49366a
+https://medium.com/theropod/operationalizing-microservices-in-z-os-e75d30189aac
+
+
+>nano smpe_list.py
+PRICHAR:/u/prichar/python1: >nano SMPElistDefaults.yaml
+PRICHAR:/u/prichar/python1: >nano smpe_list.py
+PRICHAR:/u/prichar/python1: >python3 smpe_list.py -z GLOBAL -o GZONE
+usage: smpe_list.py [-h] [-z ZONE] [-o OPTIONS] hlq
+smpe_list.py: error: the following arguments are required: hlq
+PRICHAR:/u/prichar/python1: >python3 smpe_list.py -z GLOBAL -o GZONE hlq PRICHAR
+usage: smpe_list.py [-h] [-z ZONE] [-o OPTIONS] hlq
+smpe_list.py: error: unrecognized arguments: PRICHAR
+PRICHAR:/u/prichar/python1: >python3 smpe_list.py -z GLOBAL -o GZONE PRICHAR
+Output can be found in: PRICHAR.P3620854.T0135408.C0000000
+
+PRICHAR:/u/prichar/python1: >cat PRICHAR.P3620854.T0135408.C0000000
+cat: PRICHAR.P3620854.T0135408.C0000000: EDC5129I No such file or directory.
+PRICHAR:/u/prichar/python1: >cat //'PRICHAR.P3620854.T0135408.C0000000'
+cat: //PRICHAR.P3620854.T0135408.C0000000: EDC5049I The specified file name could not be located.
+PRICHAR:/u/prichar/python1: >cat "//'PRICHAR.P3620854.T0135408.C0000000'"
+PAGE 0001  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 16:15:56  SMP/E 37.23   SMPLIST  OUTPUT
+
+LIST GZONE.
+PAGE 0002  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 16:15:56  SMP/E 37.23   SMPLIST  OUTPUT
+
+GLOBAL  ZONE ENTRIES
+
+
+  NAME
+
+GLOBAL    UPGLEVEL        = SMP/E 37.23
+          OPTIONS         = ZDTGOPT
+          ZONEINDEX       = DLB      DLIB     SMPE.FEU.CSI
+                            TGT      TARGET   SMPE.FEU.CSI
+          SREL            = Z038
+          FMID            = HALMF01
+PAGE 0003  - NOW SET TO GLOBAL ZONE          DATE 11/03/25  TIME 16:15:56  SMP/E 37.23   SMPLIST  OUTPUT
+
+LIST     SUMMARY REPORT FOR GLOBAL
+
+ENTRY-TYPE   ENTRY-NAME         STATUS
+
+ZONE                            STARTS ON PAGE 0002
+PRICHAR:/u/prichar/python1: >
+
+  
+
+nano opercmd.sh
+PRICHAR:/u/prichar/python1: >nano opercmd.sh
+PRICHAR:/u/prichar/python1: >chmod 755 opercmd.sh
+PRICHAR:/u/prichar/python1: >./opercmd.sh 'd iplinfo'
+S0W1      2025307  16:55:24.40             ISF041I CONSOLE NAME PRICHAR MODIFIED TO PRICHAR$
+S0W1      2025307  16:55:24.40             ISF031I CONSOLE PRICHAR$ ACTIVATED
+S0W1      2025307  16:55:24.40            -D IPLINFO
+S0W1      2025307  16:55:24.47             IEE254I  16.55.24 IPLINFO DISPLAY 557
+                                            SYSTEM IPLED AT 10.04.52 ON 10/30/2025
+                                            RELEASE z/OS 03.01.00    LICENSE = z/OS
+                                            USED LOADAU IN SYS1.IPLPARM ON 00A99
+                                            ARCHLVL = 2   MTLSHARE = N
+                                            VALIDATED BOOT: NO
+                                            IEASYM LIST = AU
+                                            IEASYS LIST = AU (OP)
+                                            IODF DEVICE: ORIGINAL(00A99) CURRENT(00A99)
+                                            IPL DEVICE: ORIGINAL(00A80) CURRENT(00A80) VOLUME(B3RES1)
+PRICHAR:/u/prichar/python1: >./opercmd.sh 's dealloc'
+S0W1      2025307  16:55:43.68             ISF041I CONSOLE NAME PRICHAR MODIFIED TO PRICHAR$
+S0W1      2025307  16:55:43.68             ISF031I CONSOLE PRICHAR$ ACTIVATED
+S0W1      2025307  16:55:43.68            -S DEALLOC
+
+
+initvol.sh
+export UNITS="0a98 0a99 0a9a 0a9b"
+export VOLS="USER01 USER02 TOOLS1 TOOLS2"
+output="/tmp/initvol.${RANDOM}.out"
+
+for u in ${UNITS}; do
+	opercmd "v ${u},offline" >${output}
+	if [ $? -gt 0 ]; then
+		echo "Unable to bring unit ${u} offline"
+		echo "See ${output} for details"
+		exit 16
+	fi
+	#cat ${output}
+	rm -f ${output}
+done
+
+export U="${UNITS}"
+for v in ${VOLS}; do
+	u=${U%% *}
+	U=${U#* }
+	mvscmdauth --pgm=ickdsf --args='NOREPLYU,FORCE' --sysprint=* >${output} --sysin=stdin <<zzz
+ INIT UNIT(${u}) VOLID(${v}) NOVERIFY STORAGEGROUP -
+ VTOC(2,1,10) INDEX(2,11,5)
+zzz
+   	if [ $? -gt 0 ]; then
+		echo "Unable to format unit:${u}, volume:${v}"
+		echo "See ${output} for details"
+		exit 16
+	fi
+	#cat ${output}
+	rm -f ${output}
+done
+
+for u in ${UNITS}; do
+	opercmd "v ${u},online" >${output}
+	if [ $? -gt 0 ]; then
+		echo "Unable to bring unit ${u} online"
+		echo "See ${output} for details"
+		exit 16
+	fi
+	#cat ${output}
+	rm -f ${output}
+done
+
+  
+delvsam
+#
+# delete a VSAM cluster
+#
+if [[ $# -ne 1 ]]; then
+	echo "Syntax: delvsam <vsam fully-qualified dataset>"
+	exit 16
+fi
+vsam=$1
+vsam=$(echo ${vsam} | tr '[:lower:]' '[:upper:]')
+echo " DELETE ${vsam}\n" | mvscmdauth --pgm="IDCAMS" --args="MARGINS(2 72)" --sysin=stdin --sysprint=dummy
+
+
+https://github.com/MikeFultonDev/samples-old/tree/master
+
+chmod 755 mkcat.sh
+PRICHAR:/u/prichar/python1: >./mkcat.sh TEST.ZOAU SCNONSMS
+1IDCAMS  SYSTEM SERVICES                                           TIME: 17:11:00        11/03/25     PAGE      1
+0
+     DEFINE  USERCATALOG( -
+                    NAME(USERCAT.TEST.ZOAU) -
+                    STORCLAS(SCNONSMS) -
+                    ICFCATALOG -
+                    TRACKS(150) -
+                    BUFND(4) -
+                    BUFNI(4) -
+                      ) -
+             DATA( -
+                    CYL(10 5) -
+                      ) -
+             INDEX( -
+                    TRACKS(10 5) -
+                  )
+0IDC0510I CATALOG ALLOCATION STATUS FOR VOLUME B3USR1 IS 0
+0IDC0512I NAME GENERATED-(I) USERCAT.TEST.ZOAU.CATINDEX
+ IDC0181I STORAGECLASS USED IS SCBASE
+0IDC0001I FUNCTION COMPLETED, HIGHEST CONDITION CODE WAS 0
+0
+0IDC0002I IDCAMS PROCESSING COMPLETE. MAXIMUM CONDITION CODE WAS 0
+PRICHAR:/u/prichar/python1: >
+
+nano smfsetracf.sh
+./raclist.sh FACILITY
+PRICHAR:/u/prichar/python1: >nano raclist.sh
+PRICHAR:/u/prichar/python1: >./raclist.sh FACILITY
+PRICHAR:/u/prichar/python1: >echo $?
+0
+PRICHAR:/u/prichar/python1: >./raclist.sh RRSFDATA
+PRICHAR:/u/prichar/python1: >echo $?
+4
+
+
+cls.sh
+
+#!/bin/sh
+# *******************************************************************************
+# 
+#  Copyright IBM Corp. 2023.
+# 
+#  Sample Material
+# 
+#  Licensee may copy and modify Source Components and Sample Materials for
+#  internal use only within the limits of the license rights under the Agreement
+#  for IBM Z Open Automation Utilities provided, however, that Licensee may not
+#  alter or delete any copyright information or notices contained in the Source
+#  Components or Sample Materials. IBM provides the Source Components and Sample
+#  Materials without obligation of support and "AS IS", WITH NO WARRANTY OF ANY
+#  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING THE WARRANTY OF TITLE,
+#  NON-INFRINGEMENT OR NON-INTERFERENCE AND THE IMPLIED WARRANTIES AND
+#  CONDITIONS OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+# 
+# ******************************************************************************/
+# cls: list catalogs on the system
+#
+syntax() {
+	echo "cls: list the catalogs on the system" >&2
+	echo "Syntax: cls [-?h]" >&2
+	echo 'Options are:' >&2
+	echo ' -? -h : syntax' >&2
+}
+
+while getopts ":h" opt; do
+	case ${opt} in
+	\? | h )
+        syntax
+		exit 4
+		;;
+	esac
+done
+
+shift $(( OPTIND - 1 ))
+if [ $# -ne 0 ]; then
+	syntax
+	exit 16
+fi
+
+master=$(./pmc)
+catalogs=$(pcatalog "$master" | awk '/CATALOG/ { print $2; }')
+echo "$catalogs"
+
+pmc.rexx
+pcatalog.sh
+
+./cls.sh
+./cls.sh
+CATALOG.Z31B.MASTER
+CATALOG.Z31B.MASTER.CATINDEX
+SYSCAT.SPXS.ZSEC
+USERCAT.TEST.ZOAU
+USERCAT.Z31B.CICS610
+USERCAT.Z31B.DB2VD
+USERCAT.Z31B.IMS15
+USERCAT.Z31B.INM14
+USERCAT.Z31B.PRODS
+USERCAT.Z31B.USER
+USERCAT.Z31B.WAS900
+USERCAT.Z31B.ZMS211
+
+
+
+Submit a job
+With ZOAU, you can submit a dataset that contains JCL, for example ${prefix}.SAMPLE.JCL(JCL), in the following ways:
+
+Issuing a shell command:
+job_id=`jsub "${prefix}.SAMPLE.JCL(JCL)"`
+
+Submit a job from a z/OS UNIX file
+With ZOAU, you can submit a job from a UNIX System Services file in the following ways:
+
+Issuing a shell command:
+jsub -f /path/to/somefile.jcl
+
+Cancel a job
+With ZOAU, you can cancel and purge a job in the following ways:
+
+Issuing a shell command:
+In the following example, '*' is used because we don't know the job name.
+
+jcan C '*' $job_id
+
+
+nano sub_inline_job.sh
+PRICHAR:/u/prichar/python1: >chmod 755 sub_in*
+PRICHAR:/u/prichar/python1: >./sub_in*
+JOB04766
+PRICHAR:/u/prichar/python1: >jls
+PRICHAR  LISTCAT  JOB04766 CC        0012
+START1   BPXAS    STC04752 CC        0000
+START1   BPXAS    STC04740 CC        0000
+START1   BPXAS    STC04743 CC        0000
+PRICHAR  PRICHARZ JOB04739 CC        0016
+PRICHAR  PRICHARZ JOB04738 JCLERR       ?
+
+
+>jls /PRICHAR/LIST
+BGYSC3503E Failed to retrieve job list.
+PRICHAR:/u/prichar/python1: >jls /PRICHAR/LISTCAT
+PRICHAR  LISTCAT  JOB04767 CC        0000
+PRICHAR  LISTCAT  JOB04766 CC        0012
+PRICHAR:/u/prichar/python1: >jls /PRICHAR/LIST*
+PRICHAR  LISTCAT  JOB04767 CC        0000
+PRICHAR  LISTCAT  JOB04766 CC        0012
+
+
+ddls JOB04766
+>ddls JOB04766
+JES2     -        JESMSGLG UA           133        20   2
+JES2     -        JESJCL   V            136         5   3
+JES2     -        JESYSMSG VA           137        18   4
+DSEXIST  -        SYSPRINT VBA          125         7   102
+
+PRICHAR:/u/prichar/python1: >./sub_in*
+JOB04767
+PRICHAR:/u/prichar/python1: >pjdd JOB04767 SYSPRINT
+1IDCAMS  SYSTEM SERVICES                                           TIME: 17:57:42        11/03/25     PAGE      1
+0
+  LISTCAT ENTRIES('PRICHAR.X9.JCL')
+0NONVSAM ------- PRICHAR.X9.JCL
+      IN-CAT --- USERCAT.Z31B.USER
+1IDCAMS  SYSTEM SERVICES                                           TIME: 17:57:42        11/03/25     PAGE      2
+0         THE NUMBER OF ENTRIES PROCESSED WAS:
+                    AIX -------------------0
+                    ALIAS -----------------0
+                    CLUSTER ---------------0
+                    DATA ------------------0
+                    GDG -------------------0
+                    INDEX -----------------0
+                    NONVSAM ---------------1
+                    PAGESPACE -------------0
+                    PATH ------------------0
+                    SPACE -----------------0
+                    USERCATALOG -----------0
+                    TAPELIBRARY -----------0
+                    TAPEVOLUME ------------0
+                    TOTAL -----------------1
+0         THE NUMBER OF PROTECTED ENTRIES SUPPRESSED WAS 0
+0IDC0001I FUNCTION COMPLETED, HIGHEST CONDITION CODE WAS 0
+0
+0IDC0002I IDCAMS PROCESSING COMPLETE. MAXIMUM CONDITION CODE WAS 0
+
+
+ddls JOB04767
+JES2     -        JESMSGLG UA           133        20   2
+JES2     -        JESJCL   V            136         5   3
+JES2     -        JESYSMSG VA           137        18   4
+DSEXIST  -        SYSPRINT VBA          125        25   102
+PRICHAR:/u/prichar/python1: >pjdd JOB04767 125
+PRICHAR:/u/prichar/python1: >pjdd JOB04767 102
+1IDCAMS  SYSTEM SERVICES                                           TIME: 17:57:42        11/03/25     PAGE      1
+0
+  LISTCAT ENTRIES('PRICHAR.X9.JCL')
+0NONVSAM ------- PRICHAR.X9.JCL
+      IN-CAT --- USERCAT.Z31B.USER
+1IDCAMS  SYSTEM SERVICES                                           TIME: 17:57:42        11/03/25     PAGE      2
+0         THE NUMBER OF ENTRIES PROCESSED WAS:
+                    AIX -------------------0
+                    ALIAS -----------------0
+                    CLUSTER ---------------0
+                    DATA ------------------0
+                    GDG -------------------0
+                    INDEX -----------------0
+                    NONVSAM ---------------1
+                    PAGESPACE -------------0
+                    PATH ------------------0
+                    SPACE -----------------0
+                    USERCATALOG -----------0
+                    TAPELIBRARY -----------0
+                    TAPEVOLUME ------------0
+                    TOTAL -----------------1
+0         THE NUMBER OF PROTECTED ENTRIES SUPPRESSED WAS 0
+0IDC0001I FUNCTION COMPLETED, HIGHEST CONDITION CODE WAS 0
+0
+
+
+EXAMPLES
+Shows jobs with no owner/prefix specification:
+
+jls
+jls '/*'
+Shows caller's jobs:
+
+jls '*'
+Show caller's jobs with additional fields and a header:
+
+jls -lv '*'
+Shows all jobs for IBMUSER:
+
+jls '/IBMUSER'
+Shows caller's job JOB01108:
+
+jls 'job01108'
+Show the ID, name, status and job class for job JOB01108:
+
+jls -o id,name,status,jobclass 'job01108'
+Show all fields from the -l option (except for programname) for caller's jobs, with a header:
+
+jls -v -o owner,name,id,status,ccode,jobclass,serviceclass,priority,asid,creationdate,creationtime,queueposition,jobtype '*'
+Get a JSON string with name, owner, and creation date fields:
+
+jls -o name,owner,creationdate -j '*'
+Show the status and execution time for active job J0000604, with a header:
+
+jls -v -o id,status,ccode,executiontime,executionseconds J0000604
+The job is currently active, and the command produces the following output:
+
+id       status   ccode executiontime executionseconds
+J0000604 AC           ?      00:01:04               64
+Show the name, status, and execution time for long-running SYSLOG jobs:
+
+jls -o id,name,status,ccode,executiontime,executionseconds '//SYSLOG'
+The jobs have been running for over three days, and the command produces the following output:
+
+id       name     status   ccode executiontime executionseconds
+S0000003 SYSLOG   AC           ?    3-03:39:59           272399
+S0000002 SYSLOG   AC           ?    3-03:40:35           272435
+S0000001 SYSLOG   AC           ?    3-03:49:31           272971
+Show the status and execution time for a complete job:
+
+jls -v -o id,ccode,executiontime,executionseconds J0000271
+The job ran for a short time, and the command produces the following output:
+
+id       status   ccode executiontime executionseconds
+J0000271 CC        0000      00:00:05                5
+----------------------------------------------------------------  
+https://kalebporter.medium.com/z-os-job-management-with-python-6f740144636  (à faire sur zexplore !)
+
+mkdir flask_example
+cd flask_example
+touch app.py
+mkdir templates
+touch templates/jobs.html
+
+Results
+To kick off Flask, all we need to do is run it on z/OS with python3 app.py and navigate to http://<IP_or_domain>:5000/ we’ll get back something a little bit like this:
+
+ 
+# flask_example/templates/jobs.html
+z/OS Jobs
+Job Name	Job ID	Status	Return Code	Action
+Z04683C	JOB01707	CANCELED	None	Cancel Purge
+HELLO2	JOB01431	ABEND	S722	Cancel Purge
+HELLO	JOB01413	ABEND	S722	Cancel Purge
+Z046832	JOB01412	JCLERR	None	Cancel Purge
+Z046831	JOB01409	JCLERR	None	Cancel Purge
+Z04683C	JOB01407	CC	0000	Cancel Purge
+Z04683B	JOB01406	CC	0000	Cancel Purge
+Z04683A	JOB01405	CC	0000	Cancel Purge
+Z04683	TSU01264	AC	None	Cancel Purge
+
+lancer des jobs
+z04683.jcl(wait)  99 5  => pour pouvoir faire cancel puis purge
+
+z04683.ansb.jcl(hello)   plusieusr fois pour pouvoir faire purge
+
+=========GIT==============================================================================
+create a new repo in GitHub : zoau GitHub repo: https://github.com/phil3130/zoau
+phil34130@hotmail.com Thomas99Thomas99
+use gitbash and git Gui
+git gui to create local repo in windows explorer zoau
+
+explorer in /zoau  right click, git bash here
+type: git remote add origin https://github.com/phil3130/zoau
+
+add new files/dir with explorer
+then use git gui to rescan
+and to commit 
+
+
+======= GitHub add ssh key =================
+id_rsa from C:\Users\phil3\Documents\ssh 
+chmod 600 id_rsa
+PRICHAR:/u/prichar/.ssh: >ls -al
+total 112
+drw-------   2 OMVSKERN SYS1        8192 Nov  5 08:09 .
+drwxr-xr-x  19 OMVSKERN SYS1        8192 Nov  5 07:31 ..
+-rw-------   1 OMVSKERN SYS1         996 Jun 17 16:59 authorized_keys
+-rw-r--r--   1 OMVSKERN SYS1         602 Jun 17 16:54 id_dsa.pub
+-rw-------   1 OMVSKERN SYS1        1675 Nov  5 08:09 id_rsa
+-rw-r--r--   1 OMVSKERN SYS1         394 Jun 17 16:54 id_rsa.pub
+-rw-r-xr-x   1 OMVSKERN SYS1         185 Nov  5 07:55 known_hosts
+PRICHAR:/u/prichar/.ssh: >ssh -T git@github.com
+Hi phil34130! You've successfully authenticated, but GitHub does not provide shell access.
+
+npm install git+ssh://git@github.com:phil34130/zoau-node.git
+===================================================================
+=======================================================================================
+ISM403.CYP312.ZFS
+/usr/lpp/IBM/cyp/v3r1
+
+zoau and npm: https://github.com/IBM/zoau-node/blob/main/README.md
+Quick Start
+Create a Node.js project directory and install the zoau Node.js module:
+
+mkdir my-example-project && cd my-example-project
+npm init --yes
+npm install zoau
+
+cd my-example-project
+PRICHAR:/u/prichar/my-example-project: >npm install zoau
+---- fails so install zoau module from local repo ------------
+get zip file from https://github.com/phil34130/zoau-node
+ftp in /tmp/zoau/zoau-node-main.zip
+unzip: unzip zoau-node-main.zip
+
+then npm install /tmp/zoau/zoau-node-main 
+>npm install /tmp/zoau/zoau-node-main
+
+changed 1 package, and audited 3 packages in 55s
+
+found 0 vulnerabilities
+PRICHAR:/u/prichar/my-example-project: >npm list
+my-example-project@1.0.0 /u/prichar/my-example-project
+`-- zoau@0.1.2 -> ./../../../tmp/zoau/zoau-node-main
+
+>node listds.js
+node:internal/modules/cjs/loader:1404
+  throw err;
+  ^
+
+Error: Cannot find module './lib/zoau.js'
+
+/u/prichar/my-example-project/lib: >cp -R /tmp/zoau/zoau-node-main/lib/ .
+ 
+--------------------------------------------------
+PRICHAR:/u/prichar/my-example-project: >
+
+Create a file named listds.js containing the following contents:
+
+const ds=require('./lib/zoau.js').datasets;
+ds.listing("SYS1.PARM*", {"detailed":true})
+  .then(console.log)
+  .catch(console.error);
+This code will list all datasets starting with SYS.PARM. We have chosen a detailed output, specified as the second parameter.
+
+
+This code will list all datasets starting with SYS.PARM. We have chosen a detailed output, specified as the second parameter.
+
+Run the code
+
+
+node listds.js
+[
+  Dataset {
+    _name: 'SYS1.PARMLIB',
+    recfm: 'FB',
+    lrecl: '80',
+    blockSize: '27920',
+    dsorg: 'PO',
+    volume: 'B3RES1',
+    lastReferenced: '2025/11/04',
+    usedSpace: '990420',
+    totalSpace: '1699920'
+  },
+  Dataset {
+    _name: 'SYS1.PROCLIB',
+    recfm: 'FB',
+    lrecl: '80',
+    blockSize: '27920',
+    dsorg: 'PO',
+    volume: 'B3RES1',
+    lastReferenced: '2025/11/04',
+    usedSpace: '500368',
+    totalSpace: '849960'
+  }
+]
+
+
+-
+
+ListMembers.js
+ BROWSE    /u/prichar/my-example-project/ListMember 
+********************************* Top of Data ******
+const ds=require('./lib/zoau.js').datasets;         
+ds.listMembers("PRICHAR.PYTHON.JCL", {})            
+  .then(console.log)                                
+  .catch(console.error);                            
+
+node ListMembers.js
+>node ListMembers.js
+[ 'DATA', 'HELOWRLD', 'J', 'TESTJOB', 'TESTJOB1' ]
+
+======= node on zexplore ===========
+install zoau node module locally
+
+Z04683-[/z/z04683] $>git clone https://github.com/IBM/zoau-node.git
+Cloning into 'zoau-node'...
+remote: Enumerating objects: 107, done.
+remote: Counting objects: 100% (103/103), done.
+remote: Compressing objects: 100% (76/76), done.
+remote: Total 107 (delta 38), reused 74 (delta 20), pack-reused 4 (from 1)
+Receiving objects: 100% (107/107), 47.12 KiB | 11.78 MiB/s, done.
+Resolving deltas: 100% (38/38), done.
+
+ls zo*
+
+zoau-node:
+AUTHORS          LICENSE          demo             index.js         package.json     test
+CONTRIBUTING.md  README.md        examples         lib              postinstall.js
+
+
+Z04683-[/z/z04683] $>cd zoa*
+Z04683-[/z/z04683/zoau-node] $>vi listds.js
+re('./lib/zoau.js').datasets;
+ds.listing("SYS1.P*LIB", {"detailed":true})
+  .then(console.log)
+  .catch(console.error);
+
+
+
+>node listds.js
+[
+  Dataset {
+    _name: 'SYS1.PARMLIB',
+    recfm: 'FB',
+    lrecl: '80',
+    blockSize: '27920',
+    dsorg: 'PO',
+    volume: 'VIMVSB',
+    lastReferenced: '2025/10/31',
+    usedSpace: '996744',
+    totalSpace: '1699920'
+  },
+  Dataset {
+    _name: 'SYS1.PROCLIB',
+    recfm: 'FB',
+    lrecl: '80',
+    blockSize: '27920',
+    dsorg: 'PO',
+    volume: 'VIMVSB',
+    lastReferenced: '2025/10/31',
+    usedSpace: '387720',
+    totalSpace: '849960'
+  }
+
+
+EDIT       /z/z04683/zoau-node/listMembers.js              
+Command ===>                                               
+****** ***************************** Top of Data **********
+000001 const ds=require('./lib/zoau.js').datasets;         
+000002                                                     
+000003                                                     
+000004 const ID = process.env.USER;                        
+000005 const DSN = `${ID}.JCL`;                            
+000006                                                     
+000007 function errfunc(err) {                             
+000008   throw err;                                        
+000009 }                                                   
+000010                                                     
+000011                                                     
+000012 // ---------------hlq                               
+000013 console.log(`List members of ${DSN}`);              
+000014 ds.listMembers(DSN, {})                             
+000015   .then(console.log)                                
+000016   .catch(console.error);                            
+
+node listMembers.js
+List members of Z04683.JCL.GDG
+[
+  'GDGALL',   'GDGALLB',  'GDGBIAS',
+  'GDGBIAS3', 'GDGBIA1',  'GDGBIA1B',
+  'GDGBIA1C', 'GDGBIA1D', 'GDGBIA2',
+  'GDGCURRT', 'GDGDEF',   'GDGDEFNW',
+  'GDGDEF2',  'GDGDEF34', 'GDGDEF56',
+  'GDGDEL',   'GDGIDCA',  'GDGLCAT',
+  'GDGMODEL', 'GDGPRTCU', 'GDSDEL'
+]
+
+
+==========================================================
+
+
+===============================================================
+https://community.ibm.com/community/user/blogs/wayne-zhang1/2022/03/17/managing-files-partitioned-dataset-zoau-nodejs
+npm install git+ssh://git@github.com:phil34130/zoau-node.git
+
+We start by creating a project directory:
+
+$ mkdir dpp-node-zoau-demo
+$ cd dpp-node-zoau-demo
+npm init --yes
+$ npm install express
+$ npm install zoau
+
+npm warn deprecated csurf@1.11.0: This package is archived and no longer maintained. For support, visit https://github.com/expressjs/express/discussions
+
+added 73 packages, and audited 142 packages in 14m
+
+19 packages are looking for funding
+  run `npm fund` for details
+
+6 vulnerabilities (2 low, 2 moderate, 2 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
+
+
+npm list
+dpp-node-zoau-demo@1.0.0 /u/prichar/dpp-node-zoau-demo
++-- express@5.1.0
+`-- zoau@0.1.2 (git+ssh://git@github.com/phil34130/zoau-node.git#5b4f4ff594a6ed76ec78c770db3961cb98fe865d)
+
+
+see https://community.ibm.com/community/user/blogs/wayne-zhang1/2022/03/17/managing-files-partitioned-dataset-zoau-nodejs
+for the lab
+
+ node server.js
+App running at http://localhost:8080
+
+192.168.0.66/api/PRICHAR.PYTHON.JCL
+
+192.168.0.66/api/PRICHAR.PYTHON.JCL(HELOWRLD)
+
+
+
+
+
+
+==== unzip with jar =====
+Installing on IBM z/OS USS
+Locate the .zip file that you received from Rocket Software.
+Upload the .zip file to z/OS Unix System Service in binary mode through an FTP client or another file transfer tool.
+Open a Terminal Emulator to connect to the z/OS Unix Shell.
+Extract the .zip file to a directory using an unzip command or other unzip utility.
+For example, if an unzip utility is installed, use the command unzip example.zip -d bluezone to extract the .zip file to the install directory. In this example, bluezone is the install directory.
+
+If Java is installed, use the command jar -xvf example.zip to extract the .zip file, but be sure to move the file to the selected install directory first in this case.
+
+Configure the environment variable _BPXK_AUTOCVT=ON to enable the conversion of data between EBCDIC and ASCII character sets. Use the following command at the prompt:
+export _BPXK_AUTOCVT=ON
+==============================
+pyracf:7
+https://github.com/ambitus/pyracf
+Dependencies
+z/OS 2.4 and higher.
+R_SecMgtOper (IRRSMO00): Security Management Operations.
+The appropriate RACF authorizations. For many common commands, READ access to the IRR.IRRSMO00.PRECHECK resource in the XFACILIT class is required. Details for all authorizations for IRRSMO00 can be found here
+
+Installation
+pip install pyracf
+
+example:
+Python interface into the RACF management application programming interface.
+
+>>> from pyracf import UserAdmin
+>>> user_admin = UserAdmin()
+>>> user_admin.get_omvs_uid("squidwrd")
+2424
+>>> user_admin.set_omvs_uid("squidwrd", 1919)
+>>> user_admin.get_omvs_uid("squidwrd")
+1919
+
+
+from pyracf import UserAdmin
+ user_admin = UserAdmin()
+ json_data = user_admin.extract("prichar",segments=["omvs"])
+formatted_json_string = json.dumps(json_data, indent=2)
+ print(formatted_json_string)
+
+{
+  "securityResult": {
+    "user": {
+      "name": "PRICHAR",
+      "operation": "listdata",
+      "requestId": "UserRequest",
+      "commands": [
+        {
+          "safReturnCode": 0,
+          "returnCode": 0,
+          "reasonCode": 0,
+          "image": "LISTUSER PRICHAR  OMVS    ",
+          "profiles": [
+            {
+              "base": {
+                "user": "prichar",
+                "name": "philippe richard",
+                "owner": "ibmuser",
+                "created": "6/16/2025",
+                "defaultGroup": "sys1",
+                "passwordDate": "9/2/2025",
+                "passwordInterval": 90,
+                "passphraseDate": null,
+                "attributes": [
+                  "special",
+                  "operations"
+                ],
+                "revokeDate": null,
+                "resumeDate": null,
+                "lastAccess": "11/9/2025 8:36 PM",
+                "classAuthorizations": [],
+                "logonAllowedDays": "anyday",
+                "logonAllowedTime": "anytime",
+                "groups": {
+                  "SYS1": {
+                    "auth": "use",
+                    "connectOwner": "ibmuser",
+                    "connectDate": "6/16/2025",
+                    "connects": "2,011",
+                    "uacc": null,
+                    "lastConnect": "11/9/2025 8:36 PM",
+                    "connectAttributes": [],
+                    "revokeDate": null,
+                    "resumeDate": null
+                  },
+                  "IZUADMIN": {
+                    "auth": "create",
+                    "connectOwner": "ibmuser",
+                    "connectDate": "6/16/2025",
+                    "connects": 3,
+                    "uacc": null,
+                    "lastConnect": "9/8/2025 9:56 AM",
+                    "connectAttributes": [],
+                    "revokeDate": null,
+                    "resumeDate": null
+                  },
+                  "T01AG": {
+                    "auth": "use",
+                    "connectOwner": "prichar",
+                    "connectDate": "6/19/2025",
+                    "connects": 0,
+                    "uacc": null,
+                    "lastConnect": null,
+                    "connectAttributes": [],
+                    "revokeDate": null,
+                    "resumeDate": null
+                  },
+                  "CFZUSRGP": {
+                    "auth": "use",
+                    "connectOwner": "prichar",
+                    "connectDate": "7/2/2025",
+                    "connects": 0,
+                    "uacc": null,
+                    "lastConnect": null,
+                    "connectAttributes": [],
+                    "revokeDate": null,
+                    "resumeDate": null
+                  }
+                },
+                "securityLevel": null,
+                "categoryAuthorization": null,
+                "securityLabel": null,
+                "multifactorAuthenticationDataExists.UseTheMfaKeywordToDisplayIt.": null
+              },
+              "omvs": {
+                "uid": 0,
+                "homeDirectory": "/u/prichar",
+                "defaultShell": "/bin/sh",
+                "maxCpuTime": null,
+                "maxAddressSpaceSize": null,
+                "maxFilesPerProcess": null,
+                "maxProcesses": null,
+                "maxThreads": null,
+                "maxFileMappingPages": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "returnCode": 0,
+    "reasonCode": 0,
+    "runningUserid": "prichar"
+  }
+}
+
+
+
+
+formatted_json_string = json.dumps(racf_data, indent=2)
+
+# 3. Print the result.
+print(formatted_json_string)
+
+# --- End of Script ---
+
+change uid
+>>> from pyracf import UserAdmin
+>>> user_admin = UserAdmin()
+>>> user_admin.get_omvs_uid("squidwrd")
+2424
+>>> user_admin.set_omvs_uid("squidwrd", 1919)
+>>> user_admin.get_omvs_uid("squidwrd")
+1919
+
+
+all racf python scripts:
+ls racf*
+racf_add_user.py          racf_group_add.py         racf_remove_group.py
+racf_altuser.py           racf_listds.py            racf_setropts_list.py
+racf_connect_group.py     racf_lu.py                racf_setropts_refresh.py
+racf_delete_user.py       racf_permit.py            racf_special.py
+
+
+python scripts avec z/OSMF
+===========================
+
+read_member.py
+================
+import requests
+
+# Définition des paramètres de connexion
+url = "https://204.90.115.200:10443/zosmf/restfiles/ds"
+dataset = "Z04683.JCL"
+membre = "ABEND"
+
+# Construction de l'URL de la requête
+requete_url = f"{url}/{dataset}({membre})"
+# Envoi de la requête HTTP GET
+response = requests.get(requete_url, auth=("Z04683", "c2harlot"),verify=False)
+
+# Vérification de la réponse
+if response.status_code == 200:
+    # Récupération du contenu de la réponse
+    contenu = response.content
+
+    # Création d'un DataFrame à partir du contenu
+    print(response.text)
+
+else:
+    print(f"Erreur {response.status_code} : {response.reason}")
+
+------
+cat  sub_jcl.py
+===============
+import requests
+
+# URL de l'API pour soumettre le job(Zxplore)
+url = "https://204.90.115.200:10443/zosmf/restjobs/jobs"
+
+# Headers pour la requête
+headers = {
+    "Content-Type": "text/plain",
+    "Accept": "application/json"
+}
+
+# Authentification (utilisez les identifiants corrects)
+auth = ('Z04683', 'daniele9')
+
+# Contenu du JCL à soumettre
+jcl = """//Z04683B JOB ,CLASS=A,NOTIFY=&SYSUID
+//***************************************************
+//* Créer un dataset physique (PS)                  *
+//***************************************************
+//STEP1    EXEC PGM=IEFBR14
+//NEWFILE  DD  DSN=Z04683.TEST.REST.API,
+//             DISP=(NEW,CATLG,DELETE),
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=80,BLKSIZE=800)"""
+
+
+# Envoyer la requête PUT pour soumettre le job
+response = requests.put(url, headers=headers, auth=auth, data=jcl, verify=False)
+
+# Vérifier la réponse
+if response.status_code == 201:
+    print("Job soumis avec succès!")
+    print(response.json())  # Pour voir les détails du job soumis
+else:
+    print(f"Échec de la soumission du job: {response.status_code}")
+    print(response.text)
+
+python3 sub_jcl.py
+====================
+/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1004: InsecureRequestWarning: Unverified HTTPS request is being made to host '204.90.115.200'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
+  warnings.warn(
+Job soumis avec succès!
+{'owner': '', 'phase': 128, 'subsystem': 'JES2', 'phase-name': 'Job is active in input processing', 'job-correlator': 'J0004031SVSCJES2E1D7A540.......:', 'type': 'JOB', 'url': 'https://204.90.115.200:10443/zosmf/restjobs/jobs/J0004031SVSCJES2E1D7A540.......%3A', 'jobid': 'JOB04031', 'class': 'A', 'files-url': 'https://204.90.115.200:10443/zosmf/restjobs/jobs/J0004031SVSCJES2E1D7A540.......%3A/files', 'jobname': 'Z04683B', 'status': 'INPUT', 'retcode': None}
+
+cat sub_jcl2.py
+==============
+cat sub_jcl2.py
+import requests
+import time
+import json
+from base64 import b64encode
+
+# --- Configuration Section ---
+# IMPORTANT: Replace these placeholders with your actual z/OSMF and DB2 details.
+ZOSMF_HOST = 'https://204.90.115.200:10443'
+ZOSMF_USER = 'z04683'
+ZOSMF_PASS = 'c2harlot'
+DB2_SUBSYSTEM_ID = 'DBDG' # e.g., 'DBA1', 'DBCS'
+
+# --- API Endpoints and Headers ---
+JES_URL = f'{ZOSMF_HOST}/zosmf/restjobs/jobs'
+
+# Basic Auth Header (Base64 encoded "user:password")
+auth_string = f"{ZOSMF_USER}:{ZOSMF_PASS}"
+headers = {
+    'Authorization': f'Basic {b64encode(auth_string.encode()).decode()}',
+    # Required z/OSMF Security Header - the value 'anything' is typical
+    'X-CSRF-ZOSMF-HEADER': 'anything',
+    'Content-Type': 'text/plain'
+}
+
+# --- JCL Definition ---
+# This JCL executes the DSN command processor (IKJEFT01) to run the DB2 command.
+JCL_STRING = f"""
+//Z04683Z JOB (PRICHAR),'PRICHAR',CLASS=A,MSGCLASS=X,
+//         NOTIFY=Z04683,REGION=0M,MSGLEVEL=1
+//********************************************************
+//GLDAASET EXEC PGM=IKJEFT01
+//SYSTSPRT DD SYSOUT=*
+//ISFOUT   DD SYSOUT=*
+//ISFIN    DD DUMMY
+//SYSTSIN  DD *
+  SDSF /D IPLINFO
+/*
+"""
+
+# --- Functions ---
+
+def submit_jcl(jcl_content):
+    """Submits the JCL job string to the z/OSMF JES REST API."""
+    print("🚀 Submitting JCL job...")
+
+    try:
+        # POST request submits the job; the JCL is the data payload
+        response = requests.put(JES_URL, data=jcl_content.strip(), headers=headers, verify=False)
+        response.raise_for_status() # Raise exception for 4xx or 5xx errors
+
+        job_info = response.json()
+        job_name = job_info.get('jobname')
+        job_id = job_info.get('jobid')
+        job_url = job_info.get('url') # The URL for fetching status and output
+
+        print(f"✅ Job submitted successfully: **{job_name} ({job_id})**")
+        print(f"✅ Job rl: **{job_url}**")
+        return job_url, job_name, job_id
+
+    except requests.RequestException as e:
+        print(f"❌ Error submitting job:")
+        print(e)
+        return None, None, None
+
+def retrieve_output(job_url, job_name, job_id, ddname='ISFOUT'):
+    """Polls job status and retrieves the content of the specified DD."""
+
+    print(f"\n🔄 Polling job status for {job_name} ({job_id})...")
+
+    # 1. Poll until the job completes
+    while True:
+        try:
+            status_response = requests.get(job_url, headers=headers, verify=False)
+            status_response.raise_for_status()
+            job_status = status_response.json().get('status')
+
+            if job_status == 'OUTPUT':
+                print("Job completed (status: OUTPUT).")
+                break
+
+            print(f"Current status: {job_status}. Waiting 5 seconds...")
+            time.sleep(5)
+
+        except requests.RequestException as e:
+            print(f"❌ Error checking status: {e}")
+            return None
+
+    # 2. Retrieve the list of output DDs
+    output_url = f'{job_url}/files'
+    try:
+        output_response = requests.get(output_url, headers=headers, verify=False)
+        output_response.raise_for_status()
+
+    # The response body is a list of file objects, not a dictionary containing a 'files' key
+        output_files = output_response.json()  # Assign the list directly
+
+    # Ensure it is actually a list before proceeding
+        if not isinstance(output_files, list):
+             print("❌ Error: Expected a list of files from z/OSMF but received a different format.")
+             return None
+    except requests.RequestException as e:
+        print(f"❌ Error fetching output file list: {e}")
+        return None
+
+    # 3. Find the specific DD (ISFOUT)
+    target_dd = next((f for f in output_files if f.get('ddname') == ddname), None)
+    print(f"target DD is : {target_dd}")
+    if target_dd:
+        # 4. Get the actual content of the DD
+        content_url = target_dd.get('records-url')
+        print(f"dd content url: {content_url}")
+        # Check if the URL key is actually present before attempting the request
+        if not content_url:
+            print(f"❌ Error: The DD file object for '{ddname}' is missing the 'url' field.")
+            return None
+        try:
+            content_response = requests.get(content_url, headers=headers, verify=False)
+            content_response.raise_for_status()
+
+            # The content is returned as plain text (e.g., EBCDIC translated to ASCII)
+            return content_response.text
+        except requests.RequestException as e:
+            print(f"❌ Error fetching DD content: {e}")
+            return None
+
+    return f"❌ Error: DD '{ddname}' not found in job output."
+
+# --- Main Execution ---
+
+if __name__ == '__main__':
+    # Disable SSL warnings if verify=False is used (only for testing, not recommended for production)
+    requests.packages.urllib3.disable_warnings()
+
+    # 1. Submit the job
+    job_url, job_name, job_id = submit_jcl(JCL_STRING)
+
+    if job_url:
+        # 2. Retrieve the output from the SYSTSPRT DD
+        thread_output = retrieve_output(job_url, job_name, job_id, ddname='ISFOUT')
+
+        if thread_output:
+            print("\n--- D A,L Command Output ---")
+            print(thread_output)
+            print("--------------------------------------")
+
+        # Optional: You may want to call z/OSMF again to PURGE the job from the spool
+
+
+
+python sub_jcl2.py
+=====================
+nano sub_jcl2.py
+philippe@LAPTOP-EC65KLAE:~$ python3 sub_jcl2.py
+🚀 Submitting JCL job...
+✅ Job submitted successfully: **Z04683Z (JOB09418)**
+✅ Job rl: **https://204.90.115.200:10443/zosmf/restjobs/jobs/J0009418SVSCJES2E1D91AFE.......%3A**
+
+🔄 Polling job status for Z04683Z (JOB09418)...
+Current status: ACTIVE. Waiting 5 seconds...
+Job completed (status: OUTPUT).
+target DD is : {'recfm': 'FBA', 'records-url': 'https://204.90.115.200:10443/zosmf/restjobs/jobs/J0009418SVSCJES2E1D91AFE.......%3A/files/103/records', 'stepname': 'GLDAASET', 'subsystem': 'JES2', 'job-correlator': 'J0009418SVSCJES2E1D91AFE.......:', 'byte-count': 4372, 'lrecl': 133, 'jobid': 'JOB09418', 'ddname': 'ISFOUT', 'id': 103, 'record-count': 60, 'class': 'X', 'jobname': 'Z04683Z', 'procstep': None}
+dd content url: https://204.90.115.200:10443/zosmf/restjobs/jobs/J0009418SVSCJES2E1D91AFE.......%3A/files/103/records
+
+--- D A,L Command Output ---
+1 SDSF MENU 3.1    SVSCPLEX  S0W1                         COMMAND ISSUED
+  COMMAND INPUT ===>                                            SCROLL ===> PAGE
+  RESPONSE=S0W1                                                                                                         
+   IEE254I  09.53.53 IPLINFO DISPLAY 047                                                                                
+    SYSTEM IPLED AT 11.43.57 ON 11/16/2025                                                                              
+    RELEASE z/OS 03.01.00    LICENSE = z/OS                                                                             
+    USED LOADW1 IN SYS1.IPLPARM ON 00CE3                                                                                
+    ARCHLVL = 2   MTLSHARE = N                                                                                          
+    VALIDATED BOOT: NO                                                                                                  
+    IEASYM LIST = (W1,SV,VN)                                                                                            
+    IEASYS LIST = (00,LV,SV,VN) (OP)                                                                                    
+    IODF DEVICE: ORIGINAL(00CE3) CURRENT(00CE3)                                                                         
+    IPL DEVICE: ORIGINAL(01000) CURRENT(01000) VOLUME(VIMVSB)                                                           
+    VM CPID = z/VM    7.3.0                                                                                             
+    VM UUID IS NOT PROVIDED                                                                                             
+    VM NAME = DGBGMFA                                                                                                   
+    VM EXT NAME IS NOT PROVIDED                    
+
+cat dslist.py
+================
+import http.client
+import ssl
+
+context = ssl.create_default_context(cafile="z_OSMF_CertAuth.crt")
+
+# Authentification (utilisez les identifiants corrects)
+
+conn = http.client.HTTPSConnection("S0W1.DAL-EBIS.IHOST.COM", 10443, context=context)
+
+headersList = {
+ "Accept": "*/*",
+ "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+ "Content-Type": "application/json",
+ "X-CSRF-ZOSMF-HEADER": "zosmf",
+ "Authorization": "Basic ejA0NjgzOmMyaGFybG90"
+}
+
+payload = ""
+
+conn.request("GET", "/zosmf/restfiles/ds?dslevel=z04683.**", payload, headersList)
+response = conn.getresponse()
+result = response.read()
+
+print(result.decode("utf-8"))
+
+python3 dslist.py -vv
+{"items":[
+  {"dsname":"Z04683"},
+  {"dsname":"Z04683.ANSB.COBOL"},
+  {"dsname":"Z04683.ANSB.DSN1"},
+  {"dsname":"Z04683.ANSB.DSN3"},
+  {"dsname":"Z04683.ANSB.DSN4"},
+  {"dsname":"Z04683.ANSB.HELLO.GSE"},
+  {"dsname":"Z04683.ANSB.JCL"},
+  {"dsname":"Z04683.ANSB.PARMLIB"},
+  {"dsname":"Z04683.ANSB.REXX"},
+  {"dsname":"Z04683.ANSIBLE.ARGS"},
+  {"dsname":"Z04683.ANSIBLE.TEST1"},
+  {"dsname":"Z04683.ANSIBLE.TEST2"},
+  {"dsname":"Z04683.ANSIBLE.TEST3"},
+  {"dsname":"Z04683.CB.OSHOOLI.AHOOLBIN.#"},
+  {"dsname":"Z04683.CB.OSHOOLI.AHOOLMOD.#"},
+  {"dsname":"Z04683.CB.OSHOOLI.DUMP"},
+  {"dsname":"Z04683.CB.OSHOOLI.SHOOLMOD.#"},
+  {"dsname":"Z04683.CB.OSHOOLI.SMPLOG.#"},
+
+
+
+ cat srch_member.py:
+=====================
+import http.client
+import ssl
+
+# Création d'un contexte SSL qui ignore la vérification du certificat
+context = ssl._create_unverified_context()
+#context = ssl.create_default_context(cafile="z_OSMF_CertAuth.crt")
+
+
+# Connexion HTTPS avec le contexte SSL personnalisé
+conn = http.client.HTTPSConnection("204.90.115.200", 10443, context=context)
+
+headersList = {
+    "Accept": "*/*",
+    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+    "Content-Type": "application/json",
+    "X-CSRF-ZOSMF-HEADER": "zosmf",
+    "Authorization": "Basic ejA0NjgzOmMyaGFybG90"
+}
+
+url = "/zosmf/restfiles/ds/z04683.JCL/member"
+
+# Envoi de la requête HTTP GET
+conn.request("GET", url, headers=headersList)
+response = conn.getresponse()
+result = response.read()
+
+if response.status == 200:
+    print(result.decode("utf-8"))
+else:
+    print(f"Erreur {response.status} : {response.reason}")
+
+philippe@LAPTOP-EC65KLAE:~$ python3 srch_member.py
+{"items":[
+  {"member":"$GIMGTPK"},
+  {"member":"$GIMGTP2"},
+  {"member":"$GIMHASH"},
+  {"member":"$GIMREAD"},
+  {"member":"$GIMUNZI"},
+  {"member":"$README"},
+  {"member":"$RECEIVE"},
+  {"member":"$XMIT"},
+  {"member":"#XMIT"},
+  {"member":"ABEND"},
+  {"member":"ADDAMT"},
+  {"member":"ADDDSD"},
+  {"member":"AESASM"},
+  {"member":"AESENCR"},
+  {"member":"AESENCR1"},
+  {"member":"ALLOCNEW"},
+  {"member":"ASMJOB"},
+  {"member":"AXR"},
+  {"member":"BASE64"},
+  {"member":"BPXSPOOL"},
+  {"member":"BPXUNIX1"},
+  {"member":"BPXUNIX2"},
+  {"member":"BPXWRIT"},
+  {"member":"BROKENK"},
+  {"member":"BR14"},
+  {"member":"B64OUT"},
+  {"member":"CARSPRNT"},
+  {"member":"CBLDB21C"},
+  {"member":"CBLDB21J"},
+  {"member":"CBLDB21R"},
+  {"member":"CBLDB22C"},
+  {"member":"CBLDB22R"},
+  {"member":"CBLDB23C"},
+  {"member":"CBLDB23R"},
+  {"member":"CBL0001J"},
+  {"member":"CBL0002J"},
+  {"member":"CBL0003J"},
+  {"member":"CBL0004J"},
+  {"member":"CBL0005J"},
+  {"member":"CBL0006J"},
+  {"member":"CBL0007J"},
+  {"member":"CBL0008J"},
+  {"member":"CBL0009J"},
+  {"member":"CBL0010J"},
+  {"member":"CBL0011J"},
+  {"member":"CBL0012J"},
+  {"member":"CBL0033J"},
+  {"member":"CERTAUTH"},
+  {"member":"CERTIFS"},
+  {"member":"CHECKCRT"},
+  {"member":"CHGITSH"},
+  {"member":"CHGPWD"},
+  {"member":"CHTAG"},
+  {"member":"CMPAREXX"},
+  {"member":"COBRUN"},
+  {"member":"COMMND1"},
+  {"member":"COMMND2"},
+  {"member":"COMMND3"},
+  {"member":"COMMND4"},
+  {"member":"COMPARE"},
+  {"member":"CPYCMPPS"},
+  {"member":"CPYMREXX"},
+  {"member":"CRETBL"},
+  {"member":"DB2"},
+  {"member":"DCOLLECT"},
+  {"member":"DCOLL1"},
+  {"member":"DCOL1"},
+  {"member":"DEFKSDS"},
+  {"member":"DEFNVSAM"},
+  {"member":"DEFVSAM"},
+  {"member":"DELETE"},
+  {"member":"DELET1"},
+  {"member":"DFHCOBCL"},
+  {"member":"DFHCOB2"},
+  {"member":"DUMPFIL"},
+  {"member":"DUMPHOOL"},
+  {"member":"DUMPLST"},
+  {"member":"DUMPPWSI"},
+  {"member":"DUMPREST"},
+  {"member":"EMPTY"},
+  {"member":"EMPTY1"},
+  {"member":"EMPTY2"},
+  {"member":"ESDS"},
+  {"member":"EU2015A"},
+  {"member":"EU2015B"},
+  {"member":"EXOVSAM"},
+  {"member":"EXOVSAM1"},
+  {"member":"EXTERNLK"},
+  {"member":"EXTRACTN"},
+  {"member":"EX2A"},
+  {"member":"FIBO"},
+  {"member":"FIBOEXE"},
+  {"member":"FIBOJAVA"},
+  {"member":"GDGALL"},
+  {"member":"GDGALLB"},
+  {"member":"GDGBIAS"},
+  {"member":"GDGBIAS3"},
+  {"member":"GDGBIA1"},
+  {"member":"GDGBIA1B"},
+  {"member":"GDGBIA1C"},
+  {"member":"GDGBIA1D"},
+  {"member":"GDGBIA2"},
+  {"member":"GDGCURRT"},
+  {"member":"GDGDEF"},
+  {"member":"GDGDEFNW"},
+  {"member":"GDGDEF2"},
+  {"member":"GDGDEF34"},
+  {"member":"GDGDEF56"},
+  {"member":"GDGDEL"},
+  {"member":"GDGIDCA"},
+  {"member":"GDGLCAT"},
+  {"member":"GDGMODEL"},
+  {"member":"GDGPRTCU"},
+  {"member":"GDSDEL"},
+  {"member":"GETJCL"},
+  {"member":"GIMSAMPU"},
+  {"member":"GIMUNZIP"},
+  {"member":"GIMZIP"},
+  {"member":"GIMZIP1"},
+  {"member":"GREP"},
+  {"member":"HELLO"},
+  {"member":"HELLOJ"},
+  {"member":"HOLDJ"},
+
+====== python db2 ===================
+
+     DSND10.SVSC.CNTL(SELJ1) - 01.02              
+ //SYSTSPRT DD SYSOUT=*                           
+ //SYSPRINT DD SYSOUT=*                           
+ //SYSUDUMP DD SYSOUT=*                           
+ //SYSTSIN  DD *                                  
+  DSN SYSTEM(DBDG)                                
+  RUN  PROGRAM(DSNTEP2) PLAN(DSNTEP13) +          
+       LIB('DSND10.DBDG.RUNLIB.LOAD') +           
+       PARMS('/ALIGN(MID)')                       
+  END                                             
+ //SYSIN    DD  *                                 
+                                                  
+     SELECT DEPTNO,                               
+                       DEPTNAME,                  
+                        MGRNO,                    
+                        ADMRDEPT                  
+                  FROM DSN81310.DEPT              
+                  ORDER BY DEPTNO ;               
+ /*                                               
+ //                                               
+
+see GitHub:
+https://github.com/db2dinosaur/db2-rest-python-samples/tree/master
+crGetDepartments.py  (mine: db2Service.py)
+driveGetDepartments.py (mine db2getDept.py)
+driveTLSGetDepartments.py
+driveTLSGetEmployeesByDepartment.py
+driveTLSNCGetDepartments.py
+dropGetDepartments.py
+
+------------------------------------
+nano db2Service.py
+cat db2Service.py
+import base64
+import requests
+import json
+import sys
+
+url = 'http://192.168.0.66:5045/services/DB2ServiceManager'
+data = {
+  'requestType':'createService',
+  'sqlStmt':'SELECT DEPTNO,'+
+                   'DEPTNAME,'+
+                   'MGRNO,'+
+                   'ADMRDEPT '+
+             'FROM DEPT '+
+             'ORDER BY DEPTNO',
+  'collectionID':'Z04683SRV',
+  'serviceName':'GetDepartments',
+  'description':'List departments ordered by DEPTNO',
+  'owner':'DSN81310',
+  'qualifier':'DSN81310'
+}
+body = json.dumps(data)
+# Set request auth
+authstr = 'Basic ' + base64.b64encode(b'PRICHAR:thomas99').decode()
+# Set request headers
+reqhdrs = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json',
+  'Authorization':authstr
+}
+# Issue the request
+response = requests.post(url,data=body,headers=reqhdrs)
+
+print('Status code = ',response.status_code)
+print('Returned headers:')
+for name in response.headers:
+        print('   ',name,': ',response.headers[name])
+print('Returned data:')
+json.dump(response.json(),sys.stdout,sort_keys=False,indent=4)
+
+
+philippe@samsung-philipp:~$ python3 db2Service.py
+Status code =  201
+Returned headers:
+    Location :  http://192.168.0.66:5045/services/Z04683SRV/GetDepartments/V1
+    Connection :  close
+    Content-Length :  863
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Tue, 25 Nov 2025 17:22:40 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51094.E1D7ECF41DCE
+Returned data:
+{
+    "StatusCode": 201,
+    "StatusDescription": "DB2 Rest Service Z04683SRV.GetDepartments.(V1) was created successfully.",
+    "URL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments/V1",
+    "StatusOptions": {
+        "Applied": [
+            {
+                "ACTION": "ADD"
+            },
+            {
+                "VALIDATE": "RUN"
+            },
+            {
+                "EXPLAIN": "NO"
+            },
+            {
+                "ISOLATION": "CS"
+            },
+            {
+                "RELEASE": "COMMIT"
+            },
+            {
+                "OWNER": "DSN81310"
+            },
+            {
+                "OWNERTYPE": "USER"
+            },
+            {
+                "QUALIFIER": "DSN81310"
+            },
+            {
+                "APREUSE": ""
+            },
+            {
+                "APCOMPARE": ""
+            },
+            {
+                "BUSTIMESENSITIVE": "YES"
+            },
+            {
+                "SYSTIMESENSITIVE": "YES"
+            },
+            {
+                "ARCHIVESENSITIVE": "YES"
+            },
+            {
+                "APPLCOMPAT": "V13R1M501"
+            },
+            {
+                "DESCSTAT": "YES"
+            },
+            {
+                "SQLERROR": "NOPACKAGE"
+            },
+            {
+                "CURRENTDATA": "NO"
+            },
+            {
+                "DEGREE": "1"
+            },
+            {
+                "NODEFER": "PREPARE"
+            },
+            {
+                "REOPT": "NONE"
+            },
+            {
+                "IMMEDWRITE": "NO"
+            },
+            {
+                "DBPROTOCOL": "DRDA"
+            },
+            {
+                "OPTHINT": ""
+            },
+            {
+                "ENCODING": "UNICODE(01208)"
+            },
+            {
+                "CONCURRENTACCESSRESOLUTION": ""
+            },
+            {
+                "PATH": ""
+            },
+            {
+                "QUERYACCELERATION": ""
+            },
+            {
+                "GETACCELARCHIVE": ""
+            },
+            {
+                "ACCELERATOR": ""
+            },
+            {
+                "ACCELERATIONWAITFORDATA": ""
+            }
+        ]
+    }
+
+
+
+    DSND10.SVSC.CNTL(SELJ1) - 01.02             
+//SYSTSPRT DD SYSOUT=*                          
+//SYSPRINT DD SYSOUT=*                          
+//SYSUDUMP DD SYSOUT=*                          
+//SYSTSIN  DD *                                 
+ DSN SYSTEM(DBDG)                               
+ RUN  PROGRAM(DSNTEP2) PLAN(DSNTEP13) +         
+      LIB('DSND10.DBDG.RUNLIB.LOAD') +          
+      PARMS('/ALIGN(MID)')                      
+ END                                            
+//SYSIN    DD  *                                
+   SELECT * FROM SYSIBM.DSNSERVICE WITH UR;     
+/*                                              
+
+
+SELECT * FROM SYSIBM.DSNSERVICE WITH UR;                                    
+   +------------------------------------------------------------------------
+   |                                                           NAME         
+   +------------------------------------------------------------------------
+ 1_| GetDepartments                                                         
+   +------------------------------------------------------------------------
+    2                                                                       
+   -------------------------------------------------------------------------
+   |                                                          COLLID        
+   -------------------------------------------------------------------------
+ 1_| Z04683SRV                                                              
+   -------------------------------------------------------------------------
+    3                                                                       
+                        ----------------------------------------------------
+                        | CONTOKEN | ENABLED |         CREATEDTS          | 
+                        ----------------------------------------------------
+                      1_|  PÖ4_    | Y       | 2025-11-25-19.22.34.558833 | 
+                        ----------------------------------------------------
+    4                                                                       
+   -------------------------------------------------------------------------
+   |                                                       DESCRIPTION      
+   -------------------------------------------------------------------------
+ 1_| List departments ordered by DEPTNO                                     
+   -------------------------------------------------------------------------
+                            -----------------------------------------------
+                            |                            VERSIONID         
+                            -----------------------------------------------
+                          1_| V1                                           
+                            -----------------------------------------------
+SUCCESSFUL RETRIEVAL OF          1 ROW(S)                                  
+
+
+
+cat db2getDept.py
+================
+import requests
+import base64
+import json
+import sys
+
+baseurl = 'http://192.168.0.66:5045'
+url = baseurl + '/services/Z04683SRV/GetDepartments'
+authstr = 'Basic ' + base64.b64encode(b'prichar:thomas99').decode()
+reqhdrs = {
+  'Authorization':authstr,
+  'Content-Type':'application/json'
+}
+response = requests.post(url,headers=reqhdrs)
+
+print('Status code = ',response.status_code)
+print('Returned headers:')
+for name in response.headers:
+        print('   ',name,': ',response.headers[name])
+print('Returned data:')
+json.dump(response.json(),sys.stdout,sort_keys=False,indent=4);
+
+
+
+python3 db2getDept.py
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  1207
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Tue, 25 Nov 2025 17:30:56 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51060.E1D7EED381A4
+Returned data:
+{
+    "ResultSet Output": [
+        {
+            "DEPTNO": "A00",
+            "DEPTNAME": "SPIFFY COMPUTER SERVICE DIV.",
+            "MGRNO": "000010",
+            "ADMRDEPT": "A00"
+        },
+        {
+            "DEPTNO": "B01",
+            "DEPTNAME": "PLANNING",
+            "MGRNO": "000020",
+            "ADMRDEPT": "A00"
+        },
+        {
+            "DEPTNO": "C01",
+            "DEPTNAME": "INFORMATION CENTER",
+            "MGRNO": "000030",
+            "ADMRDEPT": "A00"
+        },
+        {
+            "DEPTNO": "D01",
+            "DEPTNAME": "DEVELOPMENT CENTER",
+            "MGRNO": null,
+            "ADMRDEPT": "A00"
+        },
+        {
+            "DEPTNO": "D11",
+            "DEPTNAME": "MANUFACTURING SYSTEMS",
+            "MGRNO": "000060",
+            "ADMRDEPT": "D01"
+        },
+        {
+            "DEPTNO": "D21",
+            "DEPTNAME": "ADMINISTRATION SYSTEMS",
+            "MGRNO": "000070",
+            "ADMRDEPT": "D01"
+        },
+        {
+            "DEPTNO": "E01",
+            "DEPTNAME": "SUPPORT SERVICES",
+            "MGRNO": "000050",
+            "ADMRDEPT": "A00"
+        },
+        {
+            "DEPTNO": "E11",
+            "DEPTNAME": "OPERATIONS",
+            "MGRNO": "000090",
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "E21",
+            "DEPTNAME": "SOFTWARE SUPPORT",
+            "MGRNO": "000100",
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "F22",
+            "DEPTNAME": "BRANCH OFFICE F2",
+            "MGRNO": null,
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "G22",
+            "DEPTNAME": "BRANCH OFFICE G2",
+            "MGRNO": null,
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "H22",
+            "DEPTNAME": "BRANCH OFFICE H2",
+            "MGRNO": null,
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "I22",
+            "DEPTNAME": "BRANCH OFFICE I2",
+            "MGRNO": null,
+            "ADMRDEPT": "E01"
+        },
+        {
+            "DEPTNO": "J22",
+            "DEPTNAME": "BRANCH OFFICE J2",
+            "MGRNO": null,
+            "ADMRDEPT": "E01"
+        }
+    ],
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+
+> show with browser:
+http://192.168.0.66:5045/services/Z04683SRV/GetDepartments
+popup: userid/pwd
+{
+  "GetDepartments": {
+    "serviceName": "GetDepartments",
+    "serviceCollectionID": "Z04683SRV",
+    "version": "V1",
+    "isDefaultVersion": true,
+    "serviceProvider": "db2service-1.0",
+    "serviceDescription": "List departments ordered by DEPTNO",
+    "alternateServiceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments",
+    "serviceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments/V1",
+    "serviceStatus": "started",
+    "RequestSchema": {},
+    "ResponseSchema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+        "ResultSet Output": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "DEPTNO": {
+                "type": "string",
+                "maxLength": 3,
+                "description": "CHAR(3)"
+              },
+              "DEPTNAME": {
+                "type": "string",
+                "maxLength": 36,
+                "description": "VARCHAR(36)"
+              },
+              "MGRNO": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "maxLength": 6,
+                "description": "Nullable CHAR(6)"
+              },
+              "ADMRDEPT": {
+                "type": "string",
+                "maxLength": 3,
+                "description": "CHAR(3)"
+              }
+            },
+            "required": [
+              "DEPTNO",
+              "DEPTNAME",
+              "MGRNO",
+              "ADMRDEPT"
+            ],
+            "description": "ResultSet Row"
+          }
+        },
+        "StatusDescription": {
+          "type": "string",
+          "description": "Service invocation status description"
+        },
+        "StatusCode": {
+          "type": "integer",
+          "multipleOf": 1,
+          "minimum": 100,
+          "maximum": 600,
+          "description": "Service invocation HTTP status code"
+        }
+      },
+      "required": [
+        "StatusDescription",
+        "StatusCode",
+        "ResultSet Output"
+      ],
+      "description": "Service GetDepartments invocation HTTP response body"
+    }
+  }
+}
+
+
+services:
+To discover all services, enter a URI to start either an HTTPS POST or GET request:
+http://192.168.0.66:5045/services/
+{
+  "DB2Services": [
+    {
+      "serviceName": "DB2ServiceDiscover",
+      "serviceCollectionID": null,
+      "version": null,
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "DB2 service to list all available services.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceDiscover"
+    },
+    {
+      "serviceName": "DB2ServiceManager",
+      "serviceCollectionID": null,
+      "version": null,
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "DB2 service to create, drop, or alter a user defined service.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceManager"
+    },
+    {
+      "serviceName": "GetDepartments",
+      "serviceCollectionID": "Z04683SRV",
+      "version": "V1",
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "List departments ordered by DEPTNO",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments/V1",
+      "alternateServiceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments"
+    }
+  ]
+}
+
+
+
+nano getEmployees.py
+philippe@samsung-philipp:~$ python3 getEm*
+Status code =  201
+Returned headers:
+    Location :  http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees/V1
+    Connection :  close
+    Content-Length :  867
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 08:26:13 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51074.E1D8B6E62A0C
+Returned data:
+{
+    "StatusCode": 201,
+    "StatusDescription": "DB2 Rest Service SYSIBMSERVICE.getEmployees.(V1) was created successfully.",
+    "URL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees/V1",
+    "StatusOptions": {
+        "Applied": [
+            {
+                "ACTION": "ADD"
+            },
+            {
+                "VALIDATE": "RUN"
+            },
+            {
+                "EXPLAIN": "NO"
+            },
+            {
+                "ISOLATION": "CS"
+            },
+            {
+                "RELEASE": "COMMIT"
+            },
+            {
+                "OWNER": "DSN81310"
+            },
+            {
+                "OWNERTYPE": "USER"
+            },
+            {
+                "QUALIFIER": "DSN81310"
+            },
+            {
+                "APREUSE": ""
+            },
+            {
+                "APCOMPARE": ""
+            },
+            {
+                "BUSTIMESENSITIVE": "YES"
+            },
+            {
+                "SYSTIMESENSITIVE": "YES"
+            },
+            {
+                "ARCHIVESENSITIVE": "YES"
+            },
+            {
+                "APPLCOMPAT": "V13R1M501"
+            },
+            {
+                "DESCSTAT": "YES"
+            },
+            {
+                "SQLERROR": "NOPACKAGE"
+            },
+            {
+                "CURRENTDATA": "NO"
+            },
+            {
+                "DEGREE": "1"
+            },
+            {
+                "NODEFER": "PREPARE"
+            },
+            {
+                "REOPT": "NONE"
+            },
+            {
+                "IMMEDWRITE": "NO"
+            },
+            {
+                "DBPROTOCOL": "DRDA"
+            },
+            {
+                "OPTHINT": ""
+            },
+            {
+                "ENCODING": "UNICODE(01208)"
+            },
+            {
+                "CONCURRENTACCESSRESOLUTION": ""
+            },
+            {
+                "PATH": ""
+            },
+            {
+                "QUERYACCELERATION": ""
+            },
+            {
+                "GETACCELARCHIVE": ""
+            },
+            {
+                "ACCELERATOR": ""
+            },
+            {
+                "ACCELERATIONWAITFORDATA": ""
+            }
+        ]
+    }
+
+
+http://192.168.0.66:5045/services/
+
+{
+  "DB2Services": [
+    {
+      "serviceName": "DB2ServiceDiscover",
+      "serviceCollectionID": null,
+      "version": null,
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "DB2 service to list all available services.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceDiscover"
+    },
+    {
+      "serviceName": "DB2ServiceManager",
+      "serviceCollectionID": null,
+      "version": null,
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "DB2 service to create, drop, or alter a user defined service.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceManager"
+    },
+    {
+      "serviceName": "getEmployees",
+      "serviceCollectionID": "SYSIBMSERVICE",
+      "version": "V1",
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "Gets the details of all employee.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees/V1",
+      "alternateServiceURL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees"
+    },
+    {
+      "serviceName": "GetDepartments",
+      "serviceCollectionID": "Z04683SRV",
+      "version": "V1",
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "List departments ordered by DEPTNO",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments/V1",
+      "alternateServiceURL": "http://192.168.0.66:5045/services/Z04683SRV/GetDepartments"
+    }
+  ]
+}
+
+
+python3 getEmployee.py
+Status code =  201
+Returned headers:
+    Location :  http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployee/V1
+    Connection :  close
+    Content-Length :  865
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 08:34:07 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51136.E1D8B8AE0271
+Returned data:
+{
+    "StatusCode": 201,
+    "StatusDescription": "DB2 Rest Service SYSIBMSERVICE.getEmployee.(V1) was created successfully.",
+    "URL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployee/V1",
+    "StatusOptions": {
+        "Applied": [
+            {
+                "ACTION": "ADD"
+            },
+            {
+                "VALIDATE": "RUN"
+            },
+            {
+                "EXPLAIN": "NO"
+            },
+            {
+                "ISOLATION": "CS"
+            },
+            {
+                "RELEASE": "COMMIT"
+            },
+            {
+                "OWNER": "DSN81310"
+            },
+            {
+                "OWNERTYPE": "USER"
+            },
+            {
+                "QUALIFIER": "DSN81310"
+            },
+            {
+                "APREUSE": ""
+            },
+            {
+                "APCOMPARE": ""
+            },
+            {
+                "BUSTIMESENSITIVE": "YES"
+            },
+            {
+                "SYSTIMESENSITIVE": "YES"
+            },
+            {
+                "ARCHIVESENSITIVE": "YES"
+            },
+            {
+                "APPLCOMPAT": "V13R1M501"
+            },
+            {
+                "DESCSTAT": "YES"
+            },
+            {
+                "SQLERROR": "NOPACKAGE"
+            },
+            {
+                "CURRENTDATA": "NO"
+            },
+            {
+                "DEGREE": "1"
+            },
+            {
+                "NODEFER": "PREPARE"
+            },
+            {
+                "REOPT": "NONE"
+            },
+            {
+                "IMMEDWRITE": "NO"
+            },
+            {
+                "DBPROTOCOL": "DRDA"
+            },
+            {
+                "OPTHINT": ""
+            },
+            {
+                "ENCODING": "UNICODE(01208)"
+            },
+            {
+                "CONCURRENTACCESSRESOLUTION": ""
+            },
+            {
+                "PATH": ""
+            },
+            {
+                "QUERYACCELERATION": ""
+            },
+            {
+                "GETACCELARCHIVE": ""
+            },
+            {
+                "ACCELERATOR": ""
+            },
+            {
+                "ACCELERATIONWAITFORDATA": ""
+            }
+        ]
+    }
+
+
+ python3 addEmployee.py
+Status code =  201
+Returned headers:
+    Location :  http://192.168.0.66:5045/services/SYSIBMSERVICE/addEmployee/V1
+    Connection :  close
+    Content-Length :  865
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 08:37:10 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51142.E1D8B961EED5
+Returned data:
+{
+    "StatusCode": 201,
+    "StatusDescription": "DB2 Rest Service SYSIBMSERVICE.addEmployee.(V1) was created successfully.",
+    "URL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/addEmployee/V1",
+    "StatusOptions": {
+        "Applied": [
+            {
+                "ACTION": "ADD"
+            },
+            {
+                "VALIDATE": "RUN"
+            },
+            {
+                "EXPLAIN": "NO"
+            },
+            {
+                "ISOLATION": "CS"
+            },
+            {
+                "RELEASE": "COMMIT"
+            },
+            {
+                "OWNER": "DSN81310"
+            },
+            {
+                "OWNERTYPE": "USER"
+            },
+            {
+                "QUALIFIER": "DSN81310"
+            },
+            {
+                "APREUSE": ""
+            },
+            {
+                "APCOMPARE": ""
+            },
+            {
+                "BUSTIMESENSITIVE": "YES"
+            },
+            {
+                "SYSTIMESENSITIVE": "YES"
+            },
+            {
+                "ARCHIVESENSITIVE": "YES"
+            },
+            {
+                "APPLCOMPAT": "V13R1M501"
+            },
+            {
+                "DESCSTAT": "YES"
+            },
+            {
+                "SQLERROR": "NOPACKAGE"
+            },
+            {
+                "CURRENTDATA": "NO"
+            },
+            {
+                "DEGREE": "1"
+            },
+            {
+                "NODEFER": "PREPARE"
+            },
+            {
+                "REOPT": "NONE"
+            },
+            {
+                "IMMEDWRITE": "NO"
+            },
+            {
+                "DBPROTOCOL": "DRDA"
+            },
+            {
+                "OPTHINT": ""
+            },
+            {
+                "ENCODING": "UNICODE(01208)"
+            },
+            {
+                "CONCURRENTACCESSRESOLUTION": ""
+            },
+            {
+                "PATH": ""
+            },
+            {
+                "QUERYACCELERATION": ""
+            },
+            {
+                "GETACCELARCHIVE": ""
+            },
+            {
+                "ACCELERATOR": ""
+            },
+            {
+                "ACCELERATIONWAITFORDATA": ""
+            }
+        ]
+    }
+
+
+python3 updateEmployee.py
+Status code =  201
+Returned headers:
+    Location :  http://192.168.0.66:5045/services/SYSIBMSERVICE/updateEmployee/V1
+    Connection :  close
+    Content-Length :  871
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 08:39:12 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51144.E1D8B9D66AF3
+Returned data:
+{
+    "StatusCode": 201,
+    "StatusDescription": "DB2 Rest Service SYSIBMSERVICE.updateEmployee.(V1) was created successfully.",
+    "URL": "http://192.168.0.66:5045/services/SYSIBMSERVICE/updateEmployee/V1",
+    "StatusOptions": {
+        "Applied": [
+            {
+                "ACTION": "ADD"
+            },
+            {
+                "VALIDATE": "RUN"
+            },
+            {
+                "EXPLAIN": "NO"
+            },
+            {
+                "ISOLATION": "CS"
+            },
+            {
+                "RELEASE": "COMMIT"
+            },
+            {
+                "OWNER": "DSN81310"
+            },
+            {
+                "OWNERTYPE": "USER"
+            },
+            {
+                "QUALIFIER": "DSN81310"
+            },
+            {
+                "APREUSE": ""
+            },
+            {
+                "APCOMPARE": ""
+            },
+            {
+                "BUSTIMESENSITIVE": "YES"
+            },
+            {
+                "SYSTIMESENSITIVE": "YES"
+            },
+            {
+                "ARCHIVESENSITIVE": "YES"
+            },
+            {
+                "APPLCOMPAT": "V13R1M501"
+            },
+            {
+                "DESCSTAT": "YES"
+            },
+            {
+                "SQLERROR": "NOPACKAGE"
+            },
+            {
+                "CURRENTDATA": "NO"
+            },
+            {
+                "DEGREE": "1"
+            },
+            {
+                "NODEFER": "PREPARE"
+            },
+            {
+                "REOPT": "NONE"
+            },
+            {
+                "IMMEDWRITE": "NO"
+            },
+            {
+                "DBPROTOCOL": "DRDA"
+            },
+            {
+                "OPTHINT": ""
+            },
+            {
+                "ENCODING": "UNICODE(01208)"
+            },
+            {
+                "CONCURRENTACCESSRESOLUTION": ""
+            },
+            {
+                "PATH": ""
+            },
+            {
+                "QUERYACCELERATION": ""
+            },
+            {
+                "GETACCELARCHIVE": ""
+            },
+            {
+                "ACCELERATOR": ""
+            },
+            {
+                "ACCELERATIONWAITFORDATA": ""
+            }
+        ]
+    }
+
+
+ls *.py
+addEmployee.py  db2getDept.py      gen_passticket.py  getEmployees.py   unmask_passticket.py
+db2Service.py   deleteEmployee.py  getEmployee.py     parse_db_ptkt.py  updateEmployee.py
+
+
+drop a service:
+use chrome YARC
+http://192.168.0.66:5045/services/DB2ServiceManager
+POST request
+payload:
+{
+ "requestType": "dropService",
+ "collectionID": "SYSIBMSERVICE",
+ "serviceName": "getEmployee",
+ "version": "V1"
+}
+Authorization: Basic ...base64 prichar:thomas99
+
+headers: application/json
+
+Response
+200
+Request URL: http://192.168.0.66:5045/services/DB2ServiceManager
+Request Method: POST
+Response Time: 2.177 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "StatusCode": 200,
+  "StatusDescription": "DB2 Rest Service SYSIBMSERVICE.getEmployee.(V1) was dropped successfully."
+
+
+
+Testing the sample Db2 native REST services
+==============================================
+https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2023.4.1?topic=services-testing-sample-db2-native-rest
+
+Procedure:use YARC
+Use a REST client to test the getEmployees service.
+Send an HTTP POST request to http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees/V1 with header Content-Type: application/json and the following body:
+{
+    "WORKDEPT": "%",
+    "JOB": "%"
+}
+
+
+Request URL: http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployees/V1
+Request Method: POST
+Response Time: 1.235 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "ResultSet Output": [
+    {
+      "EMPNO": "000010",
+      "FIRSTNME": "CHRISTINE",
+      "MIDINIT": "I",
+      "LASTNAME": "HAAS",
+      "WORKDEPT": "A00",
+      "PHONENO": "3978",
+      "HIREDATE": "1965-01-01",
+      "JOB": "PRES    ",
+      "EDLEVEL": 18,
+      "SEX": "F",
+      "BIRTHDATE": "1933-08-14",
+      "SALARY": 52750,
+      "BONUS": 1000,
+      "COMM": 4220
+    },
+    {
+      "EMPNO": "000110",
+      "FIRSTNME": "VINCENZO",
+      "MIDINIT": "G",
+      "LASTNAME": "LUCCHESI",
+      "WORKDEPT": "A00",
+      "PHONENO": "3490",
+      "HIREDATE": "1958-05-16",
+      "JOB": "SALESREP",
+      "EDLEVEL": 19,
+      "SEX": "M",
+      "BIRTHDATE": "1929-11-05",
+      "SALARY": 46500,
+      "BONUS": 900,
+      "COMM": 3720
+    },
+    {
+      "EMPNO": "000120",
+      "FIRSTNME": "SEAN",
+      "MIDINIT": " ",
+      "LASTNAME": "O'CONNELL",
+      "WORKDEPT": "A00",
+      "PHONENO": "2167",
+      "HIREDATE": "1963-12-05",
+      "JOB": "CLERK   ",
+      "EDLEVEL": 14,
+      "SEX": "M",
+      "BIRTHDATE": "1942-10-18",
+      "SALARY": 29250,
+      "BONUS": 600,
+      "COMM": 2340
+    },
+    ...
+...
+  ],
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+getEmployee
+==========
+Request URL: http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployee/V1
+Request Method: POST
+Response Time: 0.476 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "ResultSet Output": [
+    {
+      "EMPNO": "000150",
+      "FIRSTNME": "BRUCE",
+      "MIDINIT": " ",
+      "LASTNAME": "ADAMSON",
+      "WORKDEPT": "D11",
+      "PHONENO": "4510",
+      "HIREDATE": "1972-02-12",
+      "JOB": "DESIGNER",
+      "EDLEVEL": 16,
+      "SEX": "M",
+      "BIRTHDATE": "1947-05-17",
+      "SALARY": 25280,
+      "BONUS": 500,
+      "COMM": 2022
+    }
+  ],
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+Optional: Use a REST client to test the addEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/addEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456",
+    "FIRSTNME": "TEST",
+    "MIDINIT": "A",
+    "LASTNAME": "EMPLOYEE",
+    "WORKDEPT": "A00",
+    "PHONENO": "1234",
+    "HIREDATE": "2000-01-01",
+    "JOB": "MANAGER",
+    "EDLEVEL": 12,
+    "SEX": "M",
+    "BIRTHDATE": "1999-01-01",
+    "SALARY": 12345.00,
+    "BONUS": 123.00,
+    "COMM": 456.00
+}
+
+Response
+200
+Request URL: http://192.168.0.66:5045/services/SYSIBMSERVICE/addEmployee/V1
+Request Method: POST
+Response Time: 0.504 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "Update Count": 1,
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+Request URL: http://192.168.0.66:5045/services/SYSIBMSERVICE/getEmployee/V1
+Request Method: POST
+Response Time: 0.047 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "ResultSet Output": [
+    {
+      "EMPNO": "123456",
+      "FIRSTNME": "TEST",
+      "MIDINIT": "A",
+      "LASTNAME": "EMPLOYEE",
+      "WORKDEPT": "A00",
+      "PHONENO": "1234",
+      "HIREDATE": "2000-01-01",
+      "JOB": "MANAGER ",
+      "EDLEVEL": 12,
+      "SEX": "M",
+      "BIRTHDATE": "1999-01-01",
+      "SALARY": 12345,
+      "BONUS": 123,
+      "COMM": 456
+    }
+  ],
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+Optional: Use a REST client to test the updateEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/updateEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456",
+    "FIRSTNME": "UPDATE_TEST",
+    "MIDINIT": "A",
+    "LASTNAME": "EMPLOYEE",
+    "WORKDEPT": "A00",
+    "PHONENO": "1234",
+    "HIREDATE": "2000-01-01",
+    "JOB": "MANAGER",
+    "EDLEVEL": 12,
+    "SEX": "M",
+    "BIRTHDATE": "1999-01-01",
+    "SALARY": 12345.00,
+    "BONUS": 123.00,
+    "COMM": 456.00
+}
+
+
+Optional: Use a REST client to test the deleteEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/deleteEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456"
+}
+
+
+Response
+200
+Request URL: http://192.168.0.66:5045/services/SYSIBMSERVICE/deleteEmployee/V1
+Request Method: POST
+Response Time: 1.47 seconds
+Response Status: 200 - OK
+Response Body
+Response Body (RAW)
+Response Headers
+Request Details
+{
+  "Update Count": 1,
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+Drive requests with pyton:
+===========================
+cat getEmployeesReq.py
+import requests
+import base64
+import json
+import sys
+
+baseurl = 'http://192.168.0.66:5045'
+url = baseurl + '/services/SYSIBMSERVICE/getEmployees'
+authstr = 'Basic ' + base64.b64encode(b'prichar:thomas99').decode()
+reqhdrs = {
+  'Authorization':authstr,
+  'Content-Type':'application/json'
+}
+
+payload = {
+    "WORKDEPT": "%",
+    "JOB": "%"
+}
+
+response = requests.post(url,headers=reqhdrs,json=payload)
+
+print('Status code = ',response.status_code)
+print('Returned headers:')
+for name in response.headers:
+        print('   ',name,': ',response.headers[name])
+print('Returned data:')
+json.dump(response.json(),sys.stdout,sort_keys=False,indent=4);
+
+
+philippe@samsung-philipp:~$ python3 getEmployeesReq.py
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  10349
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 09:48:43 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51114.E1D8C9603AA7
+Returned data:
+{
+    "ResultSet Output": [
+        {
+            "EMPNO": "000010",
+            "FIRSTNME": "CHRISTINE",
+            "MIDINIT": "I",
+            "LASTNAME": "HAAS",
+            "WORKDEPT": "A00",
+            "PHONENO": "3978",
+            "HIREDATE": "1965-01-01",
+            "JOB": "PRES    ",
+            "EDLEVEL": 18,
+            "SEX": "F",
+            "BIRTHDATE": "1933-08-14",
+            "SALARY": 52750.0,
+            "BONUS": 1000.0,
+            "COMM": 4220.0
+        },
+        {
+            "EMPNO": "000110",
+            "FIRSTNME": "VINCENZO",
+            "MIDINIT": "G",
+            "LASTNAME": "LUCCHESI",
+            "WORKDEPT": "A00",
+            "PHONENO": "3490",
+            "HIREDATE": "1958-05-16",
+            "JOB": "SALESREP",
+            "EDLEVEL": 19,
+            "SEX": "M",
+            "BIRTHDATE": "1929-11-05",
+            "SALARY": 46500.0,
+            "BONUS": 900.0,
+            "COMM": 3720.0
+        },
+        {
+            "EMPNO": "000120",
+            "FIRSTNME": "SEAN",
+            "MIDINIT": " ",
+            "LASTNAME": "O'CONNELL",
+            "WORKDEPT": "A00",
+            "PHONENO": "2167",
+            "HIREDATE": "1963-12-05",
+            "JOB": "CLERK   ",
+            "EDLEVEL": 14,
+            "SEX": "M",
+            "BIRTHDATE": "1942-10-18",
+            "SALARY": 29250.0,
+            "BONUS": 600.0,
+            "COMM": 2340.0
+
+
+python3 getEmployeeReq.py
+==========================
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  328
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 09:51:27 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51064.E1D8C9FC77BF
+Returned data:
+{
+    "ResultSet Output": [
+        {
+            "EMPNO": "000150",
+            "FIRSTNME": "BRUCE",
+            "MIDINIT": " ",
+            "LASTNAME": "ADAMSON",
+            "WORKDEPT": "D11",
+            "PHONENO": "4510",
+            "HIREDATE": "1972-02-12",
+            "JOB": "DESIGNER",
+            "EDLEVEL": 16,
+            "SEX": "M",
+            "BIRTHDATE": "1947-05-17",
+            "SALARY": 25280.0,
+            "BONUS": 500.0,
+            "COMM": 2022.0
+        }
+    ],
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+
+python3 deleteEmployeeReq.py
+=============================
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  80
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 09:55:03 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51092.E1D8CACA3B46
+Returned data:
+{
+    "Update Count": 0,
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+
+
+nano addEmployeeReq.py
+philippe@samsung-philipp:~$ python3 addEmployeeReq.py
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  80
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 09:56:24 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51112.E1D8CB179C3F
+Returned data:
+{
+    "Update Count": 1,
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}philippe@samsung-philipp:~$ nano getEmployeeReq.py
+philippe@samsung-philipp:~$ python3 getEmployeeReq.py
+Status code =  200
+Returned headers:
+    Connection :  keep-alive
+    Keep-Alive :  timeout=15
+    Content-Length :  327
+    Content-Type :  application/json; charset=UTF-8
+    Date :  Wed, 26 Nov 2025 09:56:59 GMT
+    X-Powered-By :  DB2 for z/OS
+    Server :  DB2 DDF Native REST, DALLASD, DSNLJEMG 03/01/24 UI95905
+    Content-Language :  en-US
+    X-Correlation-ID :  ::192.168.0.69.51126.E1D8CB39141B
+Returned data:
+{
+    "ResultSet Output": [
+        {
+            "EMPNO": "123456",
+            "FIRSTNME": "TEST",
+            "MIDINIT": "A",
+            "LASTNAME": "EMPLOYEE",
+            "WORKDEPT": "A00",
+            "PHONENO": "1234",
+            "HIREDATE": "2000-01-01",
+            "JOB": "MANAGER ",
+            "EDLEVEL": 12,
+            "SEX": "M",
+            "BIRTHDATE": "1999-01-01",
+            "SALARY": 12345.0,
+            "BONUS": 123.0,
+            "COMM": 456.0
+        }
+    ],
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+
+philippe@samsung-philipp:~$ ls *.py
+addEmployee.py     db2getDept.py          getEmployees.py    
+addEmployeeReq.py  deleteEmployee.py     getEmployee.py     getEmployeesReq.py  updateEmployee.py
+db2Service.py      deleteEmployeeReq.py  getEmployeeReq.py  
+
+
+
+https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2023.4.1?topic=services-testing-sample-db2-native-rest
+
+What is a Db2 native REST service?
+As a Representational State Transfer (REST) service provider, Db2 enables your web, mobile, and cloud applications to interact with Db2 data through a set of scalable RESTful APIs.
+
+Db2 defines a REST service as a package. Each package contains a single static SQL statement and is stored in a user-defined SYSIBM.DSNSERVICE catalog table. When a service is created, a new row is added to the table that associates the service with its corresponding package. After the package is bound, it can be run only as a service.
+https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2023.4.1?topic=api-setting-up-db2-native-rest-services
+What to do next
+Prepare the sample Db2 native REST services to test out the experience of API enabling Db2 data. Alternatively, configure your own Db2 native REST service and expose Db2 data by using your own OpenAPI definition.
+
+Preparing a sample Db2 native REST service
+Enable and create Db2 native REST services that use the Db2 sample tables. These services are then used by the sample OpenAPI definition, EmployeesApi.yaml, that's part of the sample-db2-api download.
+Testing the sample Db2 native REST services
+Test the created Db2 native REST services to ensure they are installed correctly.
+
+You create two Db2 native REST services:
+getEmployees - Returns a list of employees.
+getEmployee - Returns the details of an individual employee.
+Optionally create three Db2 native REST services used in z/OS Connect samples:
+addEmployee - Add the details of an individual employee.
+updateEmployee - Update the details of an individual employee.
+deleteEmployee - Removes the details of an individual employee.
+These services are created by using the Db2 Service Manager native REST service. Alternatively, the BIND SERVICE subcommand can be used to create a new Db2 native REST service. For each request, replace <db2_host_name> with the hostname of your Db2 instance and <db2_port> with the port of your Db2 instance. You might also need to include authentication credentials such as the Authorization HTTP header.
+
+The services that are created in this sample scenario use the default Db2 collection SYSIBMSERVICE.
+
+Procedure
+Ask your Db2 system administrator to create the Db2 sample tables and enable the creation of Db2 native REST services by following this procedure.
+Create the Db2 sample tables by running the Db2 installation sample jobs DSNTEJ1 and DSNTEJ7.
+The full procedure to install the Db2 samples tables is documented in the Db2 sample table topic in the Db2 for z/OS documentation.
+Enable Db2 native REST service creation.
+Follow the steps documented in Enabling Db2 REST services in the Db2 for z/OS documentation.
+Note: You must apply the PTF for Db2 APAR PI98649: New function update of Db2 native REST services support.
+Create the getEmployees service.
+Using a REST client, send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/DB2ServiceManager with header Content-Type: application/json and the following body:
+{
+    "requestType": "createService",
+    "sqlStmt": "SELECT EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM FROM DSN81210.EMP WHERE WORKDEPT LIKE :WORKDEPT AND JOB LIKE :JOB",
+    "serviceName": "getEmployees",
+    "description": "Gets the details of all employee.",
+    "collectionID": "SYSIBMSERVICE"
+}
+
+If the Db2 native REST service is created successfully, an HTTP Created (201) response code is returned.
+
+Create the getEmployee service.
+Using a REST client, send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/DB2ServiceManager with header Content-Type: application/json and the following body:
+{
+    "requestType": "createService",
+    "sqlStmt": "SELECT EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM FROM DSN81210.EMP WHERE EMPNO = :EMPNO",
+    "serviceName": "getEmployee",
+    "description": "Gets the details of an individual employee.",
+    "collectionID": "SYSIBMSERVICE"
+}
+
+If the Db2 native REST service is created successfully, an HTTP Created (201) response code is returned.
+
+Optional: Create the addEmployee service.
+Using a REST client, send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/DB2ServiceManager with header Content-Type: application/json and the following body:
+{
+    "requestType": "createService",
+    "sqlStmt": "INSERT INTO DSN81210.EMP (EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM) VALUES (:EMPNO, :FIRSTNME, :MIDINIT, :LASTNAME, :WORKDEPT, :PHONENO, :HIREDATE, :JOB, :EDLEVEL, :SEX, :BIRTHDATE, :SALARY, :BONUS, :COMM)",
+    "serviceName": "addEmployee",
+    "description": "Add the details of an individual employee.",
+    "collectionID": "SYSIBMSERVICE"
+}
+
+If the Db2 native REST service is created successfully, an HTTP Created (201) response code is returned.
+
+Optional: Create the updateEmployee service.
+Using a REST client, send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/DB2ServiceManager with header Content-Type: application/json and the following body:
+{
+    "requestType": "createService",
+    "sqlStmt": "UPDATE DSN81210.EMP SET (EMPNO, FIRSTNME, MIDINIT, LASTNAME, WORKDEPT, PHONENO, HIREDATE, JOB, EDLEVEL, SEX, BIRTHDATE, SALARY, BONUS, COMM) = (:EMPNO, :FIRSTNME, :MIDINIT, :LASTNAME, :WORKDEPT, :PHONENO, :HIREDATE, :JOB, :EDLEVEL, :SEX, :BIRTHDATE, :SALARY, :BONUS, :COMM) WHERE EMPNO = :EMPNO",
+    "serviceName": "updateEmployee",
+    "description": "Update the details of an individual employee.",
+    "collectionID": "SYSIBMSERVICE"
+}
+
+If the Db2 native REST service is created successfully, an HTTP Created (201) response code is returned.
+
+Optional: Create the deleteEmployee service.
+Using a REST client, send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/DB2ServiceManager with header Content-Type: application/json and the following body:
+{
+    "requestType": "createService",
+    "sqlStmt": "DELETE FROM DSN81210.EMP WHERE EMPNO = :EMPNO",
+    "serviceName": "deleteEmployee",
+    "description": "Removes the details of an individual employee.",
+    "collectionID": "SYSIBMSERVICE"
+}
+
+If the Db2 native REST service is created successfully, an HTTP Created (201) response code is returned.
+
+Results
+getEmployee, and getEmployees are Db2 native REST services, created as part of the SYSIBMSERVICE collection in Db2.
+What to do next
+Test that the Db2 native REST services are created correctly. See Testing the sample Db2 native REST services.
+
+https://www.ibm.com/docs/en/cloud-paks/z-modernization-stack/2023.4.1?topic=services-testing-sample-db2-native-rest
+Testing the sample Db2 native REST services
+Last Updated
+: 2024-01-30
+Test the created Db2 native REST services to ensure they are installed correctly.
+
+About this task
+This topic is applicable to: Content applicable to Db2
+administrators
+
+Use a REST client to test the Db2 native REST services. Two different API requests are made, one for each of the Db2 native REST services.
+
+For each request, replace <db2_host_name> with the hostname and <db2_port> with the port of your Db2 instance. You can also include authentication credentials such as the Authorization HTTP header.
+
+Procedure
+Use a REST client to test the getEmployees service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/getEmployees/V1 with header Content-Type: application/json and the following body:
+{
+    "WORKDEPT": "%",
+    "JOB": "%"
+}
+
+A response code HTTP OK (200) indicates success. The response body is structured like this:
+{
+    "ResultSet Output": [
+        {
+            "EMPNO": "000150",
+            "FIRSTNME": "BRUCE",
+            "MIDINIT": " ",
+            "LASTNAME": "ADAMSON",
+            "WORKDEPT": "D11",
+            "PHONENO": "2222",
+            "HIREDATE": "1972-02-12",
+            "JOB": "DESIGNER",
+            "EDLEVEL": 16,
+            "SEX": "M",
+            "BIRTHDATE": "1947-05-17",
+            "SALARY": 25280.00,
+            "BONUS": 500.00,
+            "COMM": 2022.00
+        },
+        ...
+    ],
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}
+
+Use a REST client to test the getEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/getEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "000150"
+}
+
+A response code HTTP OK (200) indicates success. A JSON property that is called EMPNO is required for the getEmployee Db2 native REST service. The value of this property is inserted into the SQL statement that is run. The response body is:
+{
+    "ResultSet Output": [
+        {
+            "EMPNO": "000150",
+            "FIRSTNME": "BRUCE",
+            "MIDINIT": " ",
+            "LASTNAME": "ADAMSON",
+            "WORKDEPT": "D11",
+            "PHONENO": "2222",
+            "HIREDATE": "1972-02-12",
+            "JOB": "DESIGNER",
+            "EDLEVEL": 16,
+            "SEX": "M",
+            "BIRTHDATE": "1947-05-17",
+            "SALARY": 25280.00,
+            "BONUS": 500.00,
+            "COMM": 2022.00
+        }
+    ],
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}
+
+Optional: Use a REST client to test the addEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/addEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456",
+    "FIRSTNME": "TEST",
+    "MIDINIT": "A",
+    "LASTNAME": "EMPLOYEE",
+    "WORKDEPT": "A00",
+    "PHONENO": "1234",
+    "HIREDATE": "2000-01-01",
+    "JOB": "MANAGER",
+    "EDLEVEL": 12,
+    "SEX": "M",
+    "BIRTHDATE": "1999-01-01",
+    "SALARY": 12345.00,
+    "BONUS": 123.00,
+    "COMM": 456.00
+}
+
+A response code HTTP Created (201) indicates that the employee was created. The getEmployee Db2 native REST service can be used to verify this. The values within the provided body are inserted into the SQL statement that is run. The response body is:
+{
+    "Update Count": 1,
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}
+
+Optional: Use a REST client to test the updateEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/updateEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456",
+    "FIRSTNME": "UPDATE_TEST",
+    "MIDINIT": "A",
+    "LASTNAME": "EMPLOYEE",
+    "WORKDEPT": "A00",
+    "PHONENO": "1234",
+    "HIREDATE": "2000-01-01",
+    "JOB": "MANAGER",
+    "EDLEVEL": 12,
+    "SEX": "M",
+    "BIRTHDATE": "1999-01-01",
+    "SALARY": 12345.00,
+    "BONUS": 123.00,
+    "COMM": 456.00
+}
+
+A response code HTTP OK (200) indicates that the employee was updated. The getEmployee Db2 native REST service can be used to verify this. The values within the provided body are inserted into the SQL statement that is run. The response body is:
+{
+    "Update Count": 1,
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}
+
+Optional: Use a REST client to test the deleteEmployee service.
+Send an HTTP POST request to https://<db2_host_name>:<db2_port>/services/SYSIBMSERVICE/deleteEmployee/V1 with header Content-Type: application/json and the following body:
+{
+    "EMPNO": "123456"
+}
+
+A response code HTTP OK (200) indicates that the employee was deleted. The getEmployee Db2 native REST service can be used to verify this. The values within the provided body are inserted into the SQL statement that is run. The response body is:
+{
+    "Update Count": 1,
+    "StatusCode": 200,
+    "StatusDescription": "Execution Successful"
+}
+
+Results
+The Db2 native REST services getEmployee, and getEmployees returned the expected responses.
+
+=====================================================================
+DB2 service creation in batch:
+    DSND10.SVSC.CNTL(BNINDSRV) - 01.01              Colum
+***************************** Top of Data ***************
+//SELECT   JOB (20,FB3),IBMUSER,MSGLEVEL=(1,1),TIME=20,  
+//            CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=0M
+//*    USER=IBMUSER,PASSWORD=SYS1                        
+//*                                                      
+//DSND10 JCLLIB ORDER=(DSND10.PROCLIB)                   
+//*                                                      
+//JOBLIB  DD  DSN=DSND10.SDSNLOAD,DISP=SHR               
+//*                                                      
+//* THIS JOB SHOULD BE RUN FROM IBMUSER                  
+//*                                                      
+//PH01LS02 EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(4,LT)     
+//SYSTSPRT DD SYSOUT=*                                   
+//SYSPRINT DD SYSOUT=*                                   
+//SYSUDUMP DD SYSOUT=*                                   
+//SYSTSIN  DD *                                          
+ DSN SYSTEM(DBDG)                                        
+  BIND SERVICE(PHILSRV)  -                               
+       NAME("GetEmpList")  -                             
+       SQLDDNAME(SQL)      -                             
+       SQLENCODING(EBCDIC) -                             
+       DESCRIPTION('Created with BIND service') -        
+       QUALIFIER(DSN81310) -                             
+       ISOLATION(UR)       -                             
+       OWNER(DSN81310)                                     
+                                                           
+ RUN  PROGRAM(DSNTEP2) PLAN(DSNTEP13) +                    
+      LIB('DSND10.DBDG.RUNLIB.LOAD')                       
+ END                                                       
+/*                                                         
+//SQL   DD *                                               
+    SELECT FIRSTNME,                                       
+                     MIDINIT,                              
+                     LASTNAME,                             
+                       EMPNO                               
+    FROM DSN81310.EMP                                      
+    WHERE LASTNAME LIKE:namelike                           
+    ORDER BY LASTNAME,FIRSTNME,MIDINIT                     
+/*                                                         
+//SYSIN DD *                                               
+   GRANT EXECUTE ON PACKAGE PHILSRV."GetEmpList" to PUBLIC 
+   ;                                                       
+/*                                                         
+**************************** Bottom of Data ***************
+http://192.168.0.66:5045/services/
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceDiscover"
+    },
+    {
+      "serviceName": "DB2ServiceManager",
+      "serviceCollectionID": null,
+      "version": null,
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "DB2 service to create, drop, or alter a user defined service.",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/DB2ServiceManager"
+    },
+    {
+      "serviceName": "GetEmpList",
+      "serviceCollectionID": "PHILSRV",
+      "version": "V1",
+      "isDefaultVersion": true,
+      "serviceStatus": "started",
+      "serviceDescription": "Created with BIND service",
+      "serviceProvider": "db2service-1.0",
+      "serviceURL": "http://192.168.0.66:5045/services/PHILSRV/GetEmpList/V1",
+      "alternateServiceURL": "http://192.168.0.66:5045/services/PHILSRV/GetEmpList"
+    },
+    {
+      "serviceName": "addEmployee",
+      "serviceCollectionID": "SYSIBMSERVICE",
+      "version": "V1",
+
+
+YARC:
+http://192.168.0.66:5045/services/PHILSRV/GetEmpList
+payload:
+{
+    "namelike":"H%"
+}
+
+POST
+
+{
+  "ResultSet Output": [
+    {
+      "FIRSTNME": "CHRISTINE",
+      "MIDINIT": "I",
+      "LASTNAME": "HAAS",
+      "EMPNO": "000010"
+    },
+    {
+      "FIRSTNME": "DIAN",
+      "MIDINIT": "J",
+      "LASTNAME": "HEMMINGER",
+      "EMPNO": "200010"
+    },
+    {
+      "FIRSTNME": "EILEEN",
+      "MIDINIT": "W",
+      "LASTNAME": "HENDERSON",
+      "EMPNO": "000090"
+    }
+  ],
+  "StatusCode": 200,
+  "StatusDescription": "Execution Successful"
+}
+
+
+curl -u prichar:thomas99 -H "Content-Type: application/json" -X POST -d "{\"namelike\":\"H%\"}" http://192.168.0.66:5045/services/PHILSRV/GetEmpList
+curl -u prichar:thomas99 -H "Content-Type: application/json" -X POST -d "{\"namelike\":\"H%\"}" http://192.168.0.66:5045/services/PHILSRV/GetEmpList
+{"ResultSet Output":[{"FIRSTNME":"CHRISTINE","MIDINIT":"I","LASTNAME":"HAAS","EMPNO":"000010"},{"FIRSTNME":"DIAN","MIDINIT":"J","LASTNAME":"HEMMINGER","EMPNO":"200010"},{"FIRSTNME":"EILEEN","MIDINIT":"W","LASTNAME":"HENDERSON","EMPNO":"000090"}],"StatusCode": 200,"StatusDescription": "Execution Successful"}
+
+=========================================================================================================================
+
+https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=services-creating-db2-rest-service
+
+{
+ "requestType": "createService",
+ "sqlStmt": "SELECT DEPTNAME FROM DSN81310.DEPT WHERE LOCATION = :LOCATION",
+ "collectionID": "SYSIBMSERVICE",
+ "serviceName": "simpleSelect1",
+ "description": "Select department name based on location.",
+ "owner": "DB2GRP1",
+ "qualifier": "USRT002"
+}
+
+Invoking a Db2 REST service
+Last Updated
+: 2025-01-07
+You can invoke a Db2 REST service through a RESTful HTTP client if you have the required authority.
+
+Before you begin
+You must have one of the following privileges or authorities to invoke a service:
+Execute privilege on the package for the service
+Ownership of the service
+SYSADM or SYSCTRL authority
+System DBADM.
+Procedure
+To invoke a service, issue an HTTP or HTTPS POST request through a REST client with the following URI format:
+POST https://<host>:<port>/services/<serviceCollectionID>/<serviceName>/<version>
+
+Example
+This example shows how to invoke the default version of the service SYSIBMSERVICE.simpleSelect1, which has a single input String parameter named LOCATION. This example includes setting the Db2-Client-ApplName and Db2-Client-WrkStnName HTTP request header fields to the values "Customer Service" and "CS Laptop-47", respectively. Enter the following URI to start an HTTPS POST request:
+
+POST https://<host>:<port>/services/SYSIBMSERVICE/simpleSelect1
+
+Specify the following HTTP header fields for the request:
+
+Accept:application/json
+Content-Type:application/json
+Db2-Client-ApplName:Customer Service
+Db2-Client-WrkStnName:CS Laptop-47
+
+Specify the following HTTP body for the request:
+
+{
+ "LOCATION": "<location>"
+}
+
+Db2 returns the following response in JSON:
+
+{
+ "ResultSet Output":
+  {
+   "DEPTNAME": "SPIFFY COMPUTER SERVICE DIV."
+  },
+  {
+   "DEPTNAME": "PLANNING"
+  },
+  {
+   "DEPTNAME": "INFORMATION CENTER"
+  },
+  {
+   "DEPTNAME": "DEVELOPMENT CENTER"
+  },
+  {
+   "DEPTNAME": "MANUFACTURING SYSTEMS"
+  },
+  {
+   "DEPTNAME": "ADMINISTRATION SYSTEMS"
+  },
+  {
+   "DEPTNAME": "SUPPORT SERVICES"
+  },
+  {
+   "DEPTNAME": "OPERATIONS"
+  },
+  {
+   "DEPTNAME": "SOFTWARE SUPPORT"
+  },
+  {
+   "DEPTNAME": "BRANCH OFFICE F2"
+  },
+  {
+   "DEPTNAME": "BRANCH OFFICE G2"
+  },
+  {
+   "DEPTNAME": "BRANCH OFFICE H2"
+  },
+  {
+   "DEPTNAME": "BRANCH OFFICE I2"
+  },
+  {
+   "DEPTNAME": "BRANCH OFFICE J2"
+  },
+ "StatusCode": 200,
+ "StatusDescription": "Execution Successful."
+}

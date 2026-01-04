@@ -1,0 +1,1374 @@
+https://github.com/phil34130/hello_world_zacademy
+
+ ssh -Tv git@github.com
+OpenSSH_8.4p1, LibreSSL 3.0.2
+debug1(10:39:20.610045): Reading configuration data /etc/ssh/ssh_config
+debug1(10:39:21.11708): zsshSmfSetConnSmfStatus: SMF status is 0
+debug1(10:39:21.12438): Authenticator provider $SSH_SK_PROVIDER did not resolve; disabling
+debug1(10:39:21.121240): Connecting to github.com [140.82.121.3] port 22.
+debug1(10:39:21.148485): Connection established.
+debug1(10:39:21.149806): cipher_init: none from source none, used in non-FIPS mode
+debug1(10:39:21.150631): cipher_init: none from source none, used in non-FIPS mode
+debug1(10:39:21.213392): identity file /u/prichar/.ssh/id_rsa type 0
+debug1(10:39:21.218658): identity file /u/prichar/.ssh/id_rsa-cert type -1
+debug1(10:39:21.230940): identity file /u/prichar/.ssh/id_dsa type 1
+debug1(10:39:21.236240): identity file /u/prichar/.ssh/id_dsa-cert type -1
+debug1(10:39:21.245247): identity file /u/prichar/.ssh/id_ecdsa type -1
+debug1(10:39:21.371691): identity file /u/prichar/.ssh/id_ecdsa-cert type -1
+debug1(10:39:21.379171): identity file /u/prichar/.ssh/id_ed25519 type -1
+debug1(10:39:21.397043): identity file /u/prichar/.ssh/id_ed25519-cert type -1
+debug1(10:39:21.398688): Local version string SSH-2.0-OpenSSH_8.4
+debug1(10:39:21.403890): Remote protocol version 2.0, remote software version 4b61ab4
+debug1(10:39:21.406292): no match: 4b61ab4
+debug1(10:39:21.407218): Authenticating to github.com:22 as 'git'
+debug1(10:39:21.891238): SSH2_MSG_KEXINIT sent
+debug1(10:39:21.894942): SSH2_MSG_KEXINIT received
+debug1(10:39:21.896367): kex: algorithm: curve25519-sha256
+debug1(10:39:21.896878): choose_kex: curve25519-sha256 from source OpenSSL, used in non-FIPS mode
+debug1(10:39:21.897592): kex: host key algorithm: ecdsa-sha2-nistp256
+debug1(10:39:21.899445): mac_setup_by_alg: hmac-sha2-256-etm@openssh.com from source CPACF, used in non-FIPS mode
+debug1(10:39:21.901328): kex: server->client cipher: aes128-ctr MAC: hmac-sha2-256-etm@openssh.com compression: none
+debug1(10:39:21.902261): mac_setup_by_alg: hmac-sha2-256-etm@openssh.com from source CPACF, used in non-FIPS mode
+debug1(10:39:21.903929): kex: client->server cipher: aes128-ctr MAC: hmac-sha2-256-etm@openssh.com compression: none
+debug1(10:39:22.170848): expecting SSH2_MSG_KEX_ECDH_REPLY
+debug1(10:39:22.755540): Server host key: ecdsa-sha2-nistp256 SHA256:p2QAMXNIC1TJYWeIOttrVc98/R1BUFWu3/LiyKgUfQM
+debug1(10:39:23.712830): Host 'github.com' is known and matches the ECDSA host key.
+debug1(10:39:23.713628): Found key in /u/prichar/.ssh/known_hosts:1
+debug1(10:39:24.277093): cipher_init: aes128-ctr from source CPACF, used in non-FIPS mode
+debug1(10:39:24.278183): rekey out after 4294967296 blocks
+debug1(10:39:24.278828): SSH2_MSG_NEWKEYS sent
+debug1(10:39:24.279438): expecting SSH2_MSG_NEWKEYS
+debug1(10:39:24.281766): SSH2_MSG_NEWKEYS received
+debug1(10:39:24.282494): cipher_init: aes128-ctr from source CPACF, used in non-FIPS mode
+debug1(10:39:24.283459): rekey in after 4294967296 blocks
+debug1(10:39:24.285131): Skipping ssh-dss key /u/prichar/.ssh/id_dsa - not in PubkeyAcceptedKeyTypes
+debug1(10:39:24.286363): Will attempt key: /u/prichar/.ssh/id_rsa RSA SHA256:iDQd9WaGhJ7wi6oFdGN0h4vpeUV8xK/79eJf5vaKgyQ
+debug1(10:39:24.287784): Will attempt key: /u/prichar/.ssh/id_ecdsa
+debug1(10:39:24.288491): Will attempt key: /u/prichar/.ssh/id_ed25519
+debug1(10:39:24.386535): SSH2_MSG_EXT_INFO received
+debug1(10:39:24.387427): kex_input_ext_info: server-sig-algs=<ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,ssh-ed25519,ecdsa-sha2-nistp521,ecdsa-sha2-nistp384,ecdsa-sha2-nistp256,rsa-sha2-512,rsa-sha2-256,ssh-rsa>
+debug1(10:39:24.388738): kex_input_ext_info: publickey-hostbound@openssh.com (unrecognised)
+debug1(10:39:24.394431): SSH2_MSG_SERVICE_ACCEPT received
+debug1(10:39:24.500826): Authentications that can continue: publickey
+debug1(10:39:24.501627): Next authentication method: publickey
+debug1(10:39:24.503189): Offering public key: /u/prichar/.ssh/id_rsa RSA SHA256:iDQd9WaGhJ7wi6oFdGN0h4vpeUV8xK/79eJf5vaKgyQ
+debug1(10:39:24.622233): Server accepts key: /u/prichar/.ssh/id_rsa RSA SHA256:iDQd9WaGhJ7wi6oFdGN0h4vpeUV8xK/79eJf5vaKgyQ
+debug1(10:39:27.411748): Authentication succeeded (publickey).
+Authenticated to github.com ([140.82.121.3]:22).
+debug1(10:39:27.418920): channel 0: new [client-session]
+debug1(10:39:27.422302): Entering interactive session.
+debug1(10:39:27.423734): pledge: network
+debug1(10:39:27.425476): client_input_global_request: rtype hostkeys-00@openssh.com want_reply 0
+debug1(10:39:27.644361): client_input_channel_req: channel 0 rtype exit-status reply 0
+Hi phil34130! You've successfully authenticated, but GitHub does not provide shell access.
+debug1(10:39:27.647783): channel 0: free: client-session, nchannels 1
+Transferred: sent 2856, received 3064 bytes, in 0.2 seconds
+Bytes per second: sent 12564.2, received 13479.3
+debug1(10:39:27.671249): Exit status 1
+
+
+ git clone https://github.com/phil34130/hello_world_zacademy
+Cloning into 'hello_world_zacademy'...
+fatal: unable to access 'https://github.com/phil34130/hello_world_zacademy/': er                                                                   ror setting certificate file: /opt/anaconda1anaconda2anaconda3/bin/ca-bundle.crt
+
+OMVSKERN@S0W1:~/hello_world-2017/hello_world_zacademy # git clone git@github.com:phil34130/hello_world_zacademy.git
+Cloning into 'hello_world_zacademy'...
+remote: Enumerating objects: 114, done.
+remote: Counting objects: 100% (6/6), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 114 (delta 4), reused 3 (delta 3), pack-reused 108 (from 1)
+Receiving objects: 100% (114/114), 16.30 KiB | 28.00 KiB/s, done.
+Resolving deltas: 100% (46/46), done.
+
+
+cd hello_world_zacademy
+
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+git config --list
+error: cannot run less: EDC5129I No such file or directory.
+http.sslverify=true
+http.sslcainfo=/opt/anaconda1anaconda2anaconda3/bin/ca-bundle.crt
+user.name=Philippe Richard
+user.email=phil34130@hotmail.com
+init.defaultbranch=main
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:phil34130/hello_world_zacademy.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+
+
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+> update README
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+OMVSKERN@S0W1:~/hello_world # git restore README.md
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+touch newfile1 
+OMVSKERN@S0W1:~/hello_world # nano newfile1
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile1
+
+nothing added to commit but untracked files present (use "git add" to track)
+OMVSKERN@S0W1:~/hello_world # git add newfile1
+fatal: can't add "newfile1": file tag (ISO8859-1) does not match its attributes                                                                    (IBM-1047)
+OMVSKERN@S0W1:~/hello_world # ls -Tl new*
+t ISO8859-1   T=on  -rw-r--r--   1 OMVSKERN SYS1           9 Nov 14 10:17 newfil                                                                   e1
+OMVSKERN@S0W1:~/hello_world #
+OMVSKERN@S0W1:~/hello_world # chtag -t -c ibm-1047 newfile1
+OMVSKERN@S0W1:~/hello_world # ls -Tl new*
+t IBM-1047    T=on  -rw-r--r--   1 OMVSKERN SYS1           9 Nov 14 10:17 newfil                                                                   e1
+OMVSKERN@S0W1:~/hello_world # git add newfile1
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile1
+
+OMVSKERN@S0W1:~/hello_world # git rm newfile1
+error: the following file has changes staged in the index:
+    newfile1
+(use --cached to keep the file, or -f to force removal)
+ git rm newfile1 --cached
+rm 'newfile1'
+OMVSKERN@S0W1:~/hello_world_zacademy # ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       newfile1      to_pds.sh     util.h
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.jcl    util.c
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile1
+
+nothing added to commit but untracked files present (use "git add" to track)
+OMVSKERN@S0W1:~/hello_world # git add newfile1
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile1
+
+OMVSKERN@S0W1:~/hello_world # git commit -m "new file created"
+[master 1509ee4] new file created
+ 1 file changed, 1 insertion(+)
+ create mode 100644 newfile1
+OMVSKERN@S0W1:~/hello_world # git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+OMVSKERN@S0W1:~/hello_world # git push origin master
+
+git push origin master
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 292 bytes | 1024 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:phil34130/hello_world_zacademy.git
+   ef7db35..7846220  master -> master
+
+
+delete file on https://github.com/phil34130/hello_world_zacademy/delete/master/newfile1 then commit changes
+
+ 
+ git remote update
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 2 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (2/2), 871 bytes | 10.00 KiB/s, done.
+From github.com:phil34130/hello_world_zacademy
+   7846220..a824175  master     -> origin/master
+
+OMVSKERN@S0W1:~/hello_world_zacademy # ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       newfile1      to_pds.sh     util.h
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.jcl    util.c
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is behind 'origin/master' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+nothing to commit, working tree clean
+
+run git pull origin master for it to download any updates that may be there:
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git pull origin master
+From github.com:phil34130/hello_world_zacademy
+ * branch            master     -> FETCH_HEAD
+Updating 7846220..a824175
+Fast-forward
+ newfile1 | 1 -
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 newfile1
+
+OMVSKERN@S0W1:~/hello_world_zacademy # ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       to_pds.jcl    util.c
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.sh     util.h
+OMVSKERN@S0W1:~/hello_world_zacademy #
+
+cat README.md
+This is a simple hello world program for testing git on z/OS. It's meant to be used in conjunction with [Using git for z/OS with GitHub](https://forum.rocketsoftware.com/t/using-git-for-z-os-with-github/654) on the [Rocket Community Forum](https://forum.rocketsoftware.com/categories).
+
+Here's a suggested scenario demonstrating how git can work with MVS datasets:
+
+* Clone this repository. If you want to push changes, fork it instead and then clone the fork.
+* cd into the repo and type `make`. This will compile and link the code and test the resulting executable.
+* Run `./allocate.sh`. This will create three PDSes (named `DEMO.{H,C,TXT}`) on MVS that will contain members corresponding to the source files in the Unix file system.
+* Run `./to_pds.sh` to populate the PDSes. This would be run any time the git repo is refreshed (via `git pull`).
+* Log into TSO, edit one of the source files, and save it.
+* Back at the Unix command line, run `./from_pds.sh` to copy the files back from MVS to Unix. This will also run a `git status` command, showing the changes.
+* When all done, run `./cleanup.sh` to delete the MVS datasets.
+
+
+
+make
+cc -c -o hello.o hello.c
+cc -o hello hello.o
+./hello
+Hello, world!
+This command is ./hello, and it has 0 arguments
+./hello with some arguments
+Hello, world!
+This command is ./hello, and it has 3 arguments
+[1]: with
+[2]: some
+[3]: arguments
+
+
+
+cat allocate.sh
+#!/bin/env bash
+
+tso 'alloc da(demo.h) recfm(f b) lrecl(80) blksize(0) dir(1) track space(2 2)'
+tso 'alloc da(demo.c) recfm(f b) lrecl(80) blksize(0) dir(1) track space(2 2)'
+tso 'alloc da(demo.txt) recfm(v b) lrecl(310) blksize(0) dir(1) track space(2 2)'
+
+
+allocate.sh
+
+./to_pds.sh
+
+PRICHAR@X9:/u/prichar/github/hello_world-2017 #cat to_pds.sh
+#!/bin/env bash
+
+# Copy the files
+cp -S d=.c *.c "//demo.c"
+cp -S d=.h *.h "//demo.h"
+cp -S d=.md *.md "//demo.txt"
+
+ PRICHAR.DEMO.C         
+ PRICHAR.DEMO.H         
+ PRICHAR.DEMO.TXT       
+BROWSE            PRICHAR.DEMO.C        
+Command ===>                            
+           Name     Prompt       Size   
+_________ HELLO                         
+_________ UTIL                          
+          **End**                       
+
+ BROWSE    PRICHAR.DEMO.TXT(TESTS)    
+ Command ===>                         
+********************************* Top 
+tests                                 
+
+PRICHAR@X9:/u/prichar/github/hello_world-2017 #cat listd.sh      
+ listd.sh
+listd demo.h m
+PRICHAR.DEMO.H
+--RECFM-LRECL-BLKSIZE-DSORG
+  FB    80    27920   PO
+--VOLUMES--
+  B3USR1
+--MEMBERS--
+  UTIL
+listd demo.c m
+PRICHAR.DEMO.C
+--RECFM-LRECL-BLKSIZE-DSORG
+  FB    80    27920   PO
+--VOLUMES--
+  B3USR1
+--MEMBERS--
+  HELLO
+  UTIL
+listd demo.txt m
+PRICHAR.DEMO.TXT
+--RECFM-LRECL-BLKSIZE-DSORG
+  VB    310   27998   PO
+--VOLUMES--
+  B3USR1
+--MEMBERS--
+  README
+  TESTS
+
+
+
+
+
+update allocate.sh and to_pds.sh
+
+ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   allocate.sh
+        modified:   from_pds.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git commit -m "update allocate and cleanup on master"
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   allocate.sh
+        modified:   from_pds.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+ git add .
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   allocate.sh
+        modified:   from_pds.sh
+
+
+
+git commit -m "update allocate and cleanup on master"
+git commit -m "update allocate and cleanup on master"
+[master 2cdf7f9] update allocate and cleanup on master
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+
+
+ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+git push origin master
+
+ git push origin master
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 414 bytes | 2.00 KiB/s, done.
+Total 4 (delta 3), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (3/3), completed with 3 local objects.
+To github.com:phil34130/hello_world_zacademy.git
+   a824175..2cdf7f9  master -> master
+
+
+now look in github hello_world  /allocate.sh
+
+allocate.sh
+update allocate and cleanup on master
+2 minutes ago
+
+@philippe-richard 
+Name		
+phil34130
+phil34130
+update allocate and cleanup on master
+2cdf7f9
+ · 
+
+
+then update agian allocate.sh
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   allocate.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+ git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   allocate.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   allocate.sh
+
+no changes added to commit (use "git add" and/or "git commit -a")
+OMVSKERN@S0W1:~/hello_world_zacademy # git restore allocate.sh
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+
+
+==========================================
+then on https://github.com/philippe-richard/hello_world_zacademy
+do the following:
+add a new file newfile3 and commit changes , then on tx9 use git fetch/ git merge as shown below
+
+git merge origin master
+Already up to date.
+OMVSKERN@S0W1:~/hello_world_zacademy # git fetch origin master
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (3/3), 926 bytes | 6.00 KiB/s, done.
+From github.com:phil34130/hello_world_zacademy
+ * branch            master     -> FETCH_HEAD
+   2cdf7f9..3da6b3c  master     -> origin/master
+OMVSKERN@S0W1:~/hello_world_zacademy # ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       to_pds.jcl    util.c
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.sh     util.h
+
+git log origin/master
+git log origin/master
+commit 3da6b3c7e8396c85a52df4073b30ab40b79498f9 (origin/master, origin/HEAD)
+Author: phil34130 <33055686+phil34130@users.noreply.github.com>
+Date:   Fri Nov 14 12:33:10 2025 +0100
+
+    Create newfile3
+
+commit 2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed (HEAD -> master)
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 11:23:58 2025 +0000
+
+    update allocate and cleanup on master
+
+commit a82417548d9738f6db4bb07aba4976b6186d0f6d
+Author: phil34130 <33055686+phil34130@users.noreply.github.com>
+Date:   Fri Nov 14 12:07:24 2025 +0100
+
+    Delete newfile1
+
+commit 7846220101f771ce47bb03ecd349d5a4dc62108a
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 10:59:36 2025 +0000
+
+    new file created
+
+commit ef7db35cc6293c74816d5b20ca17b5b5cfb46254
+Author: Jerry Callen <jcallen@rocketsoftware.com>
+Date:   Tue Jan 23 14:03:44 2018 -0500
+
+    add batch jobs for copying datasets
+
+commit d350334d517c7a17201229248def86085200c197
+Author: Jerry Callen <jcallen@rocketsoftware.com>
+Date:   Tue Jan 23 13:57:57 2018 -0500
+
+    fix some typos
+
+commit dbedcd7deb57c8bd44f09a93f9b58bcbecc64938
+Author: Jerry Callen <zorts@users.noreply.github.com>
+Date:   Thu Sep 28 11:29:54 2017 -0400
+
+    Fix a typo
+
+commit 2e61a66cbaea1c21ea6f60d5eecc6a43fb511eca
+Author: Jerry Callen <jcallen@rocketsoftware.com>
+Date:   Thu Sep 28 11:30:47 2017 -0400
+
+    Add some comments to the to/from PDS scripts
+
+commit 83b6d6670695b00a20a2906d41ef5fc66feb53cb
+Author: Jerry Callen <zorts@users.noreply.github.com>
+Date:   Wed Aug 30 13:16:28 2017 -0400
+
+    Workaround for issue 6; keep the line lengths short enough to work with an editable VB PDS. (#7)
+
+commit 1aeaa0b7d52c3ca1d572593d0a23cd5263d62aa4
+Author: Jerry Callen <zorts@users.noreply.github.com>
+Date:   Wed Aug 23 15:45:04 2017 -0400
+
+    Make the build multi-platform, and expand the message accordingly. (#4)
+
+commit 99cccaddbea13bd23988990e7ed302f35d4c2392
+
+
+git log --pretty=oneline
+ git log --pretty=oneline
+error: cannot run less: EDC5129I No such file or directory.
+2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed (HEAD -> master) update allocate and cleanup on master
+a82417548d9738f6db4bb07aba4976b6186d0f6d Delete newfile1
+7846220101f771ce47bb03ecd349d5a4dc62108a new file created
+ef7db35cc6293c74816d5b20ca17b5b5cfb46254 add batch jobs for copying datasets
+d350334d517c7a17201229248def86085200c197 fix some typos
+dbedcd7deb57c8bd44f09a93f9b58bcbecc64938 Fix a typo
+2e61a66cbaea1c21ea6f60d5eecc6a43fb511eca Add some comments to the to/from PDS scripts
+83b6d6670695b00a20a2906d41ef5fc66feb53cb Workaround for issue 6; keep the line lengths short enough to work with an editable VB PDS. (#7)
+1aeaa0b7d52c3ca1d572593d0a23cd5263d62aa4 Make the build multi-platform, and expand the message accordingly. (#4)
+99cccaddbea13bd23988990e7ed302f35d4c2392 hey, forgot the file arg!
+4a7b9e73ba0ba8b5d856d568ee7968e2f49e7c24 Add links back to the Rocket Community Forum
+fbeb8291e6bedf65659bf8e4557f46c92e448d8d fix a typo
+ git log -p
+.
+commit 2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed (HEAD -> master)
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 11:23:58 2025 +0000
+
+    update allocate and cleanup on master
+
+diff --git a/allocate.sh b/allocate.sh
+index 5011294..4c2228b 100755
+--- a/allocate.sh
++++ b/allocate.sh
+@@ -1,5 +1,6 @@
+ #!/bin/env bash
+
++# pr
+ tso 'alloc da(demo.h) recfm(f b) lrecl(80) blksize(0) dir(1) track space(2 2)'
+ tso 'alloc da(demo.c) recfm(f b) lrecl(80) blksize(0) dir(1) track space(2 2)'
+ tso 'alloc da(demo.txt) recfm(v b) lrecl(259) blksize(0) dir(1) track space(2 2)'
+
+(rajouté la ligne vace 'pr')
+
+diff --git a/from_pds.sh b/from_pds.sh
+index 9d43ea1..cc301a4 100755
+--- a/from_pds.sh
++++ b/from_pds.sh
+@@ -1,5 +1,5 @@
+ #!/bin/env bash
+-
++#pr
+ # Copy the files. See the comments in to_pds.sh for more information.
+ cp -S a=.c "//demo.c" .
+ cp -S a=.h "//demo.h" .
+@@ -12,4 +12,4 @@ chtag -tc1047 *.c *.h *.md
+ chmod 644 *.c *.h *.md
+
+ # See if anything changed
+-git status
+\ No newline at end of file
++git status
+
+commit a82417548d9738f6db4bb07aba4976b6186d0f6d
+Author: phil34130 <33055686+phil34130@users.noreply.github.com>
+Date:   Fri Nov 14 12:07:24 2025 +0100
+
+    Delete newfile1
+
+diff --git a/newfile1 b/newfile1
+deleted file mode 100644
+index 069f7ec..0000000
+--- a/newfile1
++++ /dev/null
+@@ -1 +0,0 @@
+->ÁÏ ÃÑ%Á  
+\ No newline at end of file
+
+commit 7846220101f771ce47bb03ecd349d5a4dc62108a
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 10:59:36 2025 +0000
+
+    new file created
+
+diff --git a/newfile1 b/newfile1
+new file mode 100644
+index 0000000..069f7ec
+--- /dev/null
++++ b/newfile1
+@@ -0,0 +1 @@
++>ÁÏ ÃÑ%Á  
+\ No newline at end of file
+
+commit ef7db35cc6293c74816d5b20ca17b5b5cfb46254
+Author: Jerry Callen <jcallen@rocketsoftware.com>
+Date:   Tue Jan 23 14:03:44 2018 -0500
+
+    add batch jobs for copying datasets
+
+diff --git a/README.md b/README.md
+index 48226d3..7f56142 100644
+--- a/README.md
++++ b/README.md
+@@ -11,3 +11,5 @@ Here's a suggested scenario demonstrating how git can work with MVS datasets:
+ * Log into TSO, edit one of the source files, and save it.
+ * Back at the Unix command line, run `./from_pds.sh` to copy the files back from MVS to Unix. This will also run a `git status` command, showing the changes.
+ * When all done, run `./cleanup.sh` to delete the MVS datasets.
++
++Also present are batch job equivalents of the to_/from_pds.sh scripts.
+diff --git a/from_pds.jcl b/from_pds.jcl
+new file mode 100644
+index 0000000..993531c
+--- /dev/null
++++ b/from_pds.jcl
+@@ -0,0 +1,17 @@
++//FROMPDS JOB 1,'COPY TO PDS',CLASS=A,MSGCLASS=A
++//STEP1 EXEC PGM=BPXBATCH
++//STDOUT  DD SYSOUT=*
++//*
++//* See the notes in to_pds.jcl.
++//STDPARM DD *
++SH /bin/sh -c '
++ set -x ;
++ cd ~/hello_world ;
++ rm -f *.h *.c *.md ;
++ cp -S a=.c "//demo.c" . ;
++ cp -S a=.h "//demo.h" . ;
++ cp -U -S a=.md "//demo.txt" . ;
++ chtag -tc1047 *.c *.h *.md ;
++ chmod 644 *.c *.h *.md
++ '
++/*
+\ No newline at end of file
+diff --git a/to_pds.jcl b/to_pds.jcl
+new file mode 100644
+index 0000000..f99f6e6
+--- /dev/null
++++ b/to_pds.jcl
+@@ -0,0 +1,35 @@
++//TOPDS JOB 1,'COPY TO PDS',CLASS=A,MSGCLASS=A
++//STEP1 EXEC PGM=BPXBATCH
++//STDOUT  DD SYSOUT=*
++//*
++//* Some notes:
++//*
++//* The destination dataset names use the syntax specified here
++//* (WARNING: URL split actoss 2 lines):
++//* https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/
++//*         com.ibm.zos.v2r3.cbcpx01/cbc1p210.htm
++//*
++//* In particular, the names will be prefixed with the high level
++//* qualifier of the TSOID under which the job runs. To use absolute
++//* names, put them in single quotes, like:
++//*
++//* "//'SYS1.MACLIB'"
++//*
++//* Also, this job uses the shell's "-c" option to pass a command
++//* line to the shell. This means that:
++//*
++//* * The lines aren't really separate lines; they are effectively
++//*   concatenated to make one long line.
++//* * Hence, the commands are separated by semicolons, and...
++//* * ...you can't put in comment lines, and...
++//* * ...any single quotes must themselves be quoted with a backslash.
++//*
++//STDPARM DD *
++SH /bin/sh -c '
++ set -x ;
++ cd ~/hello_world ;
++ cp -S d=.c *.c "//demo.c" ;
++ cp -S d=.h *.h "//demo.h" ;
++ cp -S d=.md *.md "//demo.txt" ;
++ '
++/*
+\ No newline at end of file
+
+commit d350334d517c7a17201229248def86085200c197
+Author: Jerry Callen <jcallen@rocketsoftware.com>
+Date:   Tue Jan 23 13:57:57 2018 -0500
+
+    fix some typos
+
+diff --git a/to_pds.sh b/to_pds.sh
+index 903ce7a..d72bbf0 100755
+--- a/to_pds.sh
++++ b/to_pds.sh
+@@ -1,8 +1,8 @@
+ #!/bin/env bash
+
+-# Copy the files. The "-s" option is z/OS-specific; it controls
++# Copy the files. The "-S" option is z/OS-specific; it controls
+ # the way that file suffices are handled. In this case, "-S d="
+-# is used to deleted the specified suffix, so that the member name
++# is used to delete the specified suffix, so that the member name
+ # will just be the main part of the file name.
+ #
+ # For more information, see:
+
+commit dbedcd7deb57c8bd44f09a93f9b58bcbecc64938
+
+
+git show 2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed --stat
+
+ git show 2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed --stat
+error: cannot run less: EDC5129I No such file or directory.
+commit 2cdf7f930341fcf0abc6d3107ae53f18fc6e64ed (HEAD -> master)
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 11:23:58 2025 +0000
+
+    update allocate and cleanup on master
+
+ allocate.sh | 1 +
+ from_pds.sh | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+========
+
+
+git merge origin master
+Updating 2cdf7f9..3da6b3c
+Fast-forward
+ newfile3 | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 newfile3
+
+ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       newfile3      to_pds.sh     util.h
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.jcl    util.c
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+=>newfile3
+
+
+git remote -v
+origin  git@github.com:phil34130/hello_world_zacademy.git (fetch)
+origin  git@github.com:phil34130/hello_world_zacademy.git (push)
+
+git branch
+git branch
+* master
+
+git show
+Understanding History: Commits
+Every change in the history of a project is represented by a commit. The git-show[1] command shows the most recent commit on the current branch:
+
+ git show
+
+commit 3da6b3c7e8396c85a52df4073b30ab40b79498f9 (HEAD -> master, origin/master, origin/HEAD)
+Author: phil34130 <33055686+phil34130@users.noreply.github.com>
+Date:   Fri Nov 14 12:33:10 2025 +0100
+
+    Create newfile3
+
+diff --git a/newfile3 b/newfile3
+new file mode 100644
+index 0000000..a7ceb7f
+--- /dev/null
++++ b/newfile3
+@@ -0,0 +1 @@
++new file 3
+
+
+Managing branches
+A single Git repository can maintain multiple branches of development. To create a new branch named experimental, use
+
+$ git branch experimental
+If you now run
+
+$ git branch
+you’ll get a list of all existing branches:
+
+  experimental
+* master
+
+The experimental branch is the one you just created, and the master branch is a default branch that was created for you automatically. The asterisk marks the branch you are currently on; type
+
+$ git switch experimental
+git switch experimental
+Switched to branch 'experimental'
+OMVSKERN@S0W1:~/hello_world_zacademy # ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       newfile3      to_pds.sh     util.h
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.jcl    util.c
+
+
+to switch to the experimental branch. Now edit a file, commit the change, and switch back to the master branch:
+
+(edit file)
+$ git commit -a
+
+git commit -a
+hint: Waiting for your editor to close the file... "/u/prichar/hello_world_zacademy/.git/COMMIT_EDITMSG"
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch experimental
+# Changes to be committed:
+#       modified:   newfile3
+closing
+~
+
+[experimental f7444de] closing
+ 1 file changed, 1 insertion(+)
+
+ git status
+On branch experimental
+nothing to commit, working tree clean
+
+
+
+$ git switch master
+Check that the change you made is no longer visible, since it was made on the experimental branch and you’re back on the master branch.
+
+You can make a different change on the master branch:
+
+(edit file) READMme
+$ git commit -a
+at this point the two branches have diverged, with different changes made in each. To merge the changes made in experimental into master, run
+
+$ git merge experimental
+If the changes don’t conflict, you’re done. If there are conflicts, markers will be left in the problematic files showing the conflict;
+
+$ git diff
+will show this. Once you’ve edited the files to resolve the conflicts,
+
+$ git commit -a
+git commit -a
+On branch master
+Your branch is ahead of 'origin/master' by 3 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+ ls
+Makefile      allocate.sh   from_pds.jcl  hello.c       newfile3      to_pds.sh     util.h
+README.md     cleanup.sh    from_pds.sh   listd.sh      to_pds.jcl    util.c
+OMVSKERN@S0W1:~/hello_world_zacademy # cat new*
+new file 3
+update  in new branch
+
+At this point you could delete the experimental branch with
+
+$ git branch -d experimental
+This command ensures that the changes in the experimental branch are already in the current branch.
+
+git branch
+* master
+
+
+If you develop on a branch crazy-idea, then regret it, you can always delete the branch with
+
+$ git branch -D crazy-idea
+Branches are cheap and easy, so this is a good way to try something out.
+
+ git show HEAD
+commit 61027b1bcb965ef5363ad103d110c256ca2bea4a (HEAD -> master)
+Merge: 7c1ddcd f7444de
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 12:03:41 2025 +0000
+
+    Merge branch 'experimental'
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git show experimental
+fatal: ambiguous argument 'experimental': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+
+
+ctreation branch1
+ git branch branch1
+OMVSKERN@S0W1:~/hello_world_zacademy # git checkout -b branch1
+fatal: a branch named 'branch1' already exists
+OMVSKERN@S0W1:~/hello_world_zacademy # git checkout -b branch2
+Switched to a new branch 'branch2'
+OMVSKERN@S0W1:~/hello_world_zacademy # git branch
+  branch1
+* branch2
+  master
+
+create newfile1 newfile2  modify newfile3
+touch newfile1 newfile2
+git add .
+
+ git add .
+fatal: can't add "newfile2": file tag (ISO8859-1) does not match its attributes (IBM-1047)
+OMVSKERN@S0W1:~/hello_world_zacademy # taga newfile2
+OMVSKERN@S0W1:~/hello_world_zacademy # git add .
+fatal: can't add "newfile2": file tag (ISO8859-1) does not match its attributes (IBM-1047)
+OMVSKERN@S0W1:~/hello_world_zacademy # tage newfile2
+OMVSKERN@S0W1:~/hello_world_zacademy # git add .
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch branch2
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile1
+        new file:   newfile2
+        modified:   newfile3
+
+git restore --staged newfile2
+
+ git restore --staged newfile2
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch branch2
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile1
+        modified:   newfile3
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile2
+
+
+
+Commit your changes locally
+git commit
+ git commit
+[branch2 f0a6557] PR
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ create mode 100644 newfile1
+
+
+Push your new branch back to the github repository:
+git push origin branch2
+ git push origin branch2
+Enumerating objects: 15, done.
+Counting objects: 100% (15/15), done.
+Compressing objects: 100% (9/9), done.
+Writing objects: 100% (12/12), 1.10 KiB | 5.00 KiB/s, done.
+Total 12 (delta 6), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (6/6), completed with 2 local objects.
+remote:
+remote: Create a pull request for 'branch2' on GitHub by visiting:
+remote:      https://github.com/phil34130/hello_world_zacademy/pull/new/branch2
+remote:
+To github.com:phil34130/hello_world_zacademy.git
+ * [new branch]      branch2 -> branch2
+
+To see the differences between the main and branch1  branches we can run: git diff then the branch names:
+ git diff master branch2
+The differences are shown in the Terminal.
+
+
+ git diff master branch2
+diff --git a/newfile1 b/newfile1
+new file mode 100644
+index 0000000..069f7ec
+--- /dev/null
++++ b/newfile1
+@@ -0,0 +1 @@
++>ÁÏ<U+0080>ÃÑ%Á<U+0080><U+008E>
+\ No newline at end of file
+diff --git a/newfile3 b/newfile3
+index 4327085..560ab97 100644
+--- a/newfile3
++++ b/newfile3
+@@ -1,2 +1,2 @@
+ new file 3
+-update  in new branch
++update  in new branch1
+
+(no newfile1 in master  et newfile3 a une ligne en plus 'update  in new branch1')
+
+You can also give git log a "range" of commits where the first is not necessarily an ancestor of the second; for example, if the tips of the branches stable and master diverged from a common commit some time ago, then
+$ git log stable..master
+will list commits made in the master branch but not in the stable branch, while
+$ git log master..stable
+will show the list of commits made on the stable branch but not the master branch.
+
+
+ Switch back to the main branch.
+
+To merge the branch1 branch back into the main branch, you need to first checkout the main branch. Enter git checkout then the branch name:
+git checkout master
+git checkout master
+Switched to branch 'master'
+Your branch is ahead of 'origin/master' by 3 commits.
+  (use "git push" to publish your local commits)
+
+You can see the newfile1 file you just created is now gone since we are back on the main branch, and the line I added to app.txt is also gone.
+
+ Merge branch1 branch into main.
+
+Now enter "git merge" and the branch name.
+git merge branch2
+ git merge branch2
+Updating 61027b1..f0a6557
+Fast-forward
+ newfile1 | 1 +
+ newfile3 | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ create mode 100644 newfile1
+
+ ls
+Makefile      cleanup.sh    hello.c       newfile2      to_pds.sh
+README.md     from_pds.jcl  listd.sh      newfile3      util.c
+allocate.sh   from_pds.sh   newfile1      to_pds.jcl    util.h
+
+
+Now the bnranch2 branch is merged into the main branch. The newfile1 file has appeared and app.txt has the new line in it.
+
+Step 6: Delete branch2 branch.
+
+Now we can either delete the branch1  branch or leave it if we expect to modify it more.
+We'll delete it with git branch -d and the branch name, branch1:
+git branch -d branch2
+Deleted branch branch2 (was f0a6557).
+OMVSKERN@S0W1:~/hello_world_zacademy # git branch
+* master
+
+
+git branch shows there is now just one branch, master.
+git log -3 shows our last 3 commits. The head commit is from the feature1 branch that we just merged in.
+git log -3
+commit f0a65574beaa3525dbff22e0e568c5df38b6bc76 (HEAD -> master, origin/branch2)
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 14:36:43 2025 +0000
+
+    PR
+
+commit 61027b1bcb965ef5363ad103d110c256ca2bea4a
+Merge: 7c1ddcd f7444de
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 12:03:41 2025 +0000
+
+    Merge branch 'experimental'
+
+commit 7c1ddcd9753f22d160d371d825bc8840b1429fd0
+Author: Philippe Richard <phil34130@hotmail.com>
+Date:   Fri Nov 14 12:02:57 2025 +0000
+
+    README.md#
+
+
+show on GitHub
+
+branch2 had recent pushes 1 minute ago
+> compare and pull request  (compare base phil34130 with branch2 !)
+
+Pull requests display diffs to compare the changes you made in your topic branch against the base branch that you want to merge your changes into.
+You don't actually have a pull request; GitHub just sees that you've pushed a branch, and is offering to create a pull request for it if you want.
+
+If you don't care about that, just ignore it. It's completely harmless and will go away as soon as GitHub doesn't think the branch is "recent".
+
+ 
+At this point, the proposed change would hopefully get incorporated into the mainline.
+
+git status
+On branch master
+Your branch is ahead of 'origin/master' by 4 commits.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile2
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+ git push
+To github.com:phil34130/hello_world_zacademy.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'github.com:phil34130/hello_world_zacademy.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+git pull 
+ git pull
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (1/1), 890 bytes | 15.00 KiB/s, done.
+From github.com:phil34130/hello_world_zacademy
+   3da6b3c..72bfe7f  master     -> origin/master
+Updating f0a6557..72bfe7f
+Fast-forward
+
+
+git add .
+OMVSKERN@S0W1:~/hello_world_zacademy # git commit
+[master 353ff89]        new file:   newfile2
+ 1 file changed, 1 insertion(+)
+ create mode 100644 newfile2
+OMVSKERN@S0W1:~/hello_world_zacademy # git push
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 295 bytes | 1024 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To github.com:phil34130/hello_world_zacademy.git
+   72bfe7f..353ff89  master -> master
+
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean
+
+
+create newfile4 nd update it
+git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile4
+
+nothing added to commit but untracked files present (use "git add" to track)
+OMVSKERN@S0W1:~/hello_world_zacademy # git commit -m " new file 4"
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile4
+
+nothing added to commit but untracked files present (use "git add" to track)
+OMVSKERN@S0W1:~/hello_world_zacademy # git add .
+fatal: can't add "newfile4": file tag (ISO8859-1) does not match its attributes (IBM-1047)
+OMVSKERN@S0W1:~/hello_world_zacademy # tage newfile4
+OMVSKERN@S0W1:~/hello_world_zacademy # git add .
+OMVSKERN@S0W1:~/hello_world_zacademy # git commit -m " new file 4"
+[master 46e99ef]  new file 4
+ 1 file changed, 1 insertion(+)
+ create mode 100644 newfile4
+
+Abandoning a Local Commit (git reset)
+If the commit has NOT been pushed to a shared remote, you can use git reset to completely remove it from the branch history.
+The most common use is to abandon the last commit(s) using the HEAD~N notation, where N is the number of commits to discard.
+
+git reset --soft HEAD~1	Removes the last commit. Keeps all the changes staged (in the index) and in your working directory. You can immediately run git commit -m "New message".
+
+git reset --soft HEAD~1
+
+ git reset --soft HEAD~1
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile4
+
+git reset --mixed HEAD~1	Removes the last commit. Unstages all the changes, but keeps them in your working directory. This is the default reset mode. You'll need to run git add again before committing.
+
+git reset --mixed HEAD~1
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is behind 'origin/master' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        newfile2
+        newfile4
+
+nothing added to commit but untracked files present (use "git add" to track)
+OMVSKERN@S0W1:~/hello_world_zacademy # git add .
+OMVSKERN@S0W1:~/hello_world_zacademy # git status
+On branch master
+Your branch is behind 'origin/master' by 1 commit, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile2
+        new file:   newfile4
+
+OMVSKERN@S0W1:~/hello_world_zacademy # git commit -m " new file 4 and 2"
+[master 3d99332]  new file 4 and 2
+ 2 files changed, 2 insertions(+)
+ create mode 100644 newfile2
+ create mode 100644 newfile4
+
+ git status
+On branch master
+Your branch and 'origin/master' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+nothing to commit, working tree clean
+
+
+Discard the Changes (Use with Extreme Caution)
+This permanently deletes the work from the commit.
+Command	Effect
+git reset --hard HEAD~1	Removes the last commit. Discards all changes in the staging area and working directory, setting your local files exactly back to the state of the commit before the abandoned one. (Changes are lost permanently!)
+
+git reset --hard HEAD~1
+ git reset --hard HEAD~1
+HEAD is now at 72bfe7f Merge pull request #1 from phil34130/branch2
+
+Abandoning the Last Commit's Message (git commit --amend)
+If the commit is the last one and you only want to change the message or add a forgotten file, you don't need to abandon it entirely.
+Command	Effect
+git commit --amend	Replaces the last commit with a new one. It reuses the staged files and the old commit message (allowing you to edit it). Use this to fix typos in the commit message.
+To add a forgotten file:	git add <file>; git commit --amend
+==================================================================
+https://www.learnbycheating.com/subjects/git-github/beginning-git-exercise-cli
+https://www.learnbycheating.com/subjects/git-github/cheatsheet#cat-2  GOOD
+
+
+labs https://github.com/LearnByCheating/git-demo
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+$ gh auth login
+bash: gh: command not found
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+$ pwd
+/c/Users/phil3
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+$
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+$ cd git-demo
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo (master)
+$ ls
+app.txt  file2.txt  file3.txt  ignoreme.txt
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo (master)
+$ git remote add origin https://github.com/phil34130/git-demo.git
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo (master)
+$ git branch -M main
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo (main)
+$ git push -u origin main
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (12/12), 1.01 KiB | 1.01 MiB/s, done.
+Total 12 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/phil34130/git-demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo (main)
+
+delete local and remote
+
+from vscode:
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+$ git clone https://github.com/LearnByCheating/git-demo.git git-demo-master-copy
+Cloning into 'git-demo-master-copy'...
+remote: Enumerating objects: 72, done.
+remote: Counting objects: 100% (28/28), done.
+remote: Compressing objects: 100% (11/11), done.
+remote: Total 72 (delta 18), reused 23 (delta 16), pack-reused 44 (from 1)Receiving obReceiving objects:  18% (13/72)
+Receiving objects: 100% (72/72), 17.75 KiB | 2.22 MiB/s, done.
+Resolving deltas: 100% (27/27), done.
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~
+
+$ git reset --hard v2-intermediate-git
+HEAD is now at a787ed2 Fix app.txt merge conflict
+
+phil3@LAPTOP-EC65KLAE MINGW64 ~/git-demo-master-copy (main)
+$ ls
+app.txt  feature1.txt  feature2.txt  feature3.txt  file2.txt  file3.txt  file4.txt
+
+
+======================================================
+
+https://git-scm.com/docs/gittutorial
+
+See Documentation/gittutorial.txt to get started, then see              
+Documentation/giteveryday.txt for a useful minimum set of commands, and 
+Documentation/git-commandname.txt for documentation of each command.    
+If git has been correctly installed, then the tutorial can also be      
+read with "man gittutorial" or "git help tutorial", and the             
+documentation of each command with "man git-commandname" or "git help   
+commandname".                                                           
+Many Git online resources are accessible from http://git-scm.com/ 
+including full documentation and Git related tools.  
+
+Cloning locally: git clone /mygit/x.git. Directory x will be created containing the clone of x.git
+
+Or from gitlab: git clone git@gitlab.com:Lotz/manfred.git which works fine as well.   
+exercices:
+https://www.pierre-giraud.com/git-github-apprendre-cours/presentation-git-github/
+http://bcl.unice.fr/membres/Laurent.Vanni/formation/git/slides/#/
+https://moodle.france-bioinformatique.fr/pluginfile.php/346/course/section/47/05_presentation_git.html#/
+
+https://rogerdudler.github.io/git-guide/
+https://www.geeksforgeeks.org/git/git-exercise/
+https://berkeley-stat159-f17.github.io/stat159-f17/lectures/01-git/Git-Tutorial..html
+
+https://www.w3schools.com/git/default.asp?remote=github
+https://github.com/eficode-academy/git-katas
+
+git remote add pr git://github.com:philippe-richard/hello_world.git
+  
+git remote add philippe  git@github.com:philippe-richard/hello_world.git
+  
+git remote -v
+origin  git@github.com:zorts/hello_world.git (fetch)
+origin  git@github.com:zorts/hello_world.git (push)
+pr      git://github.com:philippe-richard/hello_world.git (fetch)
+pr      git://github.com:philippe-richard/hello_world.git (push)
+
+   
+git config --list
+core.editor=/bin/vi -W filecodeset=ISO8859-1
+user.email=philippe_richard@fr.ibm.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:zorts/hello_world.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+remote.pr.url=git://github.com:philippe-richard/hello_world.git
+remote.pr.fetch=+refs/heads/*:refs/remotes/pr/*
+SPARKID:/u/sparkid/

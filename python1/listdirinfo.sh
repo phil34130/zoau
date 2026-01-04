@@ -25,6 +25,5 @@ mvscmd --pgm=IEHLIST \
        --sysprint=stdout \
        --dd1=${data_set},shr,volumes=${volume} \
        --sysin=stdin <<zz
- LISTPDS VOL=3390=${volume},FORMAT,                                       X
-               DSNAME=${data_set}
+    LISTPDS   DSNAME=${data_set},VOL=3390=${volume},FORMAT
 zz
