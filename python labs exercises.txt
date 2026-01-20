@@ -3,53 +3,18 @@ The python package manager and install tool pip is also included, which allows u
  
 pip – What’s Already Installed?
 
-Z04683@S0W1:~/flask_dataset $ pip3 list
-Package                Version
----------------------- -----------
-beautifulsoup4         4.10.0
-boto3                  1.35.43
-botocore               1.35.43
-bottle                 0.12.21
-certifi                2021.10.8
-cffi                   1.14.0
-charset-normalizer     2.0.7
-click                  8.1.3
-cryptography           3.3.2
-ebcdic                 1.1.1
-filelock               3.3.0
-Flask                  2.1.2
-ibm-db                 3.1.4
-idna                   3.3
-importlib-metadata     4.12.0
-itsdangerous           2.1.2
-Jinja2                 3.1.2
-jmespath               1.0.1
-MarkupSafe             2.1.1
-mysql-connector-python 8.0.32
-numpy                  1.18.2
-paho-mqtt              2.1.0
-pdfkit                 0.6.1
-pip                    23.0.1
-protobuf               3.20.3
-pycparser              2.20
-python-dateutil        2.9.0.post0
-pyzfile                1.0.0.post2
-requests               2.26.0
-requests-file          1.5.1
-s3_client              0.1.3
-s3transfer             0.10.3
-setuptools             67.4.0
-six                    1.16.0
-soupsieve              2.2.1
-tabulate               0.9.0
-tldextract             3.1.2
-tqdm                   4.66.5
-urllib3                1.26.20
-Werkzeug               2.1.2
-wheel                  0.38.4
-zipp                   3.8.0
-zos_util               1.0.0
-
+MYID:/u/myid: >pip3 list
+Package Version
+------------ -------
+cffi 1.14.0
+cryptography 2.8
+ebcdic 1.1.1
+numpy 1.18.2
+pip 20.1.1
+pycparser 2.20
+setuptools 46.4.0
+six 1.15.0
+zos-util 1.0.0
  
 pip – How Do We Install Another Package?
 Our z/OS service isn’t connected to the internet, so we did it like this:
@@ -70,6 +35,7 @@ Note lots of error messages as pip tries to access the internet version, but the
  python3 dslist.py
 pyhton3 members.py
 python3 python_scr1.py
+
 zoaversion
 
 
@@ -108,7 +74,36 @@ system  OS/390
 pip --version
 pip 24.0 from /usr/lpp/IBM/cyp/v3r12/pyz/lib/python3.12/site-packages/pip (python 3.12)
 
-   /u/prichar/python1/	
+   /u/prichar/python1/hello.py                     
+ ===>                                      
+***************************** Top of Data *
+from flask import Flask, request           
+app = Flask(__name__)                      
+@app.route('/greeting/')                   
+def hello():                               
+    name = request.args.get('name')        
+    return f"Hello, {name}!"               
+
+                                               
+FLASK_APP=hello python -m flask run -h 192.168.0.66 --port=11055 
+>FLASK_APP=hello python -m flask run -h 192.168.0.66 --port=11055
+ * Serving Flask app 'hello'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://192.168.0.66:11055
+Press CTRL+C to quit
+192.168.0.69 - - [06/Nov/2025 09:34:06] "GET / HTTP/1.1" 404 -
+192.168.0.69 - - [06/Nov/2025 09:34:06] "GET /favicon.ico HTTP/1.1" 404 -
+192.168.0.69 - - [06/Nov/2025 09:34:54] "GET /greeting/?name=phil HTTP/1.1" 200 -
+192.168.0.69 - - [06/Nov/2025 09:35:02] "GET /greeting/ HTTP/1.1" 200 -
+
+                                                                    
+
+//http://192.168.0.66/:11055/greeting/?name=phil
+Hello, phil!
+
+http://192.168.0.66/:11055/greeting/
+Hello, None!
 
 ---------------------------------------------
 
@@ -430,17 +425,6 @@ pip install fastapi uvicorn
 
 ----------------------------------------------
 
-
-remove tags: chtag -r
- ls -TaEls run*
-  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP      425 Dec 31 03:45 run_command_and_wait.sh
-  16 m IBM-1047    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP     3089 Dec 31 04:32 runjcl.py
-Z04683@S0W1:~/python $ chtag -r runjcl.py
-Z04683@S0W1:~/python $ ls -TaEls run*
-  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP      425 Dec 31 03:45 run_command_and_wait.sh
-  16 - untagged    T=off -rwxr-xr-x  --s-  1 Z04683   IPGROUP     3089 Dec 31 04:32 runjcl.py
-
-
 >mkdir python1
 PRICHAR:/u/prichar: >cd python1
 PRICHAR:/u/prichar/python1: >
@@ -507,7 +491,6 @@ else:
      else:
         print("status of STC IZUANG1 is unknown....")
 
-
 PRICHAR:/u/prichar/python1: >
 
 nano dsinf.py
@@ -528,8 +511,8 @@ print(f"the dataset members are: {members}\n")
 PRICHAR:/u/prichar/my-example-project: >python3 ds*
 Enter the Sequential Data Set name: prichar.python.jcl
 Data set found! We will use it
-	the dataset members are: ['DATA', 'HELOWRLD', 'J', 'TESTJOB', 'TESTJOB1']
-echo $name | tr '[:lower:]' '[:upper:]'
+the dataset members are: ['DATA', 'HELOWRLD', 'J', 'TESTJOB', 'TESTJOB1']
+
 
 python/rexx:
  python3 iplinfo.py
@@ -620,7 +603,7 @@ cat hc_detail.py
 
 from zoautil_py import datasets, mvscmd
 from zoautil_py.ztypes import DDStatement, DatasetDefinition
-tmp_name = datasets.tmp_name(high_level_qualifier="Z04683")
+tmp_name = datasets.tmp_name(high_level_qualifier="PRICHAR")
 tmp_ds = datasets.create(tmp_name, "SEQ", primary_space = "1K",
                          record_format="FB", record_length=256)
 print(tmp_ds)
@@ -1290,7 +1273,6 @@ Job PRICHARE submitted
 
 
 python3 runrexx.py PRICHAR.PYTHON.JCL
-HELOWRLD
 
 
  BROWSE    /S0W1/tmp/dddata.txt           
@@ -1795,22 +1777,75 @@ To kick off Flask, all we need to do is run it on z/OS with python3 app.py and n
 # flask_example/templates/jobs.html
 z/OS Jobs
 Job Name	Job ID	Status	Return Code	Action
-Z04683C	JOB01707	CANCELED	None	Cancel Purge
-HELLO2	JOB01431	ABEND	S722	Cancel Purge
-HELLO	JOB01413	ABEND	S722	Cancel Purge
-Z046832	JOB01412	JCLERR	None	Cancel Purge
-Z046831	JOB01409	JCLERR	None	Cancel Purge
-Z04683C	JOB01407	CC	0000	Cancel Purge
-Z04683B	JOB01406	CC	0000	Cancel Purge
-Z04683A	JOB01405	CC	0000	Cancel Purge
-Z04683	TSU01264	AC	None	Cancel Purge
+HELLO6	JOB06546	CC	0000	Cancel Purge Read
+HELLO6	JOB06545	CC	0000	Cancel Purge Read
+HELLO6	JOB06544	CC	0000	Cancel Purge Read
+HELLO6	JOB06543	CC	0000	Cancel Purge Read
+HELLO6	JOB06542	CC	0000	Cancel Purge Read
+HELLO6	JOB06541	CC	0000	Cancel Purge Read
+
+
+EUID=0   /u/prichar/flask_example/                                           
+  Type  Permission  Changed-CETCEST,  Owner      ------Size  File  Row 1 of 5
+_ Dir    rwxr-xr-x  2025-11-08 10:48  OMVSKERN         8192  .               
+_ Dir    rwxr-xr-x  2026-01-12 10:40  OMVSKERN         8192  ..              
+_ File   rw-r--r--  2026-01-12 23:24  OMVSKERN         1078  app.py          
+_ File   rw-r--r--  2025-11-03 18:51  OMVSKERN          100  joblist.py      
+_ Dir    rwxr-xr-x  2025-11-04 11:51  OMVSKERN         8192  templates       
+
+cat app*
+# flask_example/app.py
+from flask import Flask
+from flask import request, redirect, render_template
+from zoautil_py import jobs
+from zoautil_py import mvscmd, datasets
+app = Flask(__name__)
+
+@app.route('/')
+def list_jobs():
+    jobl = jobs.fetch_multiple(job_owner=datasets.get_hlq())
+#    jobs =  jobs.fetch_multiple()
+    return render_template('jobs.html', jobs=jobl)
+
+@app.route('/cancel/<job_id>')
+def cancel_job(job_id):
+    jobs.cancel(job_id)
+    return redirect('/')
+
+@app.route('/purge/<job_id>')
+def purge_job(job_id):
+    jobs.purge(job_id)
+    return redirect('/')
+
+@app.route('/read/<job_id>')
+def read_job(job_id):
+    try:
+        # On utilise des  quotes a l'interieur du string
+        # pour proteger l'asterisque du shell z/OS
+        allsteps =  "'*'"
+
+        output_text = jobs.read_output(job_id, allsteps)
+
+        from flask import Response
+        return Response(output_text, mimetype='text/plain')
+
+    except Exception as e:
+        return f"Erreur lors de la lecture du job : {str(e)}", 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
 
 lancer des jobs
 z04683.jcl(wait)  99 5  => pour pouvoir faire cancel puis purge
 
 z04683.ansb.jcl(hello)   plusieusr fois pour pouvoir faire purge
 
-=========GIT==============================================================================
+faire read pour voir les outputs
+
+
+
+=========================================================
 create a new repo in GitHub : zoau GitHub repo: https://github.com/phil3130/zoau
 phil34130@hotmail.com Thomas99Thomas99
 use gitbash and git Gui
@@ -1824,24 +1859,6 @@ then use git gui to rescan
 and to commit 
 
 
-======= GitHub add ssh key =================
-id_rsa from C:\Users\phil3\Documents\ssh 
-chmod 600 id_rsa
-PRICHAR:/u/prichar/.ssh: >ls -al
-total 112
-drw-------   2 OMVSKERN SYS1        8192 Nov  5 08:09 .
-drwxr-xr-x  19 OMVSKERN SYS1        8192 Nov  5 07:31 ..
--rw-------   1 OMVSKERN SYS1         996 Jun 17 16:59 authorized_keys
--rw-r--r--   1 OMVSKERN SYS1         602 Jun 17 16:54 id_dsa.pub
--rw-------   1 OMVSKERN SYS1        1675 Nov  5 08:09 id_rsa
--rw-r--r--   1 OMVSKERN SYS1         394 Jun 17 16:54 id_rsa.pub
--rw-r-xr-x   1 OMVSKERN SYS1         185 Nov  5 07:55 known_hosts
-PRICHAR:/u/prichar/.ssh: >ssh -T git@github.com
-Hi phil34130! You've successfully authenticated, but GitHub does not provide shell access.
-
-npm install git+ssh://git@github.com:phil34130/zoau-node.git
-===================================================================
-=======================================================================================
 ISM403.CYP312.ZFS
 /usr/lpp/IBM/cyp/v3r1
 
@@ -2026,6 +2043,22 @@ List members of Z04683.JCL.GDG
 
 ==========================================================
 
+======= GitHub add ssh key =================
+id_rsa from C:\Users\phil3\Documents\ssh 
+chmod 600 id_rsa
+PRICHAR:/u/prichar/.ssh: >ls -al
+total 112
+drw-------   2 OMVSKERN SYS1        8192 Nov  5 08:09 .
+drwxr-xr-x  19 OMVSKERN SYS1        8192 Nov  5 07:31 ..
+-rw-------   1 OMVSKERN SYS1         996 Jun 17 16:59 authorized_keys
+-rw-r--r--   1 OMVSKERN SYS1         602 Jun 17 16:54 id_dsa.pub
+-rw-------   1 OMVSKERN SYS1        1675 Nov  5 08:09 id_rsa
+-rw-r--r--   1 OMVSKERN SYS1         394 Jun 17 16:54 id_rsa.pub
+-rw-r-xr-x   1 OMVSKERN SYS1         185 Nov  5 07:55 known_hosts
+PRICHAR:/u/prichar/.ssh: >ssh -T git@github.com
+Hi phil34130! You've successfully authenticated, but GitHub does not provide shell access.
+
+npm install git+ssh://git@github.com:phil34130/zoau-node.git
 
 ===============================================================
 https://community.ibm.com/community/user/blogs/wayne-zhang1/2022/03/17/managing-files-partitioned-dataset-zoau-nodejs
@@ -2066,7 +2099,7 @@ dpp-node-zoau-demo@1.0.0 /u/prichar/dpp-node-zoau-demo
 see https://community.ibm.com/community/user/blogs/wayne-zhang1/2022/03/17/managing-files-partitioned-dataset-zoau-nodejs
 for the lab
 
- node server.js
+ node server.js 
 App running at http://localhost:8080
 
 192.168.0.66/api/PRICHAR.PYTHON.JCL
@@ -2074,6 +2107,205 @@ App running at http://localhost:8080
 192.168.0.66/api/PRICHAR.PYTHON.JCL(HELOWRLD)
 
 
+C'est un problème classique d'interface entre le front-end (votre navigateur) et le back-end (votre serveur Node.js). Puisque l'appel direct à l'API fonctionne, le serveur fait son travail. Le souci se situe donc dans la communication entre le bouton HTML et votre fonction JavaScript.
+
+Voici les pistes principales à vérifier pour débloquer la situation :
+
+1. Vérifiez la Console du Navigateur (Le plus important)
+C'est la première étape. Dans votre navigateur (Chrome, Firefox ou Edge) :
+
+Appuyez sur F12 (ou clic droit > Inspecter).
+
+Allez dans l'onglet Console.
+
+Cliquez sur le bouton "List PDS members" dans votre application.
+
+Si vous voyez une erreur en rouge : Elle vous dira exactement ce qui échoue (ex: pds is null signifie que l'ID n'est pas bon).
+
+Si rien ne s'affiche : Cela signifie que la fonction listMembers() n'est même pas appelée.
+
+2. Vérifiez la liaison HTML -> JS
+Assurez-vous que votre bouton dans le fichier HTML ressemble à ceci :
+
+HTML
+
+<button onclick="listMembers()">List PDS members</button>
+Si vous avez oublié l'attribut onclick ou si le nom de la fonction est mal orthographié, rien ne se passera.
+
+3. Vérifiez l'ID de l'input pds
+Dans votre script, vous utilisez : var pds = document.getElementById('pds').value;
+
+Il faut que votre champ de saisie dans le HTML ait exactement cet ID :
+
+HTML
+
+<input type="text" id="pds" value="USER.PYTHON.JCL">
+Test rapide : Avant de cliquer sur le bouton, assurez-vous que vous avez bien tapé USER.PYTHON.JCL dans ce champ. Si le champ est vide, l'appel fetch devient /api/, ce qui peut causer une erreur 404.
+
+4. Déboguez avec des console.log
+Modifiez temporairement le début de votre fonction listMembers pour voir si elle se déclenche et ce qu'elle récupère :
+
+JavaScript
+
+function listMembers() {
+  var pds = document.getElementById('pds').value;
+  console.log("Tentative de récupération pour le PDS :", pds); // AJOUTEZ CECI
+
+  fetch(`/api/${pds}`)
+    .then(response => {
+       console.log("Réponse reçue :", response.status); // AJOUTEZ CECI
+       return response.json();
+    })
+    // ... reste du code
+5. Problème de chemin relatif
+Si vous accédez à l'appli via http://192.168.0.66:8080 (sans slash à la fin), le chemin relatif /api/${pds} devrait fonctionner. Cependant, si votre navigateur interprète mal l'URL, essayez de remplacer : fetch(\/api/pds 
+)
+ˋ
+​
+ ‘par‘fetch( 
+[
+ˋ
+​
+ http://192.168.0.66:8080/api/](http://192.168.0.66:8080/api/){pds}`)` pour forcer le chemin absolu.
+
+6. Vérifiez les IDs des résultats
+Le code tente d'écrire dans deux éléments qui doivent exister dans votre HTML :
+
+Un élément <select id="members"> (pour la liste).
+
+Un élément <div id="results"> et un <pre id="output"> (pour le message de succès).
+
+Si l'un de ces éléments manque dans votre index.html, le script s'arrêtera net avec une erreur du type Cannot read property 'appendChild' of null.
+
+Souhaitez-vous que je vous génère un fichier HTML minimaliste compatible avec votre script.js pour tester si le problème vient de la structure de votre page ?
+C'est une excellente idée. Cela transformera votre outil en un véritable petit gestionnaire de fichiers pour z/OS.
+
+Pour ajouter ces fonctionnalités, nous allons devoir modifier trois fichiers : vos **routes** (le backend), votre **script.js** (la logique) et votre **index.html** (l'interface).
+
+Voici comment procéder :
+
+-----
+
+### 1\. Le Backend : Modifier `routes.js`
+
+Vous devez ajouter deux nouvelles routes à votre fichier `routes.js` pour gérer la création et la suppression via les utilitaires ZOAU.
+
+```javascript
+// Ajoutez ces lignes dans votre fichier routes.js
+const datasets = require('zoau/datasets'); // Assurez-vous que zoau est bien importé
+
+// Créer un nouveau membre (ou l'écraser s'il existe)
+router.post('/api/:pds/:member', (req, res) => {
+  const { pds, member } = req.params;
+  const fullPath = `${pds}(${member})`;
+  
+  // On écrit une chaîne vide pour créer le membre
+  datasets.write(fullPath, "")
+    .then(() => res.json(`Membre ${member} créé avec succès.`))
+    .catch(err => res.status(500).json(err.message));
+});
+
+// Supprimer un membre
+router.delete('/api/:pds/:member', (req, res) => {
+  const { pds, member } = req.params;
+  const fullPath = `${pds}(${member})`;
+
+  datasets.delete(fullPath)
+    .then(() => res.json(`Membre ${member} supprimé.`))
+    .catch(err => res.status(500).json(err.message));
+});
+```
+
+-----
+
+### 2\. Le Frontend : Modifier `public/script.js`
+
+Ajoutez ces deux fonctions à la fin de votre fichier pour appeler les nouvelles routes.
+
+```javascript
+// Créer un nouveau membre
+function createMember() {
+  var pds = document.getElementById('pds').value;
+  var newMember = prompt("Entrez le nom du nouveau membre :");
+  
+  if (!newMember) return; // Annuler si vide
+
+  fetch(`/api/${pds}/${newMember.toUpperCase()}`, {
+    method: 'POST'
+  })
+  .then(response => response.json())
+  .then(msg => {
+    printOutput(msg);
+    listMembers(); // Rafraîchir la liste automatiquement
+  })
+  .catch(err => printOutput(err));
+}
+
+// Supprimer le membre sélectionné
+function deleteMember() {
+  var pds = document.getElementById('pds').value;
+  var member = document.getElementById('members').value;
+
+  if (!member) {
+    alert("Veuillez sélectionner un membre à supprimer.");
+    return;
+  }
+
+  if (confirm(`Êtes-vous sûr de vouloir supprimer ${pds}(${member}) ?`)) {
+    fetch(`/api/${pds}/${member}`, {
+      method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(msg => {
+      printOutput(msg);
+      listMembers(); // Rafraîchir la liste
+    })
+    .catch(err => printOutput(err));
+  }
+}
+```
+
+-----
+
+### 3\. L'Interface : Modifier `public/index.html`
+
+Nous allons ajouter les boutons dans les formulaires existants.
+
+  * **Bouton Créer :** À mettre sous le bouton "List PDS Members".
+  * **Bouton Supprimer :** À mettre à côté du bouton "Read Member Content".
+
+<!-- end list -->
+
+```html
+<div class="col-12 d-grid gap-2">
+  <button type="button" onclick="listMembers()" class="btn btn-primary mb-1">List PDS Members</button>
+  <button type="button" onclick="createMember()" class="btn btn-outline-success mb-3">Create New Member</button>
+</div>
+
+<div class="col-12 d-grid gap-2">
+  <button type="button" onclick="getContent()" class="btn btn-primary mb-1">Read Member Content</button>
+  <button type="button" onclick="deleteMember()" class="btn btn-outline-danger mb-3">Delete Selected Member</button>
+</div>
+```
+
+-----
+
+### Comment ça fonctionne ?
+
+Voici le flux de données une fois ces modifications appliquées :
+
+1.  **L'utilisateur** clique sur "Delete".
+2.  **Le navigateur** envoie une requête HTTP `DELETE` au serveur Node.js.
+3.  **Node.js** reçoit la requête et appelle la fonction `datasets.delete()` de la bibliothèque **ZOAU**.
+4.  **ZOAU** exécute la commande système sur **z/OS** (équivalent d'un `IDCAMS` ou d'une commande TSO en arrière-plan).
+5.  **Le résultat** remonte jusqu'à l'écran de l'utilisateur.
+
+### Quelques conseils pour z/OS :
+
+  * **Majuscules :** Le mainframe est sensible à la casse. J'ai ajouté `.toUpperCase()` dans la fonction de création pour éviter les erreurs.
+  * **Rafraîchissement :** Remarquez que j'appelle `listMembers()` à la fin de chaque action réussie pour que la liste déroulante se mette à jour immédiatement sans que vous ayez à recliquer manuellement.
+
+Souhaitez-vous que je vous aide à ajouter une **barre de recherche** pour filtrer les membres quand la liste est très longue ?
 
 
 

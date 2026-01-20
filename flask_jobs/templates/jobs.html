@@ -36,7 +36,7 @@ tr:nth-child(even) {
     <td>{{job.job_id}}</td>
     <td>{{job.status}}</td>
     <td>{{job.return_code}}</td>
-    <td><a href="/cancel/{{job.job_id}}">Cancel</a> <a href="/purge/{{job.job_id}}">Purge</a></td>
+    <td><a href="/cancel/{{job.job_id}}">Cancel</a> <a href="/purge/{{job.job_id}}">Purge</a> <a href="/read/{{job.job_id}}">Read</a></td>
   </tr>
   {% endfor %}
 </table>
