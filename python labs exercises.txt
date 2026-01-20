@@ -2572,7 +2572,7 @@ from base64 import b64encode
 # IMPORTANT: Replace these placeholders with your actual z/OSMF and DB2 details.
 ZOSMF_HOST = 'https://204.90.115.200:10443'
 ZOSMF_USER = 'z04683'
-ZOSMF_PASS = 'c2harlot'
+ZOSMF_PASS = 'xxxxx'
 DB2_SUBSYSTEM_ID = 'DBDG' # e.g., 'DBA1', 'DBCS'
 
 # --- API Endpoints and Headers ---
